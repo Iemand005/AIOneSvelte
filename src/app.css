@@ -294,3 +294,8 @@ code {
     border-right-color: var(--border);
   }
 }
+
+
+.button {
+  background-color: red;
+}
