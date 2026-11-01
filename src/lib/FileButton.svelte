@@ -1,6 +1,6 @@
 <script lang="ts">
 	type FileButtonProps = {
-
+		onselect: ()=>void;
 	};
 
 	const { onselect }: FileButtonProps = $props();
