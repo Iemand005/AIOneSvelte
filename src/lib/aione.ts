@@ -1,4 +1,4 @@
-import AIOne from "https://iemand005.github.io/AIOneJS/web/AIOne.js";
+import AIOne from "AIOne";
 
 export let ai: Awaited<ReturnType<typeof AIOne.create>> | null = null;
 
