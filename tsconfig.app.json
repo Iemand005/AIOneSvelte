@@ -18,11 +18,8 @@
     "moduleDetection": "force",
 
     "paths": {
-      "aione": ["../AIOneWeb/.vscode/AIOne.js"]
+      "aione": ["../AIOneWeb/AIOne.js"]
     },
-    "composite": true
   },
   "include": ["src/**/*.ts", "src/**/*.js", "src/**/*.svelte", "public/aio1-worker.js", "public/aio1-worker.js"],
-  // compo
-  cco
 }
