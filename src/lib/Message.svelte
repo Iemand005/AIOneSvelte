@@ -1,4 +1,5 @@
 <script>
+	import {type Message} from "./aione";
 	let { message: Message } = $props();
 </script>
 
