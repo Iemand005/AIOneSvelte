@@ -1,6 +1,11 @@
 
 <script lang="ts">
-  import AIOne, {Message} from "aione";
+  import AIOne from "aione";
+
+  interface Message {
+    role: "user" | "assistant";
+    content: string;
+  }
 
   let ai: AIOne | null = null;
   let modelFile: File | null = null;
