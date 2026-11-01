@@ -1,7 +1,7 @@
 
 <script lang="ts">
   import AIOne from "aione";
-  import Nested from './Nested.svelte';
+  import Message from './lib/Message.svelte';
 
   const workerUrl = "/AIOneSvelte-dist/aio1-worker.js";
 
@@ -108,10 +108,11 @@
     <section class="chat">
       <div class="messages">
         {#each messages as message}
-          <article class={message.role}>
+          <Message></Message>
+          <!-- <article class={message.role}>
             <strong>{message.role === "user" ? "You" : "AIOne"}</strong>
             <p>{message.content}</p>
-          </article>
+          </article> -->
         {/each}
 
         {#if loading}
