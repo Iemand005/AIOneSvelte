@@ -1,5 +1,5 @@
 <script>
-	let { answer = 'a mystery' } = $props();
+	let { message = 'a mystery' } = $props();
 </script>
 
 <article class={message.role}>
