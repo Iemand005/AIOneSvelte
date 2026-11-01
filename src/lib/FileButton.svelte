@@ -5,11 +5,11 @@
 
 	const { onselect }: FileButtonProps = $props();
 
-	let file: File | null = null;
+	let selectedFile: File | null = $state(null);
 </script>
 
 <label id="model-button" for="model-input" class="button">
-	{#if !file}
+	{#if !selectedFile}
 	Choose model file!
 	{:else}
 	Selected a file
@@ -23,6 +23,8 @@
 	style="display: none;"
 	onchange={event => {
 		const file = event.currentTarget.files?.[0];
-		if (file) onselect(file);
+		if (!file) return;
+		onselect(file);
+		selectedFile = file;
 	}}
 />
