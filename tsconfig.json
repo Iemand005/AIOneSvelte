@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "paths": {
-      "aione": ["../AIOneJS/web/AIOne.js"]
+      "aione": ["../AIOneJS/web/AIOne.d.ts"]
     }
   },
   "files": [],
