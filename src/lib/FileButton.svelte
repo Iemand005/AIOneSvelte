@@ -8,7 +8,9 @@
 	let file: File | null = null;
 </script>
 
+{#if file}
 <label id="model-button" for="model-input" class="button">Choose model file!</label>
+{#endif}
 <input
 	type="file"
 	accept=".gguf"
