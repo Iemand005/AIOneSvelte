@@ -84,13 +84,13 @@
 <main>
   <header>
     <h1>AIOne</h1>
+    <label for="model-input">Load model!</label>
     <span class:loaded={ai}>{status}</span>
   </header>
 
   {#if !ai}
     <section class="model-picker">
       <h2>Load a model</h2>
-      <label for="model-input">Load model!</label>
       <input
         type="file"
         accept=".gguf"
