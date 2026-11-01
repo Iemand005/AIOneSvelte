@@ -1,4 +1,9 @@
 {
+  "compilerOptions": {
+    "paths": {
+      "aione": ["../AIOneJS/web/AIOne.js"]
+    }
+  },
   "files": [],
   "references": [
     { "path": "./tsconfig.app.json" },
