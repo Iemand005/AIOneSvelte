@@ -5,9 +5,9 @@ self.addEventListener("securitypolicyviolation", e => {
 
 console.log("Worker started");
 
-const baseUrl = new URL("./", self.location.href).href;
+// const baseUrl = new URL("./", self.location.href).href;
 
-importScripts(baseUrl + "worker-runtime.js");
+// importScripts(baseUrl + "worker-runtime.js");
 
 console.log("Worker runtime loaded");
 
