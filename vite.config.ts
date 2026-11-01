@@ -14,8 +14,8 @@ interface AioneAsset {
 
 const AIONE_WEB_ASSETS: AioneAsset[] = [
   {
-    url: 'build/Release/worker-runtime.js',
-    sources: ['build/Release/worker-runtime.js', 'worker-runtime.js']
+    url: 'worker-runtime.js',
+    sources: ['worker-runtime.js', 'worker-runtime.js']
   },
   {
     url: 'build/Release/AIOneWeb.js',
