@@ -97,7 +97,7 @@
         name="model-input"
         id="model-input"
         style="display: none;"
-        onchange={(event) => modelFile = event.currentTarget.files?.[0] ?? null}
+        onchange={event => modelFile = event.currentTarget.files?.[0] ?? null}
       />
       <button onclick={loadModel} disabled={!modelFile || loading}>
         {loading ? "Loading..." : "Load model"}
