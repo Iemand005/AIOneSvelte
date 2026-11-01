@@ -1,6 +1,7 @@
 
 <script lang="ts">
   import AIOne from "aione";
+  import Nested from './Nested.svelte';
 
   const workerUrl = "/AIOneSvelte-dist/aio1-worker.js";
 
