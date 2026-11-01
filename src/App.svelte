@@ -121,12 +121,12 @@
         {/if}
       </div>
 
-      <form onsubmit={(event) => { event.preventDefault(); sendMessage(); }}>
+      <form onsubmit={event => { event.preventDefault(); sendMessage(); }}>
         <textarea
           bind:value={prompt}
           placeholder="Message AIOne..."
           disabled={loading}
-          onkeydown={(event) => {
+          onkeydown={event => {
             if (event.key === "Enter" && !event.shiftKey) {
               event.preventDefault();
               sendMessage();
