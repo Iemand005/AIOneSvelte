@@ -1,6 +1,6 @@
 
 <script lang="ts">
-  import AIOne from "aione";
+  import AIOne, {Message} from "aione";
 
   let ai: AIOne | null = null;
   let modelFile: File | null = null;
@@ -8,7 +8,7 @@
   let loading = false;
   let status = "No model loaded";
 
-  let messages: { role: "user" | "assistant"; content: string }[] = [];
+  let messages: Message[] = [];
 
   async function loadModel() {
     if (!modelFile) return;
