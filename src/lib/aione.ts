@@ -1,4 +1,4 @@
-import AIOne from "AIOne";
+import AIOne from "aione";
 
 export let ai: Awaited<ReturnType<typeof AIOne.create>> | null = null;
 
