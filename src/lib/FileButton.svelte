@@ -11,5 +11,5 @@
 	name="model-input"
 	id="model-input"
 	style="display: none;"
-	onchange={onchange}
+	onchange={event => file = event.currentTarget.files?.[0] ?? null}
 />
