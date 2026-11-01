@@ -67,6 +67,10 @@ function aioneWebAssets(): Plugin {
 
         res.setHeader('Content-Type', AIONE_WEB_TYPES[extname(asset.url)] ?? 'application/octet-stream')
         res.setHeader('Cache-Control', 'no-cache')
+        res.setHeader('Cross-Origin-Resource-Policy', 'same-origin')
+        for (const [name, value] of Object.entries(crossOriginIsolationHeaders)) {
+          res.setHeader(name, value)
+        }
 
         if (req.method === 'HEAD') {
           res.end()
