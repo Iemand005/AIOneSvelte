@@ -299,4 +299,5 @@ code {
   background-color: #303139;
   padding: 12px 20px;
   border-radius: 9px;
+  cursor: pointer;
 }
