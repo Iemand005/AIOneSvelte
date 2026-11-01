@@ -205,16 +205,6 @@
     color: #78d99b;
   }
 
-  .model-picker {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 16px;
-    padding: 24px;
-    border: 1px solid #303139;
-    border-radius: 12px;
-  }
-
   .chat {
     flex: 1;
     display: flex;
@@ -235,11 +225,6 @@
     padding: 14px 18px;
     border-radius: 12px;
     background: #24252b;
-  }
-
-  article.user {
-    align-self: flex-end;
-    background: #303b55;
   }
 
   article strong {
