@@ -75,7 +75,10 @@ async function initialize(file) {
 
     if (!initializing && !module) {
         initializing = (async () => {
-            const moduleOptions = { workerFile: file };
+            const moduleOptions = {
+                workerFile: file,
+                mainScriptUrlOrBlob: runtimeUrl
+            };
 
             if (WASM_OVERRIDE || !HAS_EXTERNAL_RUNTIME) {
                 moduleOptions.locateFile = locateFile;
