@@ -16,10 +16,6 @@
     "allowJs": true,
     "checkJs": true,
     "moduleDetection": "force",
-
-    "paths": {
-      "aione": ["../AIOneWeb/AIOne.js"]
-    },
   },
   "include": ["src/**/*.ts", "src/**/*.js", "src/**/*.svelte", "public/aio1-worker.js", "public/aio1-worker.js"],
 }

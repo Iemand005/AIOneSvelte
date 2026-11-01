@@ -1,11 +1,11 @@
 
 <script lang="ts">
-  import AIOne from "aione";
+  import AIOne from "aione-web";
   import { type Message } from "./lib/aione";
   import ChatBubble from './lib/ChatBubble.svelte';
     import FileButton from "./lib/FileButton.svelte";
 
-  const workerUrl = "/AIOneSvelte-dist/aio1-worker.js";
+  const workerUrl = `${import.meta.env.BASE_URL}aio1-worker.js`;
 
   let ai: AIOne | null = null;
   let prompt = "";

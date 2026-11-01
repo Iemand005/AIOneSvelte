@@ -1,9 +1,4 @@
 {
-  "compilerOptions": {
-    "paths": {
-      "aione": ["../AIOneWeb/AIOne.d.ts"]
-    }
-  },
   "files": [],
   "references": [
     { "path": "./tsconfig.app.json", "composite": true },

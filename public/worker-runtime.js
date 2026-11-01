@@ -5,9 +5,7 @@ let mountedFile;
 
 let operationQueue = Promise.resolve();
 
-// const baseUrl = pub?  "https://iemand005.github.io/AIOneJS/web/" : "/AIOneSvelte-dist/";
-// const BASE_URL = baseUrl || "https://iemand005.github.io/AIOneJS/web/";
-const BASE_URL = "http://localhost:5173/AIOneSvelte-dist/";
+const BASE_URL = new URL("./", self.location.href).href;
 
 async function initialize(file) {
     if (session) {
