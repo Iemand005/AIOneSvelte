@@ -1,5 +1,18 @@
 {
 	"js/ts.inlayHints.parameterTypes.enabled": true,
 	"js/ts.inlayHints.propertyDeclarationTypes.enabled": true,
-	"js/ts.inlayHints.variableTypes.enabled": true
+	"js/ts.inlayHints.variableTypes.enabled": true,
+	"workbench.colorCustomizations": {
+        "activityBar.background": "#580f0f",
+        "titleBar.activeBackground": "#7c1616",
+        "titleBar.activeForeground": "#FEFCFD",
+        "titleBar.inactiveBackground": "#580F33",
+        "titleBar.inactiveForeground": "#FEFCFD",
+        "statusBar.background": "#580F33",
+        "statusBar.foreground": "#FEFCFD",
+        "statusBar.debuggingBackground": "#580F33",
+        "statusBar.debuggingForeground": "#FEFCFD",
+        "statusBar.noFolderBackground": "#580F33",
+        "statusBar.noFolderForeground": "#FEFCFD"
+    }
 }
