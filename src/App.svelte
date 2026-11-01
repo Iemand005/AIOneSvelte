@@ -15,15 +15,16 @@
 
   let messages: Message[] = [];
 
-  async function loadModel() {
-    if (!modelFile) return;
+  async function loadModel(file?:File) {
+    if (!file) file = modelFile;
+    if (!modelFile || !file) return;
 
     loading = true;
     status = "Loading model...";
 
     try {
       ai = await AIOne.create({ workerUrl });
-      await ai.loadModel(modelFile);
+      await ai.loadModel(file);
       status = "Model loaded";
     } catch (error) {
       status = String(error);
@@ -82,7 +83,7 @@
 <main>
   <header>
     <h1>AIOne</h1>
-    <FileButton onselect={file => modelFile = file}/>
+    <FileButton onselect={file => loadModel(file)}/>
     <!-- <label id="model-button" for="model-input" class="button">Choose model file!</label>
     <input
       type="file"
