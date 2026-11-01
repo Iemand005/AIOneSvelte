@@ -38,7 +38,7 @@ export async function initializeAIOne() {
 
     const workerUrl = `${BASE_URL}worker-runtime.js${usingThreads ? "?threads=1" : ""}`;
 
-    ai = await AIOne.create({ workerUrl, threads: true });
+    ai = await AIOne.create({ workerUrl, workerType: "dedicated", threads: true });
 
     return ai;
 }
