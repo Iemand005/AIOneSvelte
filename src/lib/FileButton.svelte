@@ -12,7 +12,7 @@
 	{#if !selectedFile}
 	Choose model file!
 	{:else}
-	Selected a file {selectedFile.name}
+	{selectedFile.name}
 	{/if}
 </label>
 <input
