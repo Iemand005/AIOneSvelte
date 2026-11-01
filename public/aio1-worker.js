@@ -5,7 +5,7 @@ self.addEventListener("securitypolicyviolation", e => {
 console.log("Worker started");
 
 const pub = false;
-const baseUrl = pub?  "https://iemand005.github.io/AIOneJS/web/" : "/";
+const baseUrl = pub?  "https://iemand005.github.io/AIOneJS/web/" : "/AIOneSvelte-dist/";
 
 importScripts(
     baseUrl + "AIOneWeb.js",
