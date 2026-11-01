@@ -2,8 +2,8 @@
 	type FileButtonProps = {
 
 	};
-	
-	const { onselect } = $props();
+
+	const { onselect }: FileButtonProps = $props();
 
 	let file: File | null = null;
 </script>
