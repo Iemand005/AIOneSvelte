@@ -1,9 +1,8 @@
 <script lang="ts">
 	import {type Message} from "./aione";
-	type MessageProps = {
+	let { message }: {
 		message: Message;
-	}
-	let {message}: MessageProps = $props();
+	} = $props();
 </script>
 
 <article class={message.role}>
