@@ -84,7 +84,7 @@
 <main>
   <header>
     <h1>AIOne</h1>
-    <label id="model-button" for="model-input" class="button">Load model!</label>
+    <label id="model-button" for="model-input" class="button">Choose model file!</label>
     <span class:loaded={ai}>{status}</span>
   </header>
 
