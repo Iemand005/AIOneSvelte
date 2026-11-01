@@ -4,9 +4,12 @@ self.addEventListener("securitypolicyviolation", e => {
 
 console.log("Worker started");
 
+const pub = false;
+const baseUrl = pub?  "https://iemand005.github.io/AIOneJS/web/" : "/";
+
 importScripts(
-    "https://iemand005.github.io/AIOneJS/web/AIOneWeb.js",
-    "https://iemand005.github.io/AIOneJS/web/worker-runtime.js"
+    baseUrl + "AIOneWeb.js",
+    baseUrl + "worker-runtime.js"
 );
 
 console.log("AIOneWeb loaded");
