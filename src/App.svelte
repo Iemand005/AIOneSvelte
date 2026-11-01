@@ -90,11 +90,12 @@
   {#if !ai}
     <section class="model-picker">
       <h2>Load a model</h2>
-      <label for="model-input"></label>
+      <label for="model-input">Load model!</label>
       <input
         type="file"
         accept=".gguf"
         name="model-input"
+        id="model-input"
         onchange={(event) => modelFile = event.currentTarget.files?.[0] ?? null}
       />
       <button onclick={loadModel} disabled={!modelFile || loading}>
