@@ -1,13 +1,5 @@
-self.onconnect = event => {
-    const port = event.ports[0];
+self.AIOne_BASE_URL = "https://iemand005.github.io/AIOneJS/web/";
 
-    port.onmessage = ({ data }) => {
-        port.postMessage({
-            type: "debug",
-            received: data
-        });
-    };
-
-    port.start();
-    port.postMessage({ type: "ready" });
-};
+importScripts(
+    self.AIOne_BASE_URL + "service-worker.js"
+);
