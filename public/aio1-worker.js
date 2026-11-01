@@ -1,5 +1,7 @@
-self.AIOne_BASE_URL = "https://iemand005.github.io/AIOneJS/web/";
+importScripts(
+    "https://iemand005.github.io/AIOneJS/web/AIOneWeb.js"
+);
 
 importScripts(
-    self.AIOne_BASE_URL + "service-worker.js"
+    "https://iemand005.github.io/AIOneJS/web/worker-runtime.js"
 );
