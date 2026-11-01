@@ -104,7 +104,7 @@
     <section class="chat">
       <div class="messages">
         {#each messages as message}
-          <Message message={message}/>
+          <ChatBubble message={message}/>
           <!-- <article class={message.role}>
             <strong>{message.role === "user" ? "You" : "AIOne"}</strong>
             <p>{message.content}</p>
