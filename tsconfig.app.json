@@ -20,8 +20,9 @@
     "paths": {
       "aione": ["../AIOneWeb/.vscode/AIOne.js"]
     },
-    com
+    "composite": true
   },
   "include": ["src/**/*.ts", "src/**/*.js", "src/**/*.svelte", "public/aio1-worker.js", "public/aio1-worker.js"],
   // compo
+  cco
 }
