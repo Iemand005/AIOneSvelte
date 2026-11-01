@@ -8,7 +8,6 @@
   const workerUrl = "/AIOneSvelte-dist/aio1-worker.js";
 
   let ai: AIOne | null = null;
-  let modelFile: File | null = null;
   let prompt = "";
   let loading = false;
   let status = "No model loaded";
@@ -16,7 +15,6 @@
   let messages: Message[] = [];
 
   async function loadModel(file?:File) {
-    if (!file && modelFile) file = modelFile;
     if (!file) return;
 
     loading = true;
@@ -97,51 +95,41 @@
     <span class:loaded={ai}>{status}</span>
   </header>
 
-  {#if ai}
-    <section class="model-picker">
-      <h2>Load a model</h2>
-      <button onclick={loadModel} disabled={!modelFile || loading}>
-        {loading ? "Loading..." : "Load model"}
+  <section class="chat">
+    <div class="messages">
+      {#each messages as message}
+        <ChatBubble message={message}/>
+        <!-- <article class={message.role}>
+          <strong>{message.role === "user" ? "You" : "AIOne"}</strong>
+          <p>{message.content}</p>
+        </article> -->
+      {/each}
+
+      {#if loading}
+        <article class="assistant">
+          <strong>AIOne</strong>
+          <p>Thinking...</p>
+        </article>
+      {/if}
+    </div>
+
+    <form onsubmit={event => { event.preventDefault(); sendMessage(); }}>
+      <textarea
+        bind:value={prompt}
+        placeholder="Message AIOne..."
+        disabled={loading}
+        onkeydown={event => {
+          if (event.key === "Enter" && !event.shiftKey) {
+            event.preventDefault();
+            sendMessage();
+          }
+        }}
+      ></textarea>
+      <button type="submit" disabled={loading || !prompt.trim()}>
+        Send
       </button>
-    </section>
-  {:else}
-    <section class="chat">
-      <div class="messages">
-        {#each messages as message}
-          <ChatBubble message={message}/>
-          <!-- <article class={message.role}>
-            <strong>{message.role === "user" ? "You" : "AIOne"}</strong>
-            <p>{message.content}</p>
-          </article> -->
-        {/each}
-
-        {#if loading}
-          <article class="assistant">
-            <strong>AIOne</strong>
-            <p>Thinking...</p>
-          </article>
-        {/if}
-      </div>
-
-      <form onsubmit={event => { event.preventDefault(); sendMessage(); }}>
-        <textarea
-          bind:value={prompt}
-          placeholder="Message AIOne..."
-          disabled={loading}
-          onkeydown={event => {
-            if (event.key === "Enter" && !event.shiftKey) {
-              event.preventDefault();
-              sendMessage();
-            }
-          }}
-        ></textarea>
-        <button type="submit" disabled={loading || !prompt.trim()}>
-          Send
-        </button>
-      </form>
-    </section>
-
-  {/if}
+    </form>
+  </section>
 </main>
 
 <style>
