@@ -12,7 +12,7 @@ export async function initializeAIOne() {
     return ai;
 }
 
-interface Message {
+export interface Message {
     role: "user" | "assistant";
     content: string;
 }

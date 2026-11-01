@@ -1,7 +1,8 @@
 
 <script lang="ts">
   import AIOne from "aione";
-  import Message from './lib/Message.svelte';
+  import { type Message } from "./lib/aione";
+  import ChatBubble from './lib/Message.svelte';
 
   const workerUrl = "/AIOneSvelte-dist/aio1-worker.js";
 
