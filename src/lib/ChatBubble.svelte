@@ -1,6 +1,6 @@
 <script lang="ts">
-	import {type Message} from "./aione";
-	let { message } = $props();
+	import {type Message as A} from "./aione";
+	let { message: A } = $props();
 </script>
 
 <article class={message.role}>
