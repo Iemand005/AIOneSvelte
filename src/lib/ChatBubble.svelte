@@ -3,7 +3,7 @@
 	type MessageProps = {
 		message: Message;
 	}
-	let props: MessageProps = $props();
+	let {message}: MessageProps = $props();
 </script>
 
 <article class={message.role}>
