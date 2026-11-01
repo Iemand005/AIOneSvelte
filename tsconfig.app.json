@@ -19,7 +19,9 @@
 
     "paths": {
       "aione": ["../AIOneWeb/.vscode/AIOne.js"]
-    }
+    },
+    com
   },
-  "include": ["src/**/*.ts", "src/**/*.js", "src/**/*.svelte", "public/aio1-worker.js", "public/aio1-worker.js"]
+  "include": ["src/**/*.ts", "src/**/*.js", "src/**/*.svelte", "public/aio1-worker.js", "public/aio1-worker.js"],
+  // compo
 }
