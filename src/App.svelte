@@ -5,11 +5,6 @@
 
   const workerUrl = "/AIOneSvelte-dist/aio1-worker.js";
 
-  interface Message {
-    role: "user" | "assistant";
-    content: string;
-  }
-
   let ai: AIOne | null = null;
   let modelFile: File | null = null;
   let prompt = "";

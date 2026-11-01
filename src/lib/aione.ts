@@ -11,3 +11,8 @@ export async function initializeAIOne() {
 
     return ai;
 }
+
+interface Message {
+    role: "user" | "assistant";
+    content: string;
+}
