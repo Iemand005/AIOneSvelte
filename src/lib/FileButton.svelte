@@ -10,7 +10,7 @@
 
 {#if file}
 <label id="model-button" for="model-input" class="button">Choose model file!</label>
-{#endif}
+{/if}
 <input
 	type="file"
 	accept=".gguf"
