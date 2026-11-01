@@ -2,6 +2,8 @@
 <script lang="ts">
   import AIOne from "aione";
 
+  const workerUrl = "/AIOneSvelte-dist/aio1-worker.js";
+
   interface Message {
     role: "user" | "assistant";
     content: string;
@@ -22,7 +24,7 @@
     status = "Loading model...";
 
     try {
-      ai = await AIOne.create({ workerUrl: "/AIOneSvelte-dist/aio1-worker.js" });
+      ai = await AIOne.create({ workerUrl });
       await ai.loadModel(modelFile);
       status = "Model loaded";
     } catch (error) {
