@@ -54,6 +54,7 @@
         `${conversation}\nAssistant:`,
         512,
         token => {
+          console.log("STREAM:", JSON.stringify(token));
           if (!streaming) {
             streaming = true;
             messages = [...messages, { role: "assistant", content: token }];
