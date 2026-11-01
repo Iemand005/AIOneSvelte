@@ -6,9 +6,6 @@ console.log("Worker started");
 
 const baseUrl = new URL("./", self.location.href).href;
 
-importScripts(
-    baseUrl + "AIOneWeb.js",
-    baseUrl + "worker-runtime.js"
-);
+importScripts(baseUrl + "worker-runtime.js");
 
-console.log("AIOneWeb loaded");
+console.log("Worker runtime loaded");

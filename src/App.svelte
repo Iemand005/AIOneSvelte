@@ -1,11 +1,9 @@
 
 <script lang="ts">
-  import AIOne from "aione-web";
-  import { type Message } from "./lib/aione";
+  import type AIOne from "aione-web";
+  import { closeAIOne, initializeAIOne, type Message } from "./lib/aione";
   import ChatBubble from './lib/ChatBubble.svelte';
     import FileButton from "./lib/FileButton.svelte";
-
-  const workerUrl = `${import.meta.env.BASE_URL}aio1-worker.js`;
 
   let ai: AIOne | null = null;
   let prompt = "";
@@ -21,12 +19,12 @@
     status = "Loading model...";
 
     try {
-      ai = await AIOne.create({ workerUrl });
+      ai = await initializeAIOne();
       await ai.loadModel(file);
       status = "Model loaded";
     } catch (error) {
       status = String(error);
-      ai?.close();
+      closeAIOne();
       ai = null;
     } finally {
       loading = false;
@@ -66,7 +64,7 @@
 
   function unloadModel() {
     ai?.unloadModel();
-    ai?.close();
+    closeAIOne();
     ai = null;
     status = "No model loaded";
     messages = [];

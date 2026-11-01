@@ -5,7 +5,46 @@ let mountedFile;
 
 let operationQueue = Promise.resolve();
 
-const BASE_URL = new URL("./", self.location.href).href;
+const WORKER_URL = new URL(self.location.href);
+const SEARCH_PARAMS = WORKER_URL.searchParams;
+
+const RUNTIME_OVERRIDE = SEARCH_PARAMS.get("runtime");
+const WASM_OVERRIDE = SEARCH_PARAMS.get("wasm");
+const HAS_EXTERNAL_RUNTIME = typeof Module !== "undefined";
+
+function getRuntimeUrl(threaded) {
+    return new URL(
+        threaded ? "./build/Release-mt/AIOneWebMT.js" : "./build/Release/AIOneWeb.js",
+        WORKER_URL
+    ).href;
+}
+
+let threaded = SEARCH_PARAMS.get("threads") === "1";
+let runtimeUrl = RUNTIME_OVERRIDE
+    ? new URL(RUNTIME_OVERRIDE, WORKER_URL).href
+    : getRuntimeUrl(threaded);
+
+if (!HAS_EXTERNAL_RUNTIME) {
+    try {
+        importScripts(runtimeUrl);
+    } catch (error) {
+        if (threaded && !RUNTIME_OVERRIDE) {
+            threaded = false;
+            runtimeUrl = getRuntimeUrl(false);
+            importScripts(runtimeUrl);
+        } else {
+            throw error;
+        }
+    }
+}
+
+function locateFile(path) {
+    if (WASM_OVERRIDE) {
+        return new URL(WASM_OVERRIDE, WORKER_URL).href;
+    }
+
+    return new URL(path, runtimeUrl).href;
+}
 
 async function initialize(file) {
     if (session) {
@@ -18,12 +57,13 @@ async function initialize(file) {
 
     if (!initializing && !module) {
         initializing = (async () => {
-            module = await Module({
-                workerFile: file,
+            const moduleOptions = { workerFile: file };
 
-                locateFile: path =>
-                    new URL(path, BASE_URL).href
-            });
+            if (WASM_OVERRIDE || !HAS_EXTERNAL_RUNTIME) {
+                moduleOptions.locateFile = locateFile;
+            }
+
+            module = await Module(moduleOptions);
 
             mountedFile = file.name;
             session = new module.ModelSession();
