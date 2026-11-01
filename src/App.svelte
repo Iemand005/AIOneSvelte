@@ -62,8 +62,8 @@
     }
   }
 
-  function unloadModel() {
-    ai?.unloadModel();
+  async function unloadModel() {
+    await ai?.unloadModel();
     closeAIOne();
     ai = null;
     status = "No model loaded";
