@@ -19,6 +19,6 @@
     "vite": "^8.3.5"
   },
   "dependencies": {
-    "aione-web": "^0.0.0-stage"
+    "aione-web": "^1.0.0"
   }
 }
