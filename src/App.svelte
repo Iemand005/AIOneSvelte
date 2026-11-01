@@ -82,6 +82,14 @@
   <header>
     <h1>AIOne</h1>
     <label id="model-button" for="model-input" class="button">Choose model file!</label>
+    <input
+      type="file"
+      accept=".gguf"
+      name="model-input"
+      id="model-input"
+      style="display: none;"
+      onchange={event => modelFile = event.currentTarget.files?.[0] ?? null}
+    />
     <button class="unload" onclick={unloadModel}>Eject</button>
     <span class:loaded={ai}>{status}</span>
   </header>
@@ -89,14 +97,6 @@
   {#if ai}
     <section class="model-picker">
       <h2>Load a model</h2>
-      <input
-        type="file"
-        accept=".gguf"
-        name="model-input"
-        id="model-input"
-        style="display: none;"
-        onchange={event => modelFile = event.currentTarget.files?.[0] ?? null}
-      />
       <button onclick={loadModel} disabled={!modelFile || loading}>
         {loading ? "Loading..." : "Load model"}
       </button>
