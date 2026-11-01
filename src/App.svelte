@@ -17,7 +17,7 @@
     status = "Loading model...";
 
     try {
-      ai = await AIOne.create({ workerUrl: "AIOneSvelte-dist/aio1-worker.js" });
+      ai = await AIOne.create({ workerUrl: "aio1-worker.js" });
       await ai.loadModel(modelFile);
       status = "Model loaded";
     } catch (error) {
