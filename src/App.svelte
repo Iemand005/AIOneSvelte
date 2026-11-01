@@ -16,8 +16,8 @@
   let messages: Message[] = [];
 
   async function loadModel(file?:File) {
-    if (!file) file = modelFile;
-    if (!modelFile || !file) return;
+    if (!file && modelFile) file = modelFile;
+    if (!file) return;
 
     loading = true;
     status = "Loading model...";
