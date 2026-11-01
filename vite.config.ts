@@ -4,5 +4,8 @@ import { defineConfig } from 'vite'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [svelte()],
-  base: "/AIOneSvelte-dist/"
+  base: "/AIOneSvelte-dist/",
+  resolve: {
+    tsconfigPaths: true
+  }
 })
