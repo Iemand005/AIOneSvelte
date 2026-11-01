@@ -82,6 +82,7 @@
   <header>
     <h1>AIOne</h1>
     <label id="model-button" for="model-input" class="button">Choose model file!</label>
+    <button class="unload" onclick={unloadModel}>Unload model</button>
     <span class:loaded={ai}>{status}</span>
   </header>
 
@@ -137,7 +138,6 @@
       </form>
     </section>
 
-    <button class="unload" onclick={unloadModel}>Unload model</button>
   {/if}
 </main>
 
