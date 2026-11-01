@@ -8,6 +8,7 @@
   let ai: AIOne | null = null;
   let prompt = "";
   let loading = false;
+  let streaming = false;
   let status = "No model loaded";
 
   let messages: Message[] = [];
@@ -43,22 +44,55 @@
       .map(m => `${m.role === "user" ? "User" : "Assistant"}: ${m.content}`)
       .join("\n");
 
+    const assistantIndex = messages.length;
+
     loading = true;
+    streaming = false;
 
     try {
       const response = await ai.generate(
         `${conversation}\nAssistant:`,
-        512
+        512,
+        token => {
+          if (!streaming) {
+            streaming = true;
+            messages = [...messages, { role: "assistant", content: token }];
+            return;
+          }
+
+          messages = messages.map((message, index) =>
+            index === assistantIndex
+              ? { ...message, content: message.content + token }
+              : message
+          );
+        }
       );
 
-      messages = [...messages, { role: "assistant", content: response }];
+      if (!streaming) {
+        messages = [...messages, { role: "assistant", content: response }];
+      } else {
+        messages = messages.map((message, index) =>
+          index === assistantIndex
+            ? { ...message, content: response }
+            : message
+        );
+      }
     } catch (error) {
-      messages = [...messages, {
-        role: "assistant",
-        content: `Error: ${String(error)}`
-      }];
+      if (!streaming) {
+        messages = [...messages, {
+          role: "assistant",
+          content: `Error: ${String(error)}`
+        }];
+      } else {
+        messages = messages.map((message, index) =>
+          index === assistantIndex
+            ? { ...message, content: `Error: ${String(error)}` }
+            : message
+        );
+      }
     } finally {
       loading = false;
+      streaming = false;
     }
   }
 
@@ -103,7 +137,7 @@
         </article> -->
       {/each}
 
-      {#if loading}
+      {#if loading && !streaming}
         <article class="assistant">
           <strong>AIOne</strong>
           <p>Thinking...</p>

@@ -84,7 +84,7 @@ async function initialize(file) {
     await session.loadModel("/models/" + file.name);
 }
 
-async function invoke(method, args) {
+async function invoke(method, args, onToken) {
     switch (method) {
         case "loadModel":
             return initialize(args.file);
@@ -94,7 +94,11 @@ async function invoke(method, args) {
                 throw new Error("No model is loaded");
             }
 
-            return await session.generate(args.prompt, args.maxTokens ?? 512);
+            return await session.generate(
+                args.prompt,
+                args.maxTokens ?? 512,
+                onToken
+            );
 
         case "unloadModel":
             if (session?.isLoaded()) {
@@ -111,8 +115,12 @@ self.onconnect = event => {
     const port = event.ports[0];
 
     port.onmessage = ({ data }) => {
+        const onToken = data.args?.stream
+            ? token => port.postMessage({ id: data.id, token })
+            : null;
+
         const execute = operationQueue.then(() =>
-            invoke(data.method, data.args ?? {})
+            invoke(data.method, data.args ?? {}, onToken)
         );
 
         operationQueue = execute.catch(() => {});
