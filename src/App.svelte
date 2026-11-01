@@ -85,7 +85,7 @@
     <span class:loaded={ai}>{status}</span>
   </header>
 
-  {#if !ai}
+  {#if ai}
     <section class="model-picker">
       <h2>Load a model</h2>
       <input
