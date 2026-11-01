@@ -1,10 +1,9 @@
-self.AIOne_BASE_URL = "https://iemand005.github.io/AIOneJS/web/";
+console.log("AIOne bootstrap executing");
 
-console.log("Bootstrap loaded");
+self.onconnect = event => {
+    console.log("AIOne connected");
 
-try {
-    importScripts(self.AIOne_BASE_URL + "service-worker.js");
-    console.log("Remote worker script loaded");
-} catch (error) {
-    console.error("Remote import failed:", error);
-}
+    const port = event.ports[0];
+    port.start();
+    port.postMessage({ type: "ready" });
+};
