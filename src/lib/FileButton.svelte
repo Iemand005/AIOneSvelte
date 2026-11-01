@@ -1,5 +1,9 @@
 <script lang="ts">
-	const { onchange } = $props();
+	type FileButtonProps = {
+
+	};
+	
+	const { onselect } = $props();
 
 	let file: File | null = null;
 </script>
