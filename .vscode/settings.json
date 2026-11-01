@@ -1,0 +1,5 @@
+{
+	"js/ts.inlayHints.parameterTypes.enabled": true,
+	"js/ts.inlayHints.propertyDeclarationTypes.enabled": true,
+	"js/ts.inlayHints.variableTypes.enabled": true
+}
