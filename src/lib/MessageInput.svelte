@@ -42,71 +42,42 @@
 
 <style>
 	.bar {
-		--corner-radius: calc(var(--message-box-size) / 2);
-
 		position: absolute;
 		inset: auto 0 0 0;
 		height: var(--message-box-size);
 		z-index: 0;
-
-		/* pointer-events: none; */
 	}
 
-	/* Covers: opaque background-colored fill OUTSIDE the bottom curves */
-	.bar::before,
-	.bar::after {
+	/* Cover: same shape as the form, inset 1px so its edge hides under the border ring.
+	   The shadow fills everything OUTSIDE the pill; clip-path keeps only the
+	   bottom half + below, so the top corners stay see-through. */
+	.bar::before {
 		content: "";
 		position: absolute;
-		bottom: 0;
-		width: var(--corner-radius);
-		height: var(--corner-radius);
+		inset: 1px;
+		border-radius: 1000px;
+		box-shadow: 0 0 0 100vmax var(--background);
+		clip-path: inset(50% -100vmax -100vmax -100vmax);
 		pointer-events: none;
-		z-index: 0; /* behind the form */
-
-		/* hole is 1px smaller than the border's outer edge, so the
-		   gradient's aliased edge is hidden under the border */
-		background: radial-gradient(
-			circle at top left,
-			transparent calc(var(--corner-radius) - 1px),
-			var(--background) calc(var(--corner-radius) - 0.5px)
-		);
-
-		outline: 1px solid var(--background);
-	}
-
-	.bar::before {
-		right: 0;
-	}
-
-	.bar::after {
-		left: 0;
-		transform: scaleX(-1);
+		z-index: 0;
 	}
 
 	form {
-		display: flex;
-		/* flex: 0; */
-		padding: 0;
-		border: 1px solid #00ff77;
 		position: absolute;
+		inset: 0;                 /* always exactly the size of .bar */
+		box-sizing: border-box;   /* so padding + border don't grow it */
+		z-index: 1;
 
-		height: var(--message-box-size);
-
-		border-color: rgba(139, 46, 38, 0);
-
-		transition: all 100ms ease-out;
-
+		display: flex;
 		padding: 5px;
 
-		background: #4040408f;
+		border: 1px solid rgba(139, 46, 38, 0);
+		border-radius: 1000px;
 
+		background: #4040408f;
 		backdrop-filter: blur(10px);
 
-		bottom: 0;
-		left: 0;
-		right: 0;
-
-		z-index: 1;
+		transition: border-color 100ms ease-out;
 	}
 
 	form:has(input:focus) {
