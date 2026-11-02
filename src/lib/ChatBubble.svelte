@@ -13,7 +13,7 @@
 </article>
 
 <style>
-    .bubble {
+    article {
         max-width: 80%;
         padding: 0.75rem 1rem;
         border-radius: 1rem;
