@@ -70,13 +70,6 @@ header {
 	padding: 10px;
 }
 
-h1 {
-	margin-right: 10px;
-  font-family: var(--heading);
-  font-weight: 500;
-  color: var(--text-h);
-}
-
 .button, button {
 	display: inline-block;
 	background-color: #303139;
