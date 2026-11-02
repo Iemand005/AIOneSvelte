@@ -54,6 +54,12 @@
 		background-color: green;
 	}
 
+	:global(.model-button) {
+		border-left: 1px solid black;
+
+		border-top-right-radius: 0;
+	}
+
 	form {
 		flex: 1;
 
@@ -71,12 +77,6 @@
 		min-height: 0;
 		margin-block: 0;
 		align-self: stretch;
-	}
-
-	form > *:nth-child(1) {
-		border-left: 1px solid black;
-
-		border-top-right-radius: 0;
 	}
 
 	button {
