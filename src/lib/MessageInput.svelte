@@ -48,6 +48,8 @@
 		inset: auto 0 0 0;
 		height: var(--message-box-size);
 		z-index: 1;
+
+		pointer-events: none;
 	}
 
 	/* Covers: opaque background-colored fill OUTSIDE the bottom curves */
