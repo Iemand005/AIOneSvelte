@@ -5,6 +5,7 @@
   import ChatBubble from './lib/ChatBubble.svelte';
   import MessageInput from "./lib/MessageInput.svelte";
   import ModelLoader from "./lib/ModelLoader.svelte";
+    import ChatBox from "./lib/ChatBox.svelte";
 
 
   let ai: AIOne | null = null;
@@ -31,7 +32,7 @@
     <ModelLoader {ai}/>
   </header>
 
-  
+  <ChatBox/>
 </main>
 
 <style>
