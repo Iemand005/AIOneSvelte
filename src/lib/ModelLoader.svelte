@@ -14,7 +14,7 @@
 		onerror
 	}: Props = $props();
 
-	let loaded = false;
+	let loaded = $state(false);
 
 	let status = $state("No model loaded");
 
@@ -26,7 +26,7 @@
 
 		try {
 			await ai?.loadModel(file);
-			status = "Model loaded";
+			loaded = true;
 		} catch (error) {
 			onerror?.(error);
 		} finally {
