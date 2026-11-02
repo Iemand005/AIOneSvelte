@@ -16,8 +16,6 @@
 
 	let loaded = $state(false);
 
-	let status = $state("No model loaded");
-
 	async function loadModel(file?: File) {
 		if (!file) return;
 
@@ -40,7 +38,7 @@
 		} catch (error) {
 			onerror?.(error);
 		} finally {
-			status = "No model loaded";
+			loaded = false;
 		}
 	}
 </script>
@@ -49,5 +47,3 @@
 <button class="unload" onclick={unloadModel} disabled={!ai || loading}>
 	Eject
 </button>
-
-<p>{status}</p>
