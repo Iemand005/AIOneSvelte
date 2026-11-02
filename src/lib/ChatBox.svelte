@@ -17,11 +17,11 @@
 		onerror
 	}: Props = $props();
 
-	let prompt = "";
-	let streaming = false;
+	let prompt = $state("");
+	let streaming = $state(false);
 	let status = "No model loaded";
 
-	let messages: Message[] = [];
+	let messages: Message[] = $state([]);
 	
 	async function sendMessage() {
 		if (!ai || !prompt.trim() || loading) return;
