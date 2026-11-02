@@ -19,7 +19,6 @@
 
 	let prompt = $state("");
 	let streaming = $state(false);
-	let status = "No model loaded";
 
 	let messages: Message[] = $state([]);
 	
