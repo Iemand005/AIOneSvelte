@@ -83,7 +83,7 @@
 		position: relative;
 		isolation: isolate;
 		color: white;
-		background: linear-gradient(180deg, rgb(119 26 20), rgb(99 23 18));
+		background: var(--accent-gradient);
 		transition: color 100ms linear;
 	}
 
