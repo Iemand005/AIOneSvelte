@@ -39,7 +39,7 @@
 <style>
 	form {
 		display: flex;
-		border-radius: 100%;
+		border-radius: 100px;
 	}
 
 	input {
