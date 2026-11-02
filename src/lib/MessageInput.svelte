@@ -41,14 +41,26 @@
 
 
 <style>
-	.bar {
+	form {
 		position: absolute;
 		inset: auto 0 0 0;
 		height: var(--message-box-size);
-		z-index: 0;
+		box-sizing: border-box;
+		z-index: 1; /* makes the form a stacking context, so the -1 children stay inside it */
+
+		display: flex;
+		padding: 6px; /* was 5px + 1px border; the border is now a pseudo-element */
+
+		border: none;
+		border-radius: 1000px;
+
+		background: linear-gradient(0deg, var(--background), #4040408f);
+		backdrop-filter: blur(10px);
 	}
 
-	.bar::before {
+	/* Cover: fills everything outside the pill, bottom half only.
+	   Inset 1px so its edge sits under the border ring. */
+	form::before {
 		content: "";
 		position: absolute;
 		inset: 1px;
@@ -56,28 +68,22 @@
 		box-shadow: 0 0 0 100vmax var(--background);
 		clip-path: inset(50% -100vmax -100vmax -100vmax);
 		pointer-events: none;
-		z-index: 0;
+		z-index: -1;
 	}
 
-	form {
+	/* Border ring: later in tree order than ::before, so it paints over the cover's edge */
+	form::after {
+		content: "";
 		position: absolute;
 		inset: 0;
-		box-sizing: border-box;
-		z-index: 1;
-
-		display: flex;
-		padding: 5px;
-
 		border: 1px solid rgba(139, 46, 38, 0);
 		border-radius: 1000px;
-
-		background: linear-gradient(0deg, var(--background), #4040408f);
-		backdrop-filter: blur(10px);
-
+		pointer-events: none;
+		z-index: -1;
 		transition: border-color 100ms ease-out;
 	}
 
-	form:has(input:focus) {
+	form:has(input:focus)::after {
 		border-color: rgb(139 46 38);
 	}
 
