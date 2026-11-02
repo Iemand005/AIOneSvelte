@@ -23,13 +23,13 @@
         overflow-wrap: anywhere;
     }
 
-    .bubble.user {
+    article.user {
         align-self: flex-end;
         background: #771a14;
         border-bottom-right-radius: 0.25rem;
     }
 
-    .bubble:not(.user) {
+    article:not(.user) {
         border-bottom-left-radius: 0.25rem;
     }
 
