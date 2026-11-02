@@ -1,83 +1,53 @@
 <script lang="ts">
 	type MessageInputProps = {
-        sendMessage: () => void;
-        loading?: boolean;
-        prompt?: string;
-    };
+		sendMessage: () => void;
+		loading?: boolean;
+		prompt?: string;
+	};
 
-    let {
-        sendMessage,
-        loading = false,
-        prompt = $bindable(""),
-    }: MessageInputProps = $props();
+	let {
+		sendMessage,
+		loading = false,
+		prompt = $bindable(""),
+	}: MessageInputProps = $props();
 </script>
 
 <div class="bar">
-<div class="cover"></div>
+	<div class="cover"></div>
 
-<form
-	class="button"
-	onsubmit={event => {
-		event.preventDefault();
-		sendMessage();
-	}}
->
-    <input type="text"
-        bind:value={prompt}
-        placeholder="Message..."
-        disabled={loading}
-		id="message-input"
-
-        onkeydown={event => {
-            if (event.key === "Enter" && !event.shiftKey) {
-                event.preventDefault();
-                sendMessage();
-            }
-        }}
-    >
-    <button type="submit" disabled={loading || !prompt.trim()}>
-        ↵
-    </button>
-</form>
+	<form
+		onsubmit={event => {
+			event.preventDefault();
+			sendMessage();
+		}}
+	>
+		<input
+			type="text"
+			id="message-input"
+			placeholder="Message..."
+			bind:value={prompt}
+			disabled={loading}
+			onkeydown={event => {
+				if (event.key === "Enter" && !event.shiftKey) {
+					event.preventDefault();
+					sendMessage();
+				}
+			}}
+		/>
+		<button type="submit" disabled={loading || !prompt.trim()}>↵</button>
+	</form>
 </div>
 
 <style>
-
-	.cover,
-	form {
-		--pad: 12px;
-		position: absolute;
-		inset: var(--pad, 0px);
-	}
-	.bar {
-		position: absolute;
-		flex: 1;
-		/* top: 100px; */
-		left: 0;
-		right: 0;
-		bottom: var(--bar-bottom, 0px);
-		height: var(--message-box-size);
-
-		z-index: 1;
-	}
-
-	.cover {
-		inset: 1px;
-		border-radius: 1000px;
-		box-shadow: 0 0 0 100vmax var(--background);
-		clip-path: inset(50% -100vmax -100vmax -100vmax);
-		pointer-events: none;
-		z-index: 0;
-	}
-
+	/* Position + size live here only. The pill sits --pad away from every edge. */
 	.bar {
 		--pad: 12px;
+
 		position: absolute;
 		left: 0;
 		right: 0;
 		bottom: var(--bar-bottom, 0px);
 		height: calc(var(--message-box-size) + var(--pad) * 2);
-		padding: var(--pad);
 		box-sizing: border-box;
 		z-index: 1;
 	}
@@ -88,16 +58,25 @@
 		inset: var(--pad);
 	}
 
+	/* Fills everything outside the bottom half of the pill.
+	   Inset 1px more than the form so its edge hides under the border. */
 	.cover {
 		inset: calc(var(--pad) + 1px);
+		border-radius: 1000px;
+		box-shadow: 0 0 0 100vmax var(--background);
+		clip-path: inset(50% -100vmax -100vmax -100vmax);
+		pointer-events: none;
+		z-index: 0;
 	}
 
 	form {
 		z-index: 1;
+		box-sizing: border-box;
 
 		display: flex;
 		padding: 5px;
 
+		border: 1px solid transparent;
 		border-radius: 1000px;
 
 		background: linear-gradient(0deg, #1b1b1b, #4040408f);
@@ -106,43 +85,38 @@
 		transition: border-color 100ms ease-out;
 	}
 
-	form:has(input:focus)::after {
+	form:has(input:focus) {
 		border-color: rgb(139 46 38);
-	}
-
-	form, button {
-		border-radius: 1000px;
 	}
 
 	input {
 		flex: 1;
 		width: 100%;
+		margin-left: 14px;
+		padding: 0;
+
+		font-size: 17px;
 		background: none;
 		border: none;
 		outline: none;
-		padding: 0;
-		margin-left: 14px;
-
-		font-size: 17px;
 	}
 
-	button {
-		height: 100%;
-		aspect-ratio: 1;
-		box-sizing: border-box;
-		line-height: 35px;
-		/* margin: 6px; */
-		
-		font-size: 20px;
-		padding: 0;
-		text-align: center;
-	}
-	
 	button {
 		position: relative;
 		isolation: isolate;
+
+		height: 100%;
+		aspect-ratio: 1;
+		box-sizing: border-box;
+		padding: 0;
+
+		font-size: 20px;
+		line-height: 35px;
+		text-align: center;
 		color: white;
+
 		background: var(--accent-gradient);
+		border-radius: 1000px;
 		transition: color 100ms linear;
 	}
 
