@@ -78,6 +78,8 @@
 		flex-direction: column;
 		height: 100%;
 		min-height: 0;
+
+		position: relative;
 	}
 
 	.messages {
