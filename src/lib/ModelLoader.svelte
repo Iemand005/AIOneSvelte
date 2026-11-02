@@ -16,8 +16,8 @@
 
 	let loaded = $state(false);
 
-	async function loadModel(file?: File) {
-		if (!file || !ai) return;
+	async function loadModel(file: File) {
+		if (!ai) return;
 
 		loading = true;
 
