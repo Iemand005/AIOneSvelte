@@ -55,8 +55,6 @@
 	}
 
 	:global(.model-button) {
-		border-right: 1px solid black;
-
 		border-radius: 0;
 	}
 
@@ -83,6 +81,7 @@
 	}
 
 	button {
+		border-left: 1px solid black;
 		border-radius: 0;
 	}
 </style>
