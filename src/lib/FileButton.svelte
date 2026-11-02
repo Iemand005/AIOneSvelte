@@ -1,5 +1,5 @@
 <script lang="ts">
-	type FileButtonProps = {
+	type Props = {
 		onselect: (file: File)=>void;
 		class?: string;
 	};
@@ -7,7 +7,7 @@
 	const {
 		onselect,
 		class: className = '', 
-	}: FileButtonProps = $props();
+	}: Props = $props();
 
 	let selectedFile: File | null = $state(null);
 </script>
