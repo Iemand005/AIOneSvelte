@@ -84,6 +84,7 @@
 		isolation: isolate;
 		color: white;
 		background: linear-gradient(180deg, rgb(119 26 20), rgb(99 23 18));
+		
 	}
 
 	button::before {
@@ -107,5 +108,6 @@
 
 	button:active {
 		background: linear-gradient(180deg, rgb(79 13 10), rgb(99 23 18));
+		box-shadow: inset 0 0 10px #000000a3;
 	}
 </style>
