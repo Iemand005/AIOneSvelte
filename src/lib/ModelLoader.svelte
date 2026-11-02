@@ -44,7 +44,7 @@
 
 <form>
 	<FileButton class={loaded ? "active" : ""} onselect={loadModel} />
-	<button type="button" class="unload" onclick={unloadModel} disabled={!ai || loading}>
+	<button type="button" class="unload" onclick={unloadModel} disabled={!loaded}>
 		Eject
 	</button>
 </form>
