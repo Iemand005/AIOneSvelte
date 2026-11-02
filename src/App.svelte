@@ -99,7 +99,7 @@
   <section class="chat">
     <div class="messages">
       {#each messages as message}
-        <ChatBubble message={message}/>
+        <ChatBubble {message}/>
       {/each}
 
       {#if loading && !streaming}
