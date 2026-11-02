@@ -72,13 +72,29 @@
 	}
 	
 	button {
-		color: #ffffff;
+		position: relative;
+		isolation: isolate;
+		color: white;
 		background: linear-gradient(180deg, rgb(119 26 20), rgb(99 23 18));
-		transition: background 100ms linear;
 	}
 
-	button:hover {
+	button::before {
+		content: "";
+		position: absolute;
+		inset: 0;
+		z-index: -1;
+		border-radius: inherit;
 		background: linear-gradient(180deg, rgb(139 46 38), rgb(119 26 20));
+		opacity: 0;
+		transition: opacity 100ms linear;
+	}
+
+	button:hover::before {
+		opacity: 1;
+	}
+
+	button:active::before {
+		opacity: 0;
 	}
 
 	button:active {
