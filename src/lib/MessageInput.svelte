@@ -67,13 +67,29 @@
 		border-color: rgb(139 46 38);
 	}
 
-	form::before {
+	form::before,
+	form::after {
 		content: "";
 		position: absolute;
-		inset: 0;
-		z-index: -1;
-		background: rgb(10, 10, 10);
-		border-radius: 0;
+		bottom: 0;
+		width: 20px;
+		height: 20px;
+		pointer-events: none;
+
+		background: radial-gradient(
+			circle at top left,
+			transparent 20px,
+			var(--background) 20.5px
+		);
+	}
+
+	form::before {
+		left: -20px;
+	}
+
+	form::after {
+		right: -20px;
+		transform: scaleX(-1);
 	}
 
 	form, button {
