@@ -54,6 +54,7 @@
 
 		padding: 5px;
 
+		background: #4040408f;
 
 		bottom: 0;
 		left: 0;
