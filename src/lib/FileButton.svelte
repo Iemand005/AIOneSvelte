@@ -24,6 +24,7 @@
 	name="model-input"
 	id="model-input"
 	style="display: none;"
+	class={className}
 	onchange={event => {
 		const file = event.currentTarget.files?.[0];
 		if (!file) return;

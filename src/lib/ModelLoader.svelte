@@ -14,6 +14,8 @@
 		onerror
 	}: Props = $props();
 
+	let loaded = false;
+
 	let status = $state("No model loaded");
 
 	async function loadModel(file?: File) {
@@ -43,7 +45,7 @@
 	}
 </script>
 
-<FileButton class={active} onselect={loadModel} />
+<FileButton class={loaded && "active"} onselect={loadModel} />
 <button class="unload" onclick={unloadModel} disabled={!ai || loading}>
 	Eject
 </button>
