@@ -20,7 +20,6 @@
 		if (!file) return;
 
 		loading = true;
-		status = "Loading model...";
 
 		try {
 			await ai?.loadModel(file);
