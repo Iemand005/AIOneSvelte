@@ -44,7 +44,7 @@
 		/* flex: 0; */
 		padding: 0;
 		border: 1px solid #404040;
-		border:none;
+		/* border:none; */
 		position: absolute;
 
 		height: var(--message-box-size);
@@ -81,7 +81,7 @@
 
 		background: radial-gradient(
 			circle at top left,
-			transparent calc(var(--message-box-size) / 2 - 1px),
+			transparent calc(var(--message-box-size) / 2 - 0.1px),
 			var(--background) calc(var(--message-box-size) / 2)
 		);
 
