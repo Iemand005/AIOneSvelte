@@ -37,8 +37,48 @@
     </button>
 </form>
 
+<div id="bar"></div>
+
 
 <style>
+	.bar {
+		--corner-radius: calc(var(--message-box-size) / 2);
+
+		position: absolute;
+		inset: auto 0 0 0;
+		height: var(--message-box-size);
+		z-index: 1;
+	}
+
+	/* Covers: opaque background-colored fill OUTSIDE the bottom curves */
+	.bar::before,
+	.bar::after {
+		content: "";
+		position: absolute;
+		bottom: 0;
+		width: var(--corner-radius);
+		height: var(--corner-radius);
+		pointer-events: none;
+		z-index: 0; /* behind the form */
+
+		/* hole is 1px smaller than the border's outer edge, so the
+		   gradient's aliased edge is hidden under the border */
+		background: radial-gradient(
+			circle at top left,
+			transparent calc(var(--corner-radius) - 1px),
+			var(--background) calc(var(--corner-radius) - 0.5px)
+		);
+	}
+
+	.bar::before {
+		right: 0;
+	}
+
+	.bar::after {
+		left: 0;
+		transform: scaleX(-1);
+	}
+
 	form {
 		display: flex;
 		/* flex: 0; */
