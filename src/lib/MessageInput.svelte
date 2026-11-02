@@ -52,9 +52,9 @@
 	.bar {
 		position: absolute;
 		flex: 1;
-		top: 100px;
-		left: var(--pad, 0px);
-		right: var(--pad, 0px);
+		/* top: 100px; */
+		left: 0;
+		right: 0;
 		bottom: var(--bar-bottom, 0px);
 		height: var(--message-box-size);
 
