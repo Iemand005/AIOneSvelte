@@ -31,7 +31,7 @@
         }}
     >
     <button type="submit" disabled={loading || !prompt.trim()}>
-        Send
+        ↵
     </button>
 </form>
 
