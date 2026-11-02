@@ -48,6 +48,8 @@
 		border-color: rgba(139, 46, 38, 0);
 
 		transition: all 100ms ease-out;
+
+		margin-top: -47px;
 	}
 
 	form:has(input:focus) {
