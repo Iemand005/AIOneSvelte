@@ -4,7 +4,8 @@
 
 	type ModelLoaderProps = {
 		ai: AIOne;
-		loading: Boolean
+		loading: boolean;
+		loaded: boolean;
 	};
 
 	let {
@@ -19,7 +20,6 @@
 		status = "Loading model...";
 
 		try {
-			ai = await initializeAIOne();
 			await ai.loadModel(file);
 			status = "Model loaded";
 		} catch (error) {
