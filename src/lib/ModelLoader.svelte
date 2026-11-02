@@ -6,9 +6,9 @@
 		ai: AIOne;
 	};
 
-	const {
+	let {
 		ai,
-		loading = $bindable(false);
+		loading = $bindable(false)
 	}: ModelLoaderProps = $state();
 
 	async function loadModel(file?: File) {
@@ -18,15 +18,15 @@
 		status = "Loading model...";
 
 		try {
-		ai = await initializeAIOne();
-		await ai.loadModel(file);
-		status = "Model loaded";
+			ai = await initializeAIOne();
+			await ai.loadModel(file);
+			status = "Model loaded";
 		} catch (error) {
-		status = String(error);
-		closeAIOne();
-		ai = null;
-		} finally {
-		loading = false;
+			status = String(error);
+			closeAIOne();
+			ai = null;
+			} finally {
+			loading = false;
 		}
 	}
 
