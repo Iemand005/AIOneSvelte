@@ -59,6 +59,7 @@
 
 	input {
 		flex: 1;
+		width: 100%;
 		background: none;
 		border: none;
 		outline: none;
