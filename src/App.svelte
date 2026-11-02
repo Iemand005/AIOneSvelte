@@ -202,7 +202,6 @@
 
   .messages {
     flex: 1;
-    min-height: 400px;
     display: flex;
     flex-direction: column;
     gap: 16px;
