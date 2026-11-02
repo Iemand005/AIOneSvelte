@@ -36,12 +36,6 @@
     box-sizing: border-box;
   }
 
-  :global(body) {
-    margin: 0;
-    color: #eee;
-    font-family: system-ui, sans-serif;
-  }
-
   main {
     width: min(850px, 100%);
     min-height: 100vh;
