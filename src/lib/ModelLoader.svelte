@@ -1,17 +1,18 @@
 <script lang="ts">
-    import type AIOne from "aione-web";
-    import FileButton from "./FileButton.svelte";
+	import type AIOne from "aione-web";
+	import FileButton from "./FileButton.svelte";
 
 	type ModelLoaderProps = {
-		ai: AIOne;
-		loading: boolean;
-		loaded: boolean;
+		ai: AIOne | null;
+		loading?: boolean;
 	};
 
 	let {
-		ai,
+		ai = $bindable(null),
 		loading = $bindable(false)
 	}: ModelLoaderProps = $props();
+
+	let status = $state("No model loaded");
 
 	async function loadModel(file?: File) {
 		if (!file) return;
@@ -20,27 +21,33 @@
 		status = "Loading model...";
 
 		try {
-			await ai.loadModel(file);
+			await ai?.loadModel(file);
 			status = "Model loaded";
 		} catch (error) {
-			status = String(error);
+			status = error instanceof Error ? error.message : String(error);
 			closeAIOne();
 			ai = null;
-			} finally {
+		} finally {
 			loading = false;
 		}
 	}
 
 	async function unloadModel() {
-		await ai?.unloadModel();
-		closeAIOne();
-		ai = null;
-		status = "No model loaded";
-		messages = [];
+		try {
+			await ai?.unloadModel();
+		} catch (error) {
+			status = error instanceof Error ? error.message : String(error);
+		} finally {
+			closeAIOne();
+			ai = null;
+			status = "No model loaded";
+		}
 	}
-
 </script>
 
+<FileButton onselect={loadModel} />
+<button class="unload" onclick={unloadModel} disabled={!ai || loading}>
+	Eject
+</button>
 
-<FileButton onselect={loadModel}/>
-<button class="unload" onclick={unloadModel}>Eject</button>
+<p>{status}</p>
