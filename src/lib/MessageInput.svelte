@@ -48,9 +48,6 @@
 		z-index: 0;
 	}
 
-	/* Cover: same shape as the form, inset 1px so its edge hides under the border ring.
-	   The shadow fills everything OUTSIDE the pill; clip-path keeps only the
-	   bottom half + below, so the top corners stay see-through. */
 	.bar::before {
 		content: "";
 		position: absolute;
@@ -64,8 +61,8 @@
 
 	form {
 		position: absolute;
-		inset: 0;                 /* always exactly the size of .bar */
-		box-sizing: border-box;   /* so padding + border don't grow it */
+		inset: 0;
+		box-sizing: border-box;
 		z-index: 1;
 
 		display: flex;
