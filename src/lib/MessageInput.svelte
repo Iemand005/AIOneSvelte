@@ -44,6 +44,7 @@
 		/* flex: 0; */
 		padding: 0;
 		border: 1px solid #404040;
+		position: fixed;
 
 		height: var(--message-box-size);
 
@@ -51,7 +52,7 @@
 
 		transition: all 100ms ease-out;
 
-		margin-top: calc(-1 * var(--message-box-size) / 2);
+		/* margin-top: calc(-1 * var(--message-box-size) / 2); */
 
 		padding: 5px;
 	}
