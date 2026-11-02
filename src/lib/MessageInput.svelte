@@ -76,7 +76,6 @@
 		display: flex;
 		padding: 5px;
 
-		border: 1px solid transparent;
 		border-radius: 1000px;
 
 		background: linear-gradient(0deg, #1b1b1b, #4040408f);
