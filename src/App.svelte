@@ -43,4 +43,8 @@
 
   header {
     display: flex;
-    align-items: c
+    align-items: center;
+    justify-content: space-between;
+  }
+
+</style>

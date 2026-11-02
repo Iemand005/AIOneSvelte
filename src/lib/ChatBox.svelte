@@ -7,12 +7,14 @@
 	type Props = {
 		ai: AIOne | null;
 		loading?: boolean;
+		systemPrompt?: string;
 		onerror?: (error: unknown) => void;
 	};
 
 	let {
 		ai = $bindable(null),
 		loading = $bindable(false),
+		systemPrompt = $bindable(""),
 		onerror
 	}: Props = $props();
 
@@ -27,7 +29,12 @@
 		prompt = "";
 
 		const index = messages.length;
-		const conversation = messages
+		const conversation = [
+			...(systemPrompt.trim()
+				? [{ role: "system" as const, content: systemPrompt.trim() }]
+				: []),
+			...messages
+		]
 			.map(m => `${m.role}: ${m.content}`)
 			.join("\n");
 
