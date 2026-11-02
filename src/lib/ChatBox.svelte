@@ -105,4 +105,4 @@
     </div>
 
     <MessageInput bind:prompt {loading} {sendMessage} />
-  </section>
+</section>
