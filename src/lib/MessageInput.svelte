@@ -42,6 +42,7 @@
 	form {
 		display: flex;
 		padding: 0;
+		border: 1px solid #404040;
 	}
 
 	form, button {
@@ -79,5 +80,6 @@
 
 	button:hover {
 		background-color: rgb(124 38 32);
+		background: linear-gradient(180deg, rgb(99 23 18), rgb(119 26 20));
 	}
 </style>
