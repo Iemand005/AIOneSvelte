@@ -97,7 +97,6 @@
 
 		display: flex;
 		padding: 5px;
-		bottom: 0;
 
 		border-radius: 1000px;
 
