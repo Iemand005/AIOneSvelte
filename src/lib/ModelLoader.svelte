@@ -57,8 +57,7 @@
 	:global(.model-button) {
 		border-right: 1px solid black;
 
-		border-top-right-radius: 0;
-		border-bottom-right-radius: 0;
+		border-radius: 0;
 	}
 
 	form {
