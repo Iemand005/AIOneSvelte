@@ -68,7 +68,7 @@
 		display: flex;
 		padding: 5px;
 
-		/* border: 1px solid rgba(139, 46, 38, 0); */
+		border: 1px solid rgba(139, 46, 38, 0);
 		border-radius: 1000px;
 
 		background: linear-gradient(0deg, var(--background), #4040408f);
