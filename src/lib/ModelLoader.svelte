@@ -60,9 +60,14 @@
 		display: flex;
 
 		flex-direction: row;
+		align-items: stretch;
 	}
 
 	form > * {
-		height: 100%;
+		/* height: 100%; */
+		height: auto;
+		min-height: 0;
+		margin-block: 0;
+		align-self: stretch;
 	}
 </style>
