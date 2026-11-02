@@ -59,5 +59,9 @@
 		height: 40px;
 		background-color: blue;
 		margin: 5px;
+
+		font-size: 30px;
+		padding: 0;
+		text-align: center;
 	}
 </style>
