@@ -36,7 +36,6 @@
 		try {
 			await ai?.unloadModel();
 		} catch (error) {
-			status = error instanceof Error ? error.message : String(error);
 			onerror?.(error);
 		} finally {
 			status = "No model loaded";
@@ -44,7 +43,7 @@
 	}
 </script>
 
-<FileButton onselect={loadModel} />
+<FileButton class:active onselect={loadModel} />
 <button class="unload" onclick={unloadModel} disabled={!ai || loading}>
 	Eject
 </button>
