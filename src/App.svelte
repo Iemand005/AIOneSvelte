@@ -191,29 +191,4 @@
     line-height: 1.5;
   }
 
-  form {
-    display: flex;
-    gap: 10px;
-  }
-
-
-  button {
-    padding: 12px 20px;
-    border: 0;
-    border-radius: 9px;
-    background: #526de5;
-    color: white;
-    font: inherit;
-    cursor: pointer;
-  }
-
-  button:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-  }
-
-  .unload {
-    align-self: flex-start;
-    background: #303139;
-  }
 </style>
