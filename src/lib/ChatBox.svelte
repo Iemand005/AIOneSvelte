@@ -90,6 +90,8 @@
 		min-height: 0;
 		overflow-y: auto;
 
+		padding: var(--chatbox-pad);
+
 		padding-bottom: calc(var(--message-box-size) + 1rem);
 	}
 

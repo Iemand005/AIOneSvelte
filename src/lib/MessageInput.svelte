@@ -39,15 +39,13 @@
 </div>
 
 <style>
-	/* Position + size live here only. The pill sits --pad away from every edge. */
+	
 	.bar {
-		--pad: 12px;
-
 		position: absolute;
 		left: 0;
 		right: 0;
 		bottom: var(--bar-bottom, 0px);
-		height: calc(var(--message-box-size) + var(--pad) * 2);
+		height: calc(var(--message-box-size) + var(--chatbox-pad) * 2);
 		box-sizing: border-box;
 		z-index: 1;
 	}
@@ -55,13 +53,13 @@
 	.cover,
 	form {
 		position: absolute;
-		inset: var(--pad);
+		inset: var(--chatbox-pad);
 	}
 
 	/* Fills everything outside the bottom half of the pill.
 	   Inset 1px more than the form so its edge hides under the border. */
 	.cover {
-		inset: calc(var(--pad) + 1px);
+		inset: calc(var(--chatbox-pad) + 1px);
 		border-radius: 1000px;
 		box-shadow: 0 0 0 100vmax var(--background);
 		clip-path: inset(50% -100vmax -100vmax -100vmax);
