@@ -65,13 +65,11 @@
 	}
 
 	form {
-		box-sizing: border-box;
-		z-index: 1; /* above the cover, so its border paints over the cover's edge */
+		z-index: 1;
 
 		display: flex;
 		padding: 5px;
 
-		/* border: 1px solid rgba(139, 46, 38, 0); */
 		border-radius: 1000px;
 
 		background: linear-gradient(0deg, #1b1b1b, #4040408f);
