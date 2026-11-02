@@ -50,7 +50,6 @@
 		height: var(--message-box-size);
 	}
 
-	/* inset 1px on every side so its edge hides under the form's border ring */
 	.cover {
 		left: 1px;
 		right: 1px;
@@ -71,7 +70,7 @@
 		display: flex;
 		padding: 5px;
 
-		border: 1px solid rgba(139, 46, 38, 0);
+		/* border: 1px solid rgba(139, 46, 38, 0); */
 		border-radius: 1000px;
 
 		background: linear-gradient(0deg, var(--background), #4040408f);
