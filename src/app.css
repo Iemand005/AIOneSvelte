@@ -301,3 +301,9 @@ code {
   border-radius: 9px;
   cursor: pointer;
 }
+
+textarea {
+  flex: 1;
+  background: none;
+  border: none;
+}

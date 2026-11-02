@@ -3,7 +3,9 @@
   import type AIOne from "aione-web";
   import { closeAIOne, initializeAIOne, type Message } from "./lib/aione";
   import ChatBubble from './lib/ChatBubble.svelte';
-    import FileButton from "./lib/FileButton.svelte";
+  import FileButton from "./lib/FileButton.svelte";
+  import MessageInput from "./lib/MessageInput.svelte";
+
 
   let ai: AIOne | null = null;
   let prompt = "";
@@ -133,7 +135,9 @@
       {/if}
     </div>
 
-    <form onsubmit={event => { event.preventDefault(); sendMessage(); }}>
+    <MessageInput bind:prompt {loading} {sendMessage} />
+    
+    <!-- <form onsubmit={event => { event.preventDefault(); sendMessage(); }}>
       <textarea
         bind:value={prompt}
         placeholder="Message AIOne..."
@@ -148,7 +152,7 @@
       <button type="submit" disabled={loading || !prompt.trim()}>
         Send
       </button>
-    </form>
+    </form> -->
   </section>
 </main>
 
@@ -231,18 +235,6 @@
     gap: 10px;
   }
 
-  textarea {
-    flex: 1;
-    min-height: 54px;
-    max-height: 180px;
-    resize: vertical;
-    padding: 14px;
-    border: 1px solid #383940;
-    border-radius: 10px;
-    background: #1b1c21;
-    color: white;
-    font: inherit;
-  }
 
   button {
     padding: 12px 20px;
