@@ -51,7 +51,7 @@
 
 		transition: all 100ms ease-out;
 
-		margin-top: -47px;
+		margin-top: calc(0 - (54px / 2));
 
 		padding: 5px;
 	}
