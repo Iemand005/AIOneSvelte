@@ -53,6 +53,8 @@
 		border: none;
 		outline: none;
 		margin-left: 14px;
+
+		font-size: 17px;
 	}
 
 	button {
@@ -61,7 +63,7 @@
 		line-height: 35px;
 		color: black;
 		background-color: rgb(116, 0, 0);
-		margin: 5px;
+		margin: 8px;
 
 		font-size: 20px;
 		padding: 0;
