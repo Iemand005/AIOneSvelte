@@ -25,7 +25,6 @@
 
 <main>
   <header>
-    <h1>AIOne</h1>
     <ModelLoader {ai} bind:loading/>
   </header>
 
