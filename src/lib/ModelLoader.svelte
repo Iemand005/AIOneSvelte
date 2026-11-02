@@ -42,7 +42,7 @@
 	}
 </script>
 
-<form>
+<form class="button">
 	<FileButton class={loaded ? "active" : ""} onselect={loadModel} />
 	<button type="button" class="unload button" onclick={unloadModel} disabled={!loaded}>
 		Eject
@@ -58,6 +58,8 @@
 		flex: 1;
 
 		display: flex;
+
+		padding: 0;
 
 		flex-direction: row;
 		align-items: stretch;
