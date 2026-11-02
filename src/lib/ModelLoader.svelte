@@ -4,12 +4,13 @@
 
 	type ModelLoaderProps = {
 		ai: AIOne;
+		loading: Boolean
 	};
 
 	let {
 		ai,
 		loading = $bindable(false)
-	} = $props<ModelLoaderProps>();
+	}: ModelLoaderProps = $props();
 
 	async function loadModel(file?: File) {
 		if (!file) return;
