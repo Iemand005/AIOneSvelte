@@ -69,6 +69,9 @@
 	form::before {
 		content: "";
 		background-color: red;
+		position: absolute;
+		inset: 0;
+		z-index: -1;
 	}
 
 	form, button {
