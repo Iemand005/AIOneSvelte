@@ -43,14 +43,18 @@
 
 <style>
 
-	.cover, .bar
+	.cover,
 	form {
+		--pad: 12px;
 		position: absolute;
 		inset: var(--pad, 0px);
 	}
 	.bar {
+		position: absolute;
 		flex: 1;
 		top: 100px;
+		left: var(--pad, 0px);
+		right: var(--pad, 0px);
 		bottom: var(--bar-bottom, 0px);
 		height: var(--message-box-size);
 
