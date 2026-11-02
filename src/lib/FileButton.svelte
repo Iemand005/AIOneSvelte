@@ -23,7 +23,7 @@
 </label>
 <input
 	type="file"
-	accept=".gguf"
+	{accept}
 	id="model-input"
 	onchange={event => {
 		const file = event.currentTarget.files?.[0];
