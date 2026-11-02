@@ -9,7 +9,7 @@
 	let {
 		ai,
 		loading = $bindable(false)
-	} = $state<ModelLoaderProps>();
+	} = $props<ModelLoaderProps>();
 
 	async function loadModel(file?: File) {
 		if (!file) return;
