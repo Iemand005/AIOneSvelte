@@ -12,6 +12,8 @@
     }: MessageInputProps = $props();
 </script>
 
+<div class="cover"></div>
+
 <form
 	class="button"
 	onsubmit={event => {
@@ -39,43 +41,42 @@
 
 
 <style>
-	form {
+	form,
+	.cover {
 		position: absolute;
-		inset: auto 0 0 0;
+		left: 0;
+		right: 0;
+		bottom: var(--bar-bottom, 0px);
 		height: var(--message-box-size);
-		box-sizing: border-box;
-		z-index: 1;
-
-		display: flex;
-		padding: 6px;
-
-		border: none;
-		border-radius: 1000px;
-
-		background: linear-gradient(0deg, var(--background), #4040408f);
-		backdrop-filter: blur(10px);
 	}
 
-	form::before {
-		content: "";
-		position: absolute;
-		inset: 0.4rem;
+	/* inset 1px on every side so its edge hides under the form's border ring */
+	.cover {
+		left: 1px;
+		right: 1px;
+		bottom: calc(var(--bar-bottom, 0px) + 1px);
+		height: calc(var(--message-box-size) - 2px);
+
 		border-radius: 1000px;
 		box-shadow: 0 0 0 100vmax var(--background);
 		clip-path: inset(50% -100vmax -100vmax -100vmax);
 		pointer-events: none;
-		z-index: -1;
+		z-index: 0;
 	}
 
-	/* Border ring: later in tree order than ::before, so it paints over the cover's edge */
-	form::after {
-		content: "";
-		position: absolute;
-		inset: 0;
+	form {
+		box-sizing: border-box;
+		z-index: 1; /* above the cover, so its border paints over the cover's edge */
+
+		display: flex;
+		padding: 5px;
+
 		border: 1px solid rgba(139, 46, 38, 0);
 		border-radius: 1000px;
-		pointer-events: none;
-		z-index: -1;
+
+		background: linear-gradient(0deg, var(--background), #4040408f);
+		backdrop-filter: blur(10px);
+
 		transition: border-color 100ms ease-out;
 	}
 
