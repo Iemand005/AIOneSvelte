@@ -60,10 +60,6 @@
     justify-content: space-between;
   }
 
-  h1 {
-    margin: 0;
-  }
-
   header span {
     color: #999;
     font-size: 14px;
