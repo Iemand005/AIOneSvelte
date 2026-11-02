@@ -37,7 +37,10 @@
 
 
 <style>
+	form {
+		display: flex;
+	}
 	textarea {
-		width: 100%;
+		flex: 1;
 	}
 </style>
