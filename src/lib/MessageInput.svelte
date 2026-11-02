@@ -46,6 +46,8 @@
 
 		outline: 2px solid rgba(86, 27, 22, 0);
 		border-color: rgba(139, 46, 38, 0);
+
+		transition: all 100ms ease-out;
 	}
 
 	form:has(input:focus) {
