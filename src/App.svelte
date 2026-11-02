@@ -15,25 +15,6 @@
 
   let messages: Message[] = [];
 
-  async function loadModel(file?: File) {
-    if (!file) return;
-
-    loading = true;
-    status = "Loading model...";
-
-    try {
-      ai = await initializeAIOne();
-      await ai.loadModel(file);
-      status = "Model loaded";
-    } catch (error) {
-      status = String(error);
-      closeAIOne();
-      ai = null;
-    } finally {
-      loading = false;
-    }
-  }
-
   async function sendMessage() {
     if (!ai || !prompt.trim() || loading) return;
 
@@ -99,13 +80,7 @@
     }
   }
 
-  async function unloadModel() {
-    await ai?.unloadModel();
-    closeAIOne();
-    ai = null;
-    status = "No model loaded";
-    messages = [];
-  }
+  
 </script>
 
 <svelte:head>
