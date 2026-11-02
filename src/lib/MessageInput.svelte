@@ -12,10 +12,13 @@
     }: MessageInputProps = $props();
 </script>
 
-<form onsubmit={event => {
-    event.preventDefault();
-    sendMessage();
-}}>
+<form
+	class="button"
+	onsubmit={event => {
+		event.preventDefault();
+		sendMessage();
+	}}
+>
     <textarea
         bind:value={prompt}
         placeholder="Message AIOne..."
@@ -31,3 +34,8 @@
         Send
     </button>
 </form>
+
+
+<style>
+
+</style>
