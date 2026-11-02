@@ -39,5 +39,8 @@
 	}
 	label {
 		flex: 1;
+
+		text-overflow: ellipsis;
+		white-space: nowrap;
 	}
 </style>
