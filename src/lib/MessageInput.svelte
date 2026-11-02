@@ -39,8 +39,11 @@
 <style>
 	form {
 		display: flex;
-		border-radius: 100px;
 		padding: 0 14px;
+	}
+
+	form, button {
+		border-radius: 1000px;
 	}
 
 	input {
@@ -54,6 +57,6 @@
 		width: 40px;
 		height: 40px;
 		background-color: blue;
-		bordeeer-rad: 10px;
+		margin: 5px;
 	}
 </style>
