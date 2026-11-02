@@ -4,11 +4,13 @@
   import { initializeAIOne, type Message } from "./lib/aione";
   import ModelLoader from "./lib/ModelLoader.svelte";
   import ChatBox from "./lib/ChatBox.svelte";
+  import SystemPrompt from "./lib/SystemPrompt.svelte";
 
 
   let ai: AIOne | null = null;
 
   let loading = false;
+  let systemPrompt = $state("");
   
 
   initializeAIOne().then(one => ai = one);
@@ -24,7 +26,9 @@
     <ModelLoader {ai} bind:loading/>
   </header>
 
-  <ChatBox {ai} bind:loading/>
+  <SystemPrompt bind:systemPrompt />
+
+  <ChatBox {ai} bind:loading bind:systemPrompt />
 </main>
 
 <style>
@@ -39,8 +43,4 @@
 
   header {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-
-</style>
+    align-items: c
