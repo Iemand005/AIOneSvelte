@@ -43,5 +43,7 @@
 
 	input {
 		flex: 1;
+		background: none;
+		border: none;
 	}
 </style>
