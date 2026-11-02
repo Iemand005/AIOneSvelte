@@ -32,7 +32,6 @@
     width: min(850px, 100%);
     min-height: 100vh;
     margin: auto;
-    /* padding: 32px 20px; */
     display: flex;
     flex-direction: column;
     gap: 24px;
