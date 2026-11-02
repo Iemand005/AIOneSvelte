@@ -42,10 +42,12 @@
 	}
 </script>
 
-<FileButton class={loaded ? "active" : ""} onselect={loadModel} />
-<button class="unload" onclick={unloadModel} disabled={!ai || loading}>
-	Eject
-</button>
+<form>
+	<FileButton class={loaded ? "active" : ""} onselect={loadModel} />
+	<button class="unload" onclick={unloadModel} disabled={!ai || loading}>
+		Eject
+	</button>
+</form>
 
 <style>
   .card {
