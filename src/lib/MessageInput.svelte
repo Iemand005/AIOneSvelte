@@ -47,7 +47,7 @@
 		left: 10px;
 		right: 10px;
 		bottom: 10px;
-		bottom: var(--bar-bottom, 0px);
+		/* bottom: var(--bar-bottom, 0px); */
 		height: var(--message-box-size);
 
 		z-index: 1;
