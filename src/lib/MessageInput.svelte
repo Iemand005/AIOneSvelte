@@ -80,7 +80,7 @@
 		background: radial-gradient(
 			circle at top left,
 			transparent calc(var(--message-box-size) / 2),
-			black calc(var(--message-box-size) / 2)
+			var(--background) calc(var(--message-box-size) / 2)
 		);
 	}
 
