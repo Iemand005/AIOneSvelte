@@ -73,6 +73,6 @@
 	}
 
 	button:hover {
-		background-color: rgb(138, 54, 48);
+		background-color: rgb(124 38 32);
 	}
 </style>
