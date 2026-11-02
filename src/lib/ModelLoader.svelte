@@ -2,17 +2,17 @@
 	import type AIOne from "aione-web";
 	import FileButton from "./FileButton.svelte";
 
-	type ModelLoaderProps = {
+	type Props = {
 		ai: AIOne | null;
 		loading?: boolean;
-		onerror: (status: string) => void;
+		onerror?: (error: unknown) => void;
 	};
 
 	let {
 		ai = $bindable(null),
 		loading = $bindable(false),
 		onerror
-	}: ModelLoaderProps = $props();
+	}: Props = $props();
 
 	let status = $state("No model loaded");
 
@@ -26,8 +26,7 @@
 			await ai?.loadModel(file);
 			status = "Model loaded";
 		} catch (error) {
-			status = error instanceof Error ? error.message : String(error);
-			onerror(status);
+			onerror?.(error);
 		} finally {
 			loading = false;
 		}
@@ -38,9 +37,8 @@
 			await ai?.unloadModel();
 		} catch (error) {
 			status = error instanceof Error ? error.message : String(error);
+			onerror?.(error);
 		} finally {
-			closeAIOne();
-			ai = null;
 			status = "No model loaded";
 		}
 	}
