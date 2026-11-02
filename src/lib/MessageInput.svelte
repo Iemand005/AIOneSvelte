@@ -40,7 +40,6 @@
 	form {
 		display: flex;
 		padding: 0;
-		padding-left: 14px;
 	}
 
 	form, button {
@@ -51,7 +50,8 @@
 		flex: 1;
 		background: none;
 		border: none;
-		outline:none;
+		outline: none;
+		margin-left: 14px;
 	}
 
 	button {
