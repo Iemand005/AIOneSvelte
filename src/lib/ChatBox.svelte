@@ -1,5 +1,7 @@
 <script lang="ts">
+    import type AIOne from "aione-web";
     import ChatBubble from "./ChatBubble.svelte";
+    import MessageInput from "./MessageInput.svelte";
 
 
 	type Props = {
