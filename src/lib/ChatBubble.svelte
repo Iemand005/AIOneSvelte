@@ -16,7 +16,7 @@
     article {
         max-width: 80%;
         padding: 0.75rem 1rem;
-        border-radius: 1rem;
+        border-radius: calc(var(--message-box-size) / 2);
         background: #292929;
         color: white;
         align-self: flex-start;
