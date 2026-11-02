@@ -62,5 +62,7 @@
 		flex-direction: row;
 	}
 
-	
+	form > * {
+		height: 100%;
+	}
 </style>
