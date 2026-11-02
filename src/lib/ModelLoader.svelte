@@ -46,3 +46,10 @@
 <button class="unload" onclick={unloadModel} disabled={!ai || loading}>
 	Eject
 </button>
+
+<style>
+  .card {
+    padding: 1rem;
+    border-radius: 8px;
+  }
+</style>
