@@ -73,8 +73,8 @@
 	}
 
 	button {
-		width: 35px;
 		height: 35px;
+		aspect-ratio: 1;
 		line-height: 35px;
 		margin: 6px;
 		
