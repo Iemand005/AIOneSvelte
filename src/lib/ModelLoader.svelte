@@ -50,15 +50,17 @@
 </form>
 
 <style>
-  :global(label.active) {
-	background-color: green;
-  }
+	:global(label.active) {
+		background-color: green;
+	}
 
-  form {
-	flex: 1;
+	form {
+		flex: 1;
 
-	display: flex;
+		display: flex;
 
-	flex-direction: row;
-  }
+		flex-direction: row;
+	}
+
+	
 </style>
