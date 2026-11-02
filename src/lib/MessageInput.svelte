@@ -62,7 +62,7 @@
 		background-color: blue;
 		margin: 5px;
 
-		font-size: 30px;
+		font-size: 20px;
 		padding: 0;
 		text-align: center;
 	}
