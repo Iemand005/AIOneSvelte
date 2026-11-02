@@ -32,7 +32,7 @@
     <ModelLoader {ai}/>
   </header>
 
-  <ChatBox/>
+  <ChatBox {ai}/>
 </main>
 
 <style>
