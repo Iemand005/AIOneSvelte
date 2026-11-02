@@ -13,6 +13,12 @@
 		loading = $bindable(false),
 		onerror
 	}: Props = $props();
+
+	let prompt = "";
+	let streaming = false;
+	let status = "No model loaded";
+
+	let messages: Message[] = [];
 	
 	async function sendMessage() {
 		if (!ai || !prompt.trim() || loading) return;

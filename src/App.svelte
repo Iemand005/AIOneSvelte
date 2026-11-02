@@ -9,12 +9,9 @@
 
 
   let ai: AIOne | null = null;
-  let prompt = "";
-  let loading = false;
-  let streaming = false;
-  let status = "No model loaded";
 
-  let messages: Message[] = [];
+	let loading = false;
+  
 
   initializeAIOne().then(one => ai = one);
 
@@ -29,10 +26,10 @@
 <main>
   <header>
     <h1>AIOne</h1>
-    <ModelLoader {ai}/>
+    <ModelLoader {ai} bind:loading/>
   </header>
 
-  <ChatBox {ai}/>
+  <ChatBox {ai} bind:loading/>
 </main>
 
 <style>
