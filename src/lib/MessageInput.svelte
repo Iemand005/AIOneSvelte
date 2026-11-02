@@ -44,8 +44,9 @@
 <style>
 	.bar {
 		position: absolute;
-		left: 0;
-		right: 0;
+		left: 10px;
+		right: 10px;
+		bottom: 10px;
 		bottom: var(--bar-bottom, 0px);
 		height: var(--message-box-size);
 
