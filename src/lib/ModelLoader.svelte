@@ -61,6 +61,8 @@
 
 		padding: 0;
 
+		border-left: 1px solid black;
+
 		flex-direction: row;
 		align-items: stretch;
 	}
