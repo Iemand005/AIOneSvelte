@@ -94,8 +94,6 @@
   <header>
     <h1>AIOne</h1>
     <ModelLoader {ai}/>
-
-    <span class:loaded={ai}>{status}</span>
   </header>
 
   <section class="chat">
