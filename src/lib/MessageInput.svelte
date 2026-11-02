@@ -59,7 +59,7 @@
 		width: 35px;
 		height: 35px;
 		line-height: 35px;
-		background-color: blue;
+		background-color: rgb(116, 0, 0);
 		margin: 5px;
 
 		font-size: 20px;
