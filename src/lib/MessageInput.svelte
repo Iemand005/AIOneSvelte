@@ -19,7 +19,7 @@
 		sendMessage();
 	}}
 >
-    <textarea
+    <input type="text"
         bind:value={prompt}
         placeholder="Message AIOne..."
         disabled={loading}
@@ -29,7 +29,7 @@
                 sendMessage();
             }
         }}
-    ></textarea>
+    >
     <button type="submit" disabled={loading || !prompt.trim()}>
         Send
     </button>
@@ -41,7 +41,7 @@
 		display: flex;
 	}
 
-	textarea {
+	input {
 		flex: 1;
 	}
 </style>
