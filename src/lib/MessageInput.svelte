@@ -12,6 +12,7 @@
     }: MessageInputProps = $props();
 </script>
 
+<div>
 <div class="cover"></div>
 
 <form
@@ -38,7 +39,7 @@
         ↵
     </button>
 </form>
-
+</div>
 
 <style>
 	form,
