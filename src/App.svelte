@@ -3,7 +3,6 @@
   import type AIOne from "aione-web";
   import { closeAIOne, initializeAIOne, type Message } from "./lib/aione";
   import ChatBubble from './lib/ChatBubble.svelte';
-  import FileButton from "./lib/FileButton.svelte";
   import MessageInput from "./lib/MessageInput.svelte";
     import ModelLoader from "./lib/ModelLoader.svelte";
 
