@@ -2,11 +2,13 @@
 	type Props = {
 		onselect: (file: File)=>void;
 		class?: string;
+		accept?: string;
 	};
 
 	const {
 		onselect,
-		class: className = '', 
+		class: className = '',
+		accept = ".gguf"
 	}: Props = $props();
 
 	let selectedFile: File | null = $state(null);
@@ -22,9 +24,7 @@
 <input
 	type="file"
 	accept=".gguf"
-	name="model-input"
 	id="model-input"
-	style="display: none;"
 	onchange={event => {
 		const file = event.currentTarget.files?.[0];
 		if (!file) return;
@@ -32,3 +32,9 @@
 		selectedFile = file;
 	}}
 />
+
+<style>
+	input {
+		display: none;
+	}
+</style>
