@@ -50,8 +50,7 @@
 </form>
 
 <style>
-  .card {
-    padding: 1rem;
-    border-radius: 8px;
+  :global(label.active) {
+	background-color: green;
   }
 </style>
