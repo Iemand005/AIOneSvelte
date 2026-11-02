@@ -13,7 +13,6 @@
 </script>
 
 <div class="bar">
-
 <form
 	class="button"
 	onsubmit={event => {
