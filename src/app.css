@@ -300,6 +300,7 @@ code {
   padding: 12px 20px;
   border-radius: 9px;
   cursor: pointer;
+  border: none;
 }
 
 textarea {
