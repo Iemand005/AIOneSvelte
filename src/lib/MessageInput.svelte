@@ -46,7 +46,7 @@
 	}
 
 	form:has(input:focus) {
-		outline: 2px solid rgb(139 46 38);
+		outline: 2px solid rgb(86 27 22);
 		border-color: rgb(139 46 38);
 	}
 
