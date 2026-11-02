@@ -41,7 +41,7 @@
 <style>
 	form {
 		display: flex;
-		flex: 0;
+		/* flex: 0; */
 		padding: 0;
 		border: 1px solid #404040;
 
