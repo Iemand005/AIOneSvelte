@@ -2,20 +2,16 @@
 <script lang="ts">
   import type AIOne from "aione-web";
   import { initializeAIOne, type Message } from "./lib/aione";
-  import ChatBubble from './lib/ChatBubble.svelte';
-  import MessageInput from "./lib/MessageInput.svelte";
   import ModelLoader from "./lib/ModelLoader.svelte";
-    import ChatBox from "./lib/ChatBox.svelte";
+  import ChatBox from "./lib/ChatBox.svelte";
 
 
   let ai: AIOne | null = null;
 
-	let loading = false;
+  let loading = false;
   
 
   initializeAIOne().then(one => ai = one);
-
-  
 </script>
 
 <svelte:head>
@@ -32,10 +28,6 @@
 </main>
 
 <style>
-  :global(*) {
-    box-sizing: border-box;
-  }
-
   main {
     width: min(850px, 100%);
     min-height: 100vh;
