@@ -79,7 +79,7 @@
 		background: radial-gradient(
 			circle at top left,
 			transparent 20px,
-			var(--background) 20.5px
+			black 20.5px
 		);
 	}
 
