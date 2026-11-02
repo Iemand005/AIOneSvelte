@@ -12,7 +12,7 @@
     }: MessageInputProps = $props();
 </script>
 
-<div>
+<div class="bar">
 <div class="cover"></div>
 
 <form
@@ -42,22 +42,25 @@
 </div>
 
 <style>
-	form,
-	.cover {
+	.bar {
 		position: absolute;
 		left: 0;
 		right: 0;
 		bottom: var(--bar-bottom, 0px);
 		height: var(--message-box-size);
+
+		z-index: 1; /* above page content, and a stacking context for the children */
 	}
 
-	.cover {
-		left: 1px;
-		right: 1px;
-		bottom: 1px;
-		bottom: calc(var(--bar-bottom, 0px) + 1px);
-		height: calc(var(--message-box-size) - 2px);
+	.cover,
+	form {
+		position: absolute;
+		inset: 0;
+	}
 
+	/* Inset 1px so its edge hides under the form's border ring. */
+	.cover {
+		inset: 1px;
 		border-radius: 1000px;
 		box-shadow: 0 0 0 100vmax var(--background);
 		clip-path: inset(50% -100vmax -100vmax -100vmax);
@@ -67,10 +70,12 @@
 
 	form {
 		z-index: 1;
+		box-sizing: border-box;
 
 		display: flex;
 		padding: 5px;
 
+		border: 1px solid transparent;
 		border-radius: 1000px;
 
 		background: linear-gradient(0deg, #1b1b1b, #4040408f);
