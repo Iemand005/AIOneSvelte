@@ -17,6 +17,9 @@
 
   --accent-gradient: linear-gradient(180deg, rgb(119 26 20), rgb(99 23 18));
 
+
+	--message-box-size: 45px;
+
   font: 18px/145% var(--sans);
   letter-spacing: 0.18px;
   color-scheme: light dark;
