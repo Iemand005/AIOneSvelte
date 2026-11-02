@@ -92,7 +92,8 @@
 <main>
   <header>
     <h1>AIOne</h1>
-    <ModelLoader ai={ai}/>
+    <ModelLoader {ai}/>
+    
     <span class:loaded={ai}>{status}</span>
   </header>
 
