@@ -12,7 +12,6 @@
     }: MessageInputProps = $props();
 </script>
 
-<div class="bar">
 <form
 	class="button"
 	onsubmit={event => {
@@ -37,7 +36,6 @@
         ↵
     </button>
 </form>
-</div>
 
 
 <style>
