@@ -45,13 +45,13 @@
 		padding: 0;
 		border: 1px solid #404040;
 
-		height: 45px;
+		height: var(--message-box-size);
 
 		border-color: rgba(139, 46, 38, 0);
 
 		transition: all 100ms ease-out;
 
-		margin-top: calc(-1 * 45px / 2);
+		margin-top: calc(-1 * var(--message-box-size) / 2);
 
 		padding: 5px;
 	}
