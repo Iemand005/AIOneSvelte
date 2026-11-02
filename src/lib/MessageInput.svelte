@@ -72,7 +72,7 @@
 	}
 	
 	button {
-		transition: background-color 100ms linear;
+		transition: background 100ms linear;
 		color: #ffffff;	 
 		background-color: rgb(119 26 20);
 		background: linear-gradient(1deg, rgb(99 23 18), rgb(119 26 20));
@@ -80,6 +80,6 @@
 
 	button:hover {
 		background-color: rgb(124 38 32);
-		background: linear-gradient(180deg, rgb(99 23 18), rgb(119 26 20));
+		background: linear-gradient(180deg, rgb(99 23 18), rgb(124 38 32));
 	}
 </style>
