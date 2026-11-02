@@ -45,11 +45,15 @@
 		padding: 0;
 		border: 1px solid #404040;
 
+		height: 48px;
+
 		border-color: rgba(139, 46, 38, 0);
 
 		transition: all 100ms ease-out;
 
 		margin-top: -47px;
+
+		padding: 6px;
 	}
 
 	form:has(input:focus) {
@@ -73,10 +77,11 @@
 	}
 
 	button {
-		height: 35px;
+		height: 100%;
 		aspect-ratio: 1;
+		box-sizing: border-box;
 		line-height: 35px;
-		margin: 6px;
+		/* margin: 6px; */
 		
 		font-size: 20px;
 		padding: 0;
