@@ -73,7 +73,7 @@
 		position: absolute;
 		inset: 0;
 		z-index: -1;
-		background: var(--your-background);
+		background: red;
 		border-radius: inherit;
 	}
 
