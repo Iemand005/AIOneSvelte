@@ -45,6 +45,11 @@
 		border: 1px solid #404040;
 	}
 
+	form:has(input:focus) {
+		outline: 2px solid rgb(139 46 38);
+		border-color: rgb(139 46 38);
+	}
+
 	form, button {
 		border-radius: 1000px;
 	}
