@@ -63,13 +63,17 @@
 		width: 35px;
 		height: 35px;
 		line-height: 35px;
-		color: #ffffff;	 
-		background-color: rgb(119 26 20);
 		margin: 8px;
-
+		
 		font-size: 20px;
 		padding: 0;
 		text-align: center;
+	}
+	
+	button {
+		transition: background-color 100ms linear;
+		color: #ffffff;	 
+		background-color: rgb(119 26 20);
 	}
 
 	button:hover {
