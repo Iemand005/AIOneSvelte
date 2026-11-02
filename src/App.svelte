@@ -93,7 +93,7 @@
   <header>
     <h1>AIOne</h1>
     <ModelLoader {ai}/>
-    
+
     <span class:loaded={ai}>{status}</span>
   </header>
 
@@ -112,23 +112,6 @@
     </div>
 
     <MessageInput bind:prompt {loading} {sendMessage} />
-
-    <!-- <form onsubmit={event => { event.preventDefault(); sendMessage(); }}>
-      <textarea
-        bind:value={prompt}
-        placeholder="Message AIOne..."
-        disabled={loading}
-        onkeydown={event => {
-          if (event.key === "Enter" && !event.shiftKey) {
-            event.preventDefault();
-            sendMessage();
-          }
-        }}
-      ></textarea>
-      <button type="submit" disabled={loading || !prompt.trim()}>
-        Send
-      </button>
-    </form> -->
   </section>
 </main>
 
