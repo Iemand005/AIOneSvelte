@@ -72,7 +72,7 @@
 		position: absolute;
 		inset: 0;
 		z-index: -1;
-		background: red;
+		background: rgb(10, 10, 10);
 		border-radius: 0;
 	}
 
