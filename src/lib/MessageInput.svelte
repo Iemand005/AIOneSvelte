@@ -23,6 +23,7 @@
         bind:value={prompt}
         placeholder="Message..."
         disabled={loading}
+		id="message-input"
 
         onkeydown={event => {
             if (event.key === "Enter" && !event.shiftKey) {
