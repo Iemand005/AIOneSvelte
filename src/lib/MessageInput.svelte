@@ -55,6 +55,8 @@
 		/* margin-top: calc(-1 * var(--message-box-size) / 2); */
 
 		padding: 5px;
+
+		width: 100%;
 	}
 
 	form:has(input:focus) {
