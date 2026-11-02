@@ -53,5 +53,7 @@
 	button {
 		width: 40px;
 		height: 40px;
+		background-color: blue;
+		bordeeer-rad: 10px;
 	}
 </style>
