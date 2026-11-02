@@ -60,6 +60,8 @@
 		bottom: 0;
 		left: 0;
 		right: 0;
+
+		/* z-index: 2; */
 	}
 
 	form:has(input:focus) {
@@ -68,10 +70,11 @@
 
 	form::before {
 		content: "";
-		background-color: red;
 		position: absolute;
 		inset: 0;
 		z-index: -1;
+		background: var(--your-background);
+		border-radius: inherit;
 	}
 
 	form, button {
