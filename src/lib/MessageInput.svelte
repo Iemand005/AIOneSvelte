@@ -66,6 +66,11 @@
 		border-color: rgb(139 46 38);
 	}
 
+	form::before {
+		content: "";
+		background-color: red;
+	}
+
 	form, button {
 		border-radius: 1000px;
 	}
