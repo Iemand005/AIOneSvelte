@@ -53,6 +53,7 @@
 		background: none;
 		border: none;
 		outline: none;
+		padding: 0;
 		margin-left: 14px;
 
 		font-size: 17px;
@@ -62,8 +63,8 @@
 		width: 35px;
 		height: 35px;
 		line-height: 35px;
-		color: black;
-		background-color: rgb(116, 0, 0);
+		color: #ffffff;	 
+		background-color: rgb(119 26 20);
 		margin: 8px;
 
 		font-size: 20px;
