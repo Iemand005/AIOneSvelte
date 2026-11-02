@@ -44,6 +44,7 @@
 		/* flex: 0; */
 		padding: 0;
 		border: 1px solid #404040;
+		border:none;
 		position: absolute;
 
 		height: var(--message-box-size);
@@ -72,23 +73,23 @@
 		content: "";
 		position: absolute;
 		bottom: 0;
-		width: 20px;
-		height: 20px;
+		aspect-ratio: 1;
+		height: calc(var(--message-box-size) / 2);
 		pointer-events: none;
 
 		background: radial-gradient(
 			circle at top left,
-			transparent 20px,
-			black 20.5px
+			transparent calc(var(--message-box-size) / 2),
+			black calc(var(--message-box-size) / 2 + 0.0px)
 		);
 	}
 
 	form::before {
-		left: -20px;
+		right: 0px;
 	}
 
 	form::after {
-		right: -20px;
+		left: 0px;
 		transform: scaleX(-1);
 	}
 
