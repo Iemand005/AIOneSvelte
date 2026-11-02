@@ -44,10 +44,10 @@
 		inset: auto 0 0 0;
 		height: var(--message-box-size);
 		box-sizing: border-box;
-		z-index: 1; /* makes the form a stacking context, so the -1 children stay inside it */
+		z-index: 1;
 
 		display: flex;
-		padding: 6px; /* was 5px + 1px border; the border is now a pseudo-element */
+		padding: 6px;
 
 		border: none;
 		border-radius: 1000px;
@@ -56,12 +56,10 @@
 		backdrop-filter: blur(10px);
 	}
 
-	/* Cover: fills everything outside the pill, bottom half only.
-	   Inset 1px so its edge sits under the border ring. */
 	form::before {
 		content: "";
 		position: absolute;
-		inset: 1px;
+		inset: 0.4rem;
 		border-radius: 1000px;
 		box-shadow: 0 0 0 100vmax var(--background);
 		clip-path: inset(50% -100vmax -100vmax -100vmax);
