@@ -21,8 +21,9 @@
 >
     <input type="text"
         bind:value={prompt}
-        placeholder="Message AIOne..."
+        placeholder="Message..."
         disabled={loading}
+
         onkeydown={event => {
             if (event.key === "Enter" && !event.shiftKey) {
                 event.preventDefault();
