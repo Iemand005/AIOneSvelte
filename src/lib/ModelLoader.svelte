@@ -17,12 +17,12 @@
 	let loaded = $state(false);
 
 	async function loadModel(file?: File) {
-		if (!file) return;
+		if (!file || !ai) return;
 
 		loading = true;
 
 		try {
-			await ai?.loadModel(file);
+			await ai.loadModel(file);
 			loaded = true;
 		} catch (error) {
 			onerror?.(error);
