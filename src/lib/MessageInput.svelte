@@ -60,6 +60,7 @@
 	input {
 		flex: 1;
 		width: 100%;
+		text-overflow: ellipsis;
 		background: none;
 		border: none;
 		outline: none;
