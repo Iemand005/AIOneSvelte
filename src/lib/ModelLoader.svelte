@@ -53,4 +53,8 @@
   :global(label.active) {
 	background-color: green;
   }
+
+  form {
+	flex: 1;
+  }
 </style>
