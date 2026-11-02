@@ -25,7 +25,7 @@
 
     article.user {
         align-self: flex-end;
-        background: #771a14;
+        background: var(--accent-gradient);
         border-bottom-right-radius: 0.25rem;
     }
 
