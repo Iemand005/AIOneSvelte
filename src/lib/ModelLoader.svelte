@@ -5,11 +5,13 @@
 	type ModelLoaderProps = {
 		ai: AIOne | null;
 		loading?: boolean;
+		onerror: (status: string) => void;
 	};
 
 	let {
 		ai = $bindable(null),
-		loading = $bindable(false)
+		loading = $bindable(false),
+		onerror
 	}: ModelLoaderProps = $props();
 
 	let status = $state("No model loaded");
@@ -25,8 +27,7 @@
 			status = "Model loaded";
 		} catch (error) {
 			status = error instanceof Error ? error.message : String(error);
-			closeAIOne();
-			ai = null;
+			onerror(status);
 		} finally {
 			loading = false;
 		}
