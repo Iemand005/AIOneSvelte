@@ -43,6 +43,9 @@
 		display: flex;
 		padding: 0;
 		border: 1px solid #404040;
+
+		outline: 2px solid rgba(86, 27, 22, 0);
+		border-color: rgba(139, 46, 38, 0);
 	}
 
 	form:has(input:focus) {
