@@ -39,7 +39,6 @@
 
   :global(body) {
     margin: 0;
-    background: #101114;
     color: #eee;
     font-family: system-ui, sans-serif;
   }
@@ -58,48 +57,6 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-  }
-
-  header span {
-    color: #999;
-    font-size: 14px;
-  }
-
-  header span.loaded {
-    color: #78d99b;
-  }
-
-  .chat {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-  }
-
-  .messages {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-  }
-
-  article {
-    max-width: 85%;
-    padding: 14px 18px;
-    border-radius: 12px;
-    background: #24252b;
-  }
-
-  article strong {
-    font-size: 13px;
-    color: #aaa;
-  }
-
-  article p {
-    margin: 8px 0 0;
-    white-space: pre-wrap;
-    overflow-wrap: anywhere;
-    line-height: 1.5;
   }
 
 </style>
