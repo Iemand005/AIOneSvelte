@@ -84,7 +84,6 @@
 		/* flex: 0; */
 		padding: 0;
 		border: 1px solid #404040;
-		/* border:none; */
 		position: absolute;
 
 		height: var(--message-box-size);
@@ -102,8 +101,6 @@
 		bottom: 0;
 		left: 0;
 		right: 0;
-
-		z-index: 1;
 	}
 
 	form:has(input:focus) {
@@ -134,30 +131,6 @@
 		border: 1px solid transparent;
 		box-shadow: inset 0 0 0 1px #606060;
 		overflow: visible;
-	}
-
-	form {
-		position: absolute;
-		isolation: isolate;
-		z-index: 1;
-		background: #4040408f;
-	}
-
-	form::before,
-	form::after {
-		content: "";
-		position: absolute;
-		bottom: 0;
-		width: var(--corner-radius);
-		height: var(--corner-radius);
-		pointer-events: none;
-		z-index: -1;
-
-		background: radial-gradient(
-			circle at top left,
-			transparent calc(var(--corner-radius) - 1px),
-			var(--background) var(--corner-radius)
-		);
 	}
 
 	form, button {
