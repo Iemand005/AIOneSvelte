@@ -49,4 +49,9 @@
 		border: none;
 		outline:none;
 	}
+
+	button {
+		width: 40px;
+		height: 40px;
+	}
 </style>
