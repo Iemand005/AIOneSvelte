@@ -71,4 +71,8 @@
 		padding: 0;
 		text-align: center;
 	}
+
+	button:hover {
+		background-color: rgb(138, 54, 48);
+	}
 </style>
