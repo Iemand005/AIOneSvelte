@@ -136,7 +136,7 @@
     </div>
 
     <MessageInput bind:prompt {loading} {sendMessage} />
-    
+
     <!-- <form onsubmit={event => { event.preventDefault(); sendMessage(); }}>
       <textarea
         bind:value={prompt}
