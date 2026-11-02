@@ -68,6 +68,9 @@
 
 		padding: 0;
 
+		border-radius: 10px;
+		overflow: hidden;
+
 		flex-direction: row;
 		align-items: stretch;
 	}
@@ -81,7 +84,6 @@
 	}
 
 	button {
-		border-top-left-radius: 0;
-		border-bottom-left-radius: 0;
+		border-radius: 0;
 	}
 </style>
