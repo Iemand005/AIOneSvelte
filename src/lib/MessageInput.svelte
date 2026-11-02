@@ -88,49 +88,40 @@
 		z-index: -1;
 	}
 
+	form {
+		--corner-radius: calc(var(--message-box-size) / 2);
+
+		border: 1px solid transparent;
+		box-shadow: inset 0 0 0 1px #606060;
+		overflow: visible;
+	}
+
+	form::before,
+	form::after {
+		content: "";
+		position: absolute;
+		bottom: 0;
+		width: var(--corner-radius);
+		height: var(--corner-radius);
+		pointer-events: none;
+		z-index: -1;
+
+		background:
+			radial-gradient(
+				circle at top left,
+				transparent calc(var(--corner-radius) - 0.5px),
+				var(--background) var(--corner-radius)
+			);
+	}
+
 	form::before {
-		right: 0px;
+		right: 0;
 	}
 
 	form::after {
-		left: 0px;
+		left: 0;
 		transform: scaleX(-1);
 	}
-
-	form {
-    --corner-radius: calc(var(--message-box-size) / 2);
-
-    border: 1px solid transparent;
-    box-shadow: inset 0 0 0 1px #606060;
-    overflow: visible;
-}
-
-form::before,
-form::after {
-    content: "";
-    position: absolute;
-    bottom: 0;
-    width: var(--corner-radius);
-    height: var(--corner-radius);
-    pointer-events: none;
-    z-index: -1;
-
-    background:
-        radial-gradient(
-            circle at top left,
-            transparent calc(var(--corner-radius) - 0.1px),
-            var(--background) var(--corner-radius)
-        );
-}
-
-form::before {
-    right: 0;
-}
-
-form::after {
-    left: 0;
-    transform: scaleX(-1);
-}
 
 	form, button {
 		border-radius: 1000px;
