@@ -72,7 +72,7 @@
 		width: 35px;
 		height: 35px;
 		line-height: 35px;
-		margin: 8px;
+		margin: 6px;
 		
 		font-size: 20px;
 		padding: 0;
