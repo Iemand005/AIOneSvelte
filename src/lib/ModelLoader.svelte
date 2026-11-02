@@ -42,7 +42,7 @@
 	}
 </script>
 
-<form class="button">
+<form class="card">
 	<FileButton class={loaded ? "active" : ""} onselect={loadModel} />
 	<button type="button" class="unload button" onclick={unloadModel} disabled={!loaded}>
 		Eject
