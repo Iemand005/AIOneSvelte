@@ -63,6 +63,8 @@
 
 		border-left: 1px solid black;
 
+		border-top-right-radius: 0;
+
 		flex-direction: row;
 		align-items: stretch;
 	}
