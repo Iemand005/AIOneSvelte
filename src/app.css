@@ -15,6 +15,8 @@
   --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
   --mono: ui-monospace, Consolas, monospace;
 
+  --accent-gradient: linear-gradient(180deg, rgb(119 26 20), rgb(99 23 18));
+
   font: 18px/145% var(--sans);
   letter-spacing: 0.18px;
   color-scheme: light dark;
