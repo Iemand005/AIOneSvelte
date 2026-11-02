@@ -62,6 +62,8 @@
 		bottom: 0;
 		left: 0;
 		right: 0;
+
+		z-index: 1;
 	}
 
 	form:has(input:focus) {
@@ -79,9 +81,11 @@
 
 		background: radial-gradient(
 			circle at top left,
-			transparent calc(var(--message-box-size) / 2),
+			transparent calc(var(--message-box-size) / 2 - 1px),
 			var(--background) calc(var(--message-box-size) / 2)
 		);
+
+		z-index: -1;
 	}
 
 	form::before {
