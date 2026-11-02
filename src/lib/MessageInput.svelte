@@ -48,7 +48,7 @@
 		position: absolute;
 		inset: auto 0 0 0;
 		height: var(--message-box-size);
-		z-index: 2;
+		z-index: 0;
 
 		pointer-events: none;
 	}
@@ -71,6 +71,8 @@
 			transparent calc(var(--corner-radius) - 1px),
 			var(--background) calc(var(--corner-radius) - 0.5px)
 		);
+
+		outline: 1px solid var(--background);
 	}
 
 	.bar::before {
