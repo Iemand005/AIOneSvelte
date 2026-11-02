@@ -14,7 +14,7 @@
 	let selectedFile: File | null = $state(null);
 </script>
 
-<label id="model-button" for="model-input" class={`button ${className}`}>
+<label for="file-input" class={`button ${className}`}>
 	{#if !selectedFile}
 	Choose model file!
 	{:else}
@@ -24,7 +24,7 @@
 <input
 	type="file"
 	{accept}
-	id="model-input"
+	id="file-input"
 	onchange={event => {
 		const file = event.currentTarget.files?.[0];
 		if (!file) return;
