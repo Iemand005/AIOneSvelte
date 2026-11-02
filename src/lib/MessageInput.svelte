@@ -125,7 +125,7 @@
 		border-radius: inherit;
 		background: linear-gradient(180deg, rgb(139 46 38), rgb(119 26 20));
 		opacity: 0;
-		transition: opacity 70ms ease-out;
+		transition: opacity 120ms cubic-bezier(0, 0.73, 0.34, 0.91);
 	}
 
 	button:hover::before {
