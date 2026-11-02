@@ -40,6 +40,7 @@
 	form {
 		display: flex;
 		border-radius: 100px;
+		padding: 0 14px;
 	}
 
 	input {
