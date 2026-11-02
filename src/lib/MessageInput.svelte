@@ -70,6 +70,28 @@
 		z-index: 0;
 	}
 
+	.bar {
+		--pad: 12px;
+		position: absolute;
+		left: 0;
+		right: 0;
+		bottom: var(--bar-bottom, 0px);
+		height: calc(var(--message-box-size) + var(--pad) * 2);
+		padding: var(--pad);
+		box-sizing: border-box;
+		z-index: 1;
+	}
+
+	.cover,
+	form {
+		position: absolute;
+		inset: var(--pad);
+	}
+
+	.cover {
+		inset: calc(var(--pad) + 1px);
+	}
+
 	form {
 		z-index: 1;
 
