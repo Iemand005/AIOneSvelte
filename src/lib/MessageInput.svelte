@@ -107,32 +107,6 @@
 		border-color: rgb(139 46 38);
 	}
 
-	form::before,
-	form::after {
-		content: "";
-		position: absolute;
-		bottom: 0;
-		aspect-ratio: 1;
-		height: calc(var(--message-box-size) / 2);
-		pointer-events: none;
-
-		background: radial-gradient(
-			circle at top left,
-			transparent calc(var(--message-box-size) / 2 - 0.1px),
-			var(--background) calc(var(--message-box-size) / 2)
-		);
-
-		z-index: -1;
-	}
-
-	form {
-		--corner-radius: calc(var(--message-box-size) / 2);
-
-		border: 1px solid transparent;
-		box-shadow: inset 0 0 0 1px #606060;
-		overflow: visible;
-	}
-
 	form, button {
 		border-radius: 1000px;
 	}
