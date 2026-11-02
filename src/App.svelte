@@ -1,10 +1,10 @@
 
 <script lang="ts">
   import type AIOne from "aione-web";
-  import { closeAIOne, initializeAIOne, type Message } from "./lib/aione";
+  import { initializeAIOne, type Message } from "./lib/aione";
   import ChatBubble from './lib/ChatBubble.svelte';
   import MessageInput from "./lib/MessageInput.svelte";
-    import ModelLoader from "./lib/ModelLoader.svelte";
+  import ModelLoader from "./lib/ModelLoader.svelte";
 
 
   let ai: AIOne | null = null;
