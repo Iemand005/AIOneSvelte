@@ -5,6 +5,7 @@
   import ChatBubble from './lib/ChatBubble.svelte';
   import FileButton from "./lib/FileButton.svelte";
   import MessageInput from "./lib/MessageInput.svelte";
+    import ModelLoader from "./lib/ModelLoader.svelte";
 
 
   let ai: AIOne | null = null;
@@ -91,8 +92,7 @@
 <main>
   <header>
     <h1>AIOne</h1>
-    <FileButton onselect={loadModel}/>
-    <button class="unload" onclick={unloadModel}>Eject</button>
+    <ModelLoader ai={ai}/>
     <span class:loaded={ai}>{status}</span>
   </header>
 
