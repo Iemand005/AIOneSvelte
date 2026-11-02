@@ -59,6 +59,7 @@
 		width: 35px;
 		height: 35px;
 		line-height: 35px;
+		color: black;
 		background-color: rgb(116, 0, 0);
 		margin: 5px;
 
