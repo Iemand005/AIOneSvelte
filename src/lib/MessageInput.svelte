@@ -52,16 +52,12 @@
 
 		transition: all 100ms ease-out;
 
-		/* margin-top: calc(-1 * var(--message-box-size) / 2); */
-
 		padding: 5px;
 
 
 		bottom: 0;
 		left: 0;
 		right: 0;
-
-		/* z-index: 2; */
 	}
 
 	form:has(input:focus) {
@@ -74,7 +70,7 @@
 		inset: 0;
 		z-index: -1;
 		background: red;
-		border-radius: inherit;
+		border-radius: 0;
 	}
 
 	form, button {
