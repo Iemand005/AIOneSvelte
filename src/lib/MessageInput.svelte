@@ -83,7 +83,7 @@
 		display: flex;
 		/* flex: 0; */
 		padding: 0;
-		border: 1px solid #404040;
+		border: 1px solid #00ff77;
 		position: absolute;
 
 		height: var(--message-box-size);
