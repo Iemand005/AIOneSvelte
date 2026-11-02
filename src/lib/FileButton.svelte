@@ -37,4 +37,7 @@
 	input {
 		display: none;
 	}
+	label {
+		flex: 1;
+	}
 </style>
