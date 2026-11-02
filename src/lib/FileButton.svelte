@@ -4,7 +4,8 @@
 		class?: string;
 	};
 
-	const { onselect,
+	const {
+		onselect,
 		class: className = '', 
 	}: FileButtonProps = $props();
 
