@@ -45,7 +45,7 @@
 		padding: 0;
 		border: 1px solid #404040;
 
-		height: 48px;
+		height: 45px;
 
 		border-color: rgba(139, 46, 38, 0);
 
@@ -53,7 +53,7 @@
 
 		margin-top: -47px;
 
-		padding: 6px;
+		padding: 5px;
 	}
 
 	form:has(input:focus) {
