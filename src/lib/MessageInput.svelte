@@ -52,7 +52,8 @@
 
 	.cover {
 		left: 1px;
-		right: 1px;
+		right: 1px;;
+		bottom: 1px
 		bottom: calc(var(--bar-bottom, 0px) + 1px);
 		height: calc(var(--message-box-size) - 2px);
 
