@@ -49,7 +49,7 @@
 		bottom: var(--bar-bottom, 0px);
 		height: var(--message-box-size);
 
-		z-index: 1; /* above page content, and a stacking context for the children */
+		z-index: 1;
 	}
 
 	.cover,
@@ -58,7 +58,6 @@
 		inset: 0;
 	}
 
-	/* Inset 1px so its edge hides under the form's border ring. */
 	.cover {
 		inset: 1px;
 		border-radius: 1000px;
