@@ -43,7 +43,7 @@
 	}
 </script>
 
-<FileButton class:active onselect={loadModel} />
+<FileButton class={active} onselect={loadModel} />
 <button class="unload" onclick={unloadModel} disabled={!ai || loading}>
 	Eject
 </button>

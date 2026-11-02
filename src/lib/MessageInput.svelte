@@ -3,14 +3,12 @@
         sendMessage: () => void;
         loading?: boolean;
         prompt?: string;
-		class?: string;
     };
 
     let {
         sendMessage,
         loading = false,
         prompt = $bindable(""),
-		class: className = '', 
     }: MessageInputProps = $props();
 </script>
 

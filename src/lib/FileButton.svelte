@@ -1,9 +1,12 @@
 <script lang="ts">
 	type FileButtonProps = {
 		onselect: (file: File)=>void;
+		class?: string;
 	};
 
-	const { onselect }: FileButtonProps = $props();
+	const { onselect,
+		class: className = '', 
+	}: FileButtonProps = $props();
 
 	let selectedFile: File | null = $state(null);
 </script>
