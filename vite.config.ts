@@ -98,7 +98,7 @@ function aioneWebAssets(): Plugin {
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [svelte(), aioneWebAssets()],
-  base: "/",
+  base: "./",
   server: {
     headers: crossOriginIsolationHeaders
   },
