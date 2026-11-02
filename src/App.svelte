@@ -16,7 +16,7 @@
 
   let messages: Message[] = [];
 
-  initializeAIOne().then(aione => ai = aione);
+  initializeAIOne().then(one => ai = one);
 
   async function sendMessage() {
     if (!ai || !prompt.trim() || loading) return;
