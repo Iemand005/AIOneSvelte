@@ -39,7 +39,8 @@
 <style>
 	form {
 		display: flex;
-		padding: 0 14px;
+		padding: 0;
+		padding-left: 14px;
 	}
 
 	form, button {
