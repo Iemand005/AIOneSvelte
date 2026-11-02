@@ -49,7 +49,7 @@
 		height: var(--message-box-size);
 		z-index: 0;
 
-		pointer-events: none;
+		/* pointer-events: none; */
 	}
 
 	/* Covers: opaque background-colored fill OUTSIDE the bottom curves */
