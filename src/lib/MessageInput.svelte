@@ -42,21 +42,19 @@
 </div>
 
 <style>
-	.bar {
+
+	.cover, .bar
+	form {
 		position: absolute;
-		left: 10px;
-		right: 10px;
-		bottom: 10px;
-		/* bottom: var(--bar-bottom, 0px); */
+		inset: var(--pad, 0px);
+	}
+	.bar {
+		flex: 1;
+		top: 100px;
+		bottom: var(--bar-bottom, 0px);
 		height: var(--message-box-size);
 
 		z-index: 1;
-	}
-
-	.cover,
-	form {
-		position: absolute;
-		inset: 0;
 	}
 
 	.cover {
