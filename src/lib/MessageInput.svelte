@@ -40,6 +40,7 @@
 	form {
 		display: flex;
 	}
+
 	textarea {
 		flex: 1;
 	}
