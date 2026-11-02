@@ -39,6 +39,7 @@
 <style>
 	form {
 		display: flex;
+		border-radius: fulll;
 	}
 
 	input {
