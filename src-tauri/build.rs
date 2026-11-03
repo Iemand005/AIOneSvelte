@@ -54,7 +54,7 @@ fn main() {
         .arg("-DAIONE_UWP=OFF")
         .arg("-DAIONE_ENABLE_OPENAI=OFF")
         .arg("-DAIONE_ENABLE_STABLE_DIFFUSION=OFF")
-        .arg("-DAIONE_VULKAN=OFF")
+        .arg("-DAIONE_VULKAN=ON")
         .arg("-DAIONE_OPENCL=OFF")
         .arg("-DAIONE_VERBOSE=OFF")
         .arg("-DLLAMA_BUILD_TESTS=OFF")
