@@ -181,5 +181,8 @@ export default defineConfig({
   },
   resolve: {
     tsconfigPaths: true
-  }
+  },
+   watch: {
+      ignored: ["**/src-tauri/**"],
+    },
 });
