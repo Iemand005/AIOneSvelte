@@ -19,6 +19,6 @@
     "vite": "^8.3.5"
   },
   "dependencies": {
-    "aione-web": "file:../AIOneWeb"
+    "aione-web": "^1.0.3"
   }
 }
