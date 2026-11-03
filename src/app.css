@@ -14,7 +14,7 @@
   --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
   --mono: ui-monospace, Consolas, monospace;
 
-	--background: #171413;
+	
 	
   --accent-gradient: linear-gradient(180deg, rgb(119 26 20), rgb(99 23 18));
 	
@@ -37,7 +37,7 @@
   :root {
     --text: #9ca3af;
     --text-h: #f3f4f6;
-    --bg: #16171d;
+    --bg: #171413;
     --border: #2e303a;
     --code-bg: #1f2028;
     --accent: #c084fc;
@@ -50,7 +50,7 @@
 
 html, body, main {
   height: 100%;
-	background-color: var(--background);
+	background-color: var(--bg);
 }
 
 body {

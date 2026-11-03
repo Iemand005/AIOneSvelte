@@ -61,7 +61,7 @@
 	.cover {
 		inset: calc(var(--chatbox-pad) + 1px);
 		border-radius: 1000px;
-		box-shadow: 0 0 0 100vmax var(--background);
+		box-shadow: 0 0 0 100vmax var(--bg);
 		clip-path: inset(50% -100vmax -100vmax -100vmax);
 		pointer-events: none;
 		z-index: 0;
