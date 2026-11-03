@@ -1,7 +1,6 @@
 
 <script lang="ts">
-	import type AIOne from "aione-web";
-	import { initializeAIOne, type Backend, type Message } from "./lib/aione";
+	import { initializeAIOne, type Backend } from "./lib/aione";
 	import ModelLoader from "./lib/ModelLoader.svelte";
 	import ChatBox from "./lib/ChatBox.svelte";
 	import SystemPrompt from "./lib/SystemPrompt.svelte";
