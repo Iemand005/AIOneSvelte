@@ -18,7 +18,7 @@
 	let loaded = $state(false);
 	let progress = $state(0);
 
-	async function loadModel(file: File) {
+	async function loadModel(src: ModelSource) {
 		if (!ai) return;
 
 		loading = true;
@@ -27,12 +27,6 @@
 		console.log(ai.kind)
 
 		try {
-			const src: ModelSource = ai.kind === "native" ? {
-				kind: "file", file
-			} : {
-				kind: "path", path: file.webkitRelativePath
-			}
-
 			console.log(src)
 
 			await ai.loadModel(src, value => {
@@ -56,6 +50,25 @@
 		} finally {
 			loaded = false;
 		}
+	}
+
+	async function load() {
+		await ai.loadModel(src, p => console.log(p));
+	}
+
+	 async function pickNative() {
+		const { open } = await import("@tauri-apps/plugin-dialog");
+		const path = await open({
+		multiple: false,
+		directory: false,
+		filters: [{ name: "Model", extensions: ["gguf"] }],  // your format
+		});
+		if (typeof path === "string") load({ kind: "path", path });
+	}
+
+	function pickWeb(e: Event) {
+		const file = (e.target as HTMLInputElement).files?.[0];
+		if (file) load({ kind: "file", file });
 	}
 </script>
 
