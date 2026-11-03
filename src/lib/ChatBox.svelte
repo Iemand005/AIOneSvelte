@@ -3,9 +3,10 @@
 	import type { Message } from "aione-web";
 	import ChatBubble from "./ChatBubble.svelte";
 	import MessageInput from "./MessageInput.svelte";
+    import type { Backend } from "./backend";
 
 	type Props = {
-		ai: AIOne | null;
+		ai: Backend | null;
 		loading?: boolean;
 		systemPrompt?: string;
 		onerror?: (error: unknown) => void;
