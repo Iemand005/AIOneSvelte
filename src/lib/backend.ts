@@ -11,7 +11,6 @@ export interface GenerateCallbacks {
   onGenerationStart?: () => void;
 }
 
-// native loads from a disk path, web loads from a File or URL
 export type ModelSource =
   | { kind: "path"; path: string }
   | { kind: "file"; file: File }
