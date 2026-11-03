@@ -52,10 +52,6 @@
 		}
 	}
 
-	async function load() {
-		await ai.loadModel(src, p => console.log(p));
-	}
-
 	 async function pickNative() {
 		const { open } = await import("@tauri-apps/plugin-dialog");
 		const path = await open({
@@ -63,17 +59,20 @@
 		directory: false,
 		filters: [{ name: "Model", extensions: ["gguf"] }],  // your format
 		});
-		if (typeof path === "string") load({ kind: "path", path });
+		if (typeof path === "string") loadModel({ kind: "path", path });
 	}
 
-	function pickWeb(e: Event) {
-		const file = (e.target as HTMLInputElement).files?.[0];
-		if (file) load({ kind: "file", file });
+	function pickWeb(file: File) {
+		if (file) loadModel({ kind: "file", file });
 	}
 </script>
 
 <form class="card">
-	<FileButton class={loaded ? "active model-button" : "model-button"} onselect={loadModel} />
+	{#if ai?.kind === "native"}
+	<button onclick={pickNative}>Choose model…</button>
+	{:else}
+	<FileButton class={loaded ? "active model-button" : "model-button"} onselect={pickWeb} />
+	{/if}
 	<button type="button" class="unload button" onclick={unloadModel} disabled={!loaded}>
 		Eject
 	</button>
