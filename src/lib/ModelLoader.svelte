@@ -15,19 +15,24 @@
 	}: Props = $props();
 
 	let loaded = $state(false);
+	let progress = $state(0);
 
 	async function loadModel(file: File) {
 		if (!ai) return;
 
 		loading = true;
+		progress = 0;
 
 		try {
-			await ai.loadModel(file);
+			await ai.loadModel(file, value => {
+				progress = value;
+			});
 			loaded = true;
 		} catch (error) {
 			onerror?.(error);
 		} finally {
 			loading = false;
+			progress = 0;
 		}
 	}
 
@@ -47,6 +52,18 @@
 	<button type="button" class="unload button" onclick={unloadModel} disabled={!loaded}>
 		Eject
 	</button>
+
+	{#if loading}
+		<div
+			class="progress"
+			role="progressbar"
+			aria-valuemin="0"
+			aria-valuemax="100"
+			aria-valuenow={Math.round(progress * 100)}
+		>
+			<div class="progress-fill" style:width={`${Math.round(progress * 100)}%`}></div>
+		</div>
+	{/if}
 </form>
 
 <style>
@@ -62,6 +79,7 @@
 		flex: 1;
 
 		display: flex;
+		position: relative;
 
 		padding: 0;
 
@@ -70,6 +88,21 @@
 
 		flex-direction: row;
 		align-items: stretch;
+	}
+
+	.progress {
+		position: absolute;
+		inset: auto 0 0 0;
+		height: 4px;
+		background: #00000080;
+		pointer-events: none;
+		z-index: 2;
+	}
+
+	.progress-fill {
+		height: 100%;
+		background: linear-gradient(90deg, rgb(119 26 20), rgb(224 83 63));
+		transition: width 120ms ease-out;
 	}
 
 	form > * {
