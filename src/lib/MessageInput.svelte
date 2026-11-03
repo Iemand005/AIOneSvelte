@@ -76,7 +76,7 @@
 
 		border-radius: 1000px;
 
-		background: linear-gradient(0deg, #1b1b1b, #4040408f);
+		background: linear-gradient(0deg, #46454587, #36363666);
 		backdrop-filter: blur(10px);
 
 		transition: border-color 100ms ease-out;

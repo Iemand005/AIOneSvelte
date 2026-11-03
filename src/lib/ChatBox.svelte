@@ -145,7 +145,9 @@
 		gap: 1rem;
 		flex: 1;
 		min-height: 0;
+
 		overflow-y: auto;
+		scrollbar-gutter: stable both-edges;
 
 		padding: var(--chatbox-pad);
 
