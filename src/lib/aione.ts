@@ -54,9 +54,8 @@ export class WasmBackend implements Backend {
 	}
 
 	async loadModel(src: ModelSource, onProgress?: (p: number) => void): Promise<boolean> {
-		let data: ArrayBuffer;
-		if (src.kind === "file") data = await src.file.arrayBuffer();
-		else if (src.kind === "url") data = await (await fetch(src.url)).arrayBuffer();
+		let data: File;
+		if (src.kind === "file") data = src.file;
 		else throw new Error("WASM backend can't load from a disk path");
 
 		this.ai.loadModel(data, onProgress);
