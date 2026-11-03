@@ -1,4 +1,4 @@
-import AIOne from "aione-web";
+import AIOne, { type GenerateStats } from "aione-web";
 
 const BASE_URL = import.meta.env.BASE_URL;
 
@@ -50,6 +50,10 @@ export function closeAIOne() {
 }
 
 export interface Message {
-    role: "user" | "assistant";
+    role: "user" | "assistant" | "system";
     content: string;
+    thinking?: string;
+    stats?: GenerateStats;
 }
+
+export type { GenerateStats };
