@@ -103,7 +103,8 @@
 	}
 
 	button {
-		border-left: 1px solid black;
+		/* border-left: 1px solid black; */
+		margin-left: 1px;
 		border-radius: 0;
 	}
 </style>
