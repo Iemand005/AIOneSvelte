@@ -71,7 +71,7 @@ export class WasmBackend implements Backend {
 	}
 
 	async cancel(): Promise<void> {
-		this.ai.cancel(); // ADAPT
+		// this.ai.cancel(); // ADAPT
 	}
 
 	async unloadModel(): Promise<void> {
@@ -79,7 +79,8 @@ export class WasmBackend implements Backend {
 	}
 
 	async isLoaded(): Promise<boolean> {
-		return this.ai.isLoaded(); // ADAPT
+		// return this.ai.isLoaded(); // ADAPT
+		return true;
 	}
 
 	async close(): Promise<void> {
