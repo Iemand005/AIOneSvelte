@@ -54,7 +54,7 @@
 		Eject
 	</button>
 
-	{#if true}
+	{#if loading}
 		<progress class="progress" value={Math.round(progress * 100)} max="100">
 		</progress>
 	{/if}
@@ -87,8 +87,7 @@
 	progress {
 		position: absolute;
 		inset: auto 0 0 0;
-		height: 4px;
-		min-height: 4px;
+		height: 5px !important;
 		width: 100%;
 		background: #00000080;
 		pointer-events: none;
