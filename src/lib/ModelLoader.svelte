@@ -88,6 +88,8 @@
 		position: absolute;
 		inset: auto 0 0 0;
 		height: 4px;
+		min-height: 4px;
+		width: 100%;
 		background: #00000080;
 		pointer-events: none;
 		z-index: 2;
@@ -96,7 +98,7 @@
 	form > * {
 		/* height: 100%; */
 		height: auto;
-		min-height: 0;
+		/* min-height: 0; */
 		margin-block: 0;
 		align-self: stretch;
 	}
