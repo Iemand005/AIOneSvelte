@@ -124,9 +124,9 @@
 				{/if}
 			</article>
 		{/if}
+		<MessageInput bind:prompt {loading} {sendMessage} />
 	</div>
 
-	<MessageInput bind:prompt {loading} {sendMessage} />
 </section>
 
 <style>
@@ -140,6 +140,8 @@
 	}
 
 	.messages {
+		position: relative;
+		
 		display: flex;
 		flex-direction: column;
 		gap: 1rem;
