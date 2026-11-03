@@ -50,7 +50,11 @@
 
 html, body, main {
   height: 100%;
-	background-color: var(--bg);
+}
+
+html, body {
+  background-color: var(--bg);
+  overscroll-behavior-x: none;
 }
 
 body {
