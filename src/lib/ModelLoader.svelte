@@ -54,16 +54,9 @@
 		Eject
 	</button>
 
-	{#if loading}
-		<div
-			class="progress"
-			role="progressbar"
-			aria-valuemin="0"
-			aria-valuemax="100"
-			aria-valuenow={Math.round(progress * 100)}
-		>
-			<div class="progress-fill" style:width={`${Math.round(progress * 100)}%`}></div>
-		</div>
+	{#if !loading}
+		<progress class="progress" fill>
+		</progress>
 	{/if}
 </form>
 
@@ -91,19 +84,13 @@
 		align-items: stretch;
 	}
 
-	.progress {
+	progress {
 		position: absolute;
 		inset: auto 0 0 0;
 		height: 4px;
 		background: #00000080;
 		pointer-events: none;
 		z-index: 2;
-	}
-
-	.progress-fill {
-		height: 100%;
-		background: linear-gradient(90deg, rgb(119 26 20), rgb(224 83 63));
-		transition: width 120ms ease-out;
 	}
 
 	form > * {
