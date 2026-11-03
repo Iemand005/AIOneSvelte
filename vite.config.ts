@@ -1,7 +1,7 @@
 import { svelte } from '@sveltejs/vite-plugin-svelte'
-import { createReadStream, existsSync, readFileSync } from 'node:fs'
+import { createReadStream, existsSync, readFileSync, readdirSync, writeFileSync } from 'node:fs'
 import { createRequire } from 'node:module'
-import { dirname, extname, join } from 'node:path'
+import { dirname, extname, join, relative, resolve, sep } from 'node:path'
 import { defineConfig, type Plugin } from 'vite'
 
 const require = createRequire(import.meta.url)
@@ -95,9 +95,80 @@ function aioneWebAssets(): Plugin {
   }
 }
 
+function collectPrecacheFiles(root: string) {
+  const files: string[] = []
+
+  function walk(dir: string) {
+    for (const entry of readdirSync(dir, { withFileTypes: true })) {
+      if (entry.name.startsWith('.') || entry.name === 'node_modules') continue
+
+      const fullPath = join(dir, entry.name)
+
+      if (entry.isDirectory()) {
+        walk(fullPath)
+        continue
+      }
+
+      if (!entry.isFile()) continue
+
+      const relativePath = relative(root, fullPath).split(sep).join('/')
+
+      if (
+        relativePath === 'sw.js' ||
+        relativePath === '_headers' ||
+        relativePath === '.nojekyll' ||
+        relativePath.endsWith('.map')
+      ) continue
+
+      files.push(`./${relativePath}`)
+    }
+  }
+
+  walk(root)
+  return files.sort()
+}
+
+function serviceWorker(): Plugin {
+  let outDir = ''
+
+  return {
+    name: 'aione-service-worker',
+    apply: 'build',
+    configResolved(config) {
+      outDir = resolve(config.root, config.build.outDir)
+    },
+    writeBundle() {
+      const swPath = join(outDir, 'sw.js')
+
+      if (!existsSync(swPath)) {
+        console.warn('[service-worker] public/sw.js was not copied to the build output')
+        return
+      }
+
+      const source = readFileSync(swPath, 'utf8')
+
+      if (
+        !source.includes('__AIONE_CACHE_VERSION__') ||
+        !source.includes('/* __AIONE_PRECACHE_MANIFEST__ */ []')
+      ) {
+        console.warn('[service-worker] placeholders missing from public/sw.js')
+        return
+      }
+
+      const precache = collectPrecacheFiles(outDir)
+      const version = Date.now().toString(36)
+      const output = source
+        .replace('__AIONE_CACHE_VERSION__', version)
+        .replace('/* __AIONE_PRECACHE_MANIFEST__ */ []', JSON.stringify(precache))
+
+      writeFileSync(swPath, output)
+    }
+  }
+}
+
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [svelte(), aioneWebAssets()],
+  plugins: [svelte(), aioneWebAssets(), serviceWorker()],
   base: "./",
   optimizeDeps: {
     exclude: ['aione-web']
