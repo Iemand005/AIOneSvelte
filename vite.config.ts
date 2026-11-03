@@ -4,6 +4,8 @@ import { createRequire } from 'node:module'
 import { dirname, extname, join, relative, resolve, sep } from 'node:path'
 import { defineConfig, type Plugin } from 'vite'
 
+const host = process.env.TAURI_DEV_HOST;
+
 const require = createRequire(import.meta.url)
 const aioneWebDir = dirname(require.resolve('aione-web/package.json'))
 
@@ -173,7 +175,7 @@ export default defineConfig({
   optimizeDeps: {
     exclude: ['aione-web']
   },
-  
+
   // Vite options tailored for Tauri development and only applied in `tauri dev` or `tauri build`
   //
   // 1. prevent Vite from obscuring rust errors
@@ -192,6 +194,7 @@ export default defineConfig({
         }
       : undefined,
     watch: {
+      // 3. tell Vite to ignore watching `src-tauri`
       ignored: ["**/src-tauri/**"],
     },
   },
