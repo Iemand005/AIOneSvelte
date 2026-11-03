@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type AIOne from "aione-web";
 	import FileButton from "./FileButton.svelte";
-    import type { Backend } from "./backend";
+    import type { Backend, ModelSource } from "./backend";
 
 	type Props = {
 		ai: Backend | null;
@@ -27,7 +27,15 @@
 		console.log(ai.kind)
 
 		try {
-			await ai.loadModel({ kind: "file", file }, value => {
+			const src: ModelSource = ai.kind === "native" ? {
+				kind: "file", file
+			} : {
+				kind: "path", path: file.webkitRelativePath
+			}
+
+			console.log(src)
+
+			await ai.loadModel(src, value => {
 				progress = value;
 				console.log(value);
 			});
