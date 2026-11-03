@@ -125,6 +125,10 @@
 		align-self: stretch;
 	}
 
+	form > *:nth-child(1) {
+		width: 100%;
+	}
+
 	button {
 		/* border-left: 1px solid black; */
 		margin-left: 1px;
