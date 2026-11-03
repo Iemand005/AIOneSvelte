@@ -99,7 +99,7 @@ export async function initializeAIOne(): Promise<Backend> {
 	if (backend) return backend;
 
 	if (isTauri()) {
-		const { NativeBackend } = await import("./aione-native");
+		const { NativeBackend } = await import("./aione-tauri");
 		backend = await NativeBackend.create();
 	} else {
 		backend = await WasmBackend.create();
