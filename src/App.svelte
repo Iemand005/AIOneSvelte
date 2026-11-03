@@ -1,13 +1,13 @@
 
 <script lang="ts">
   import type AIOne from "aione-web";
-  import { initializeAIOne, type Message } from "./lib/aione";
+  import { initializeAIOne, type Backend, type Message } from "./lib/aione";
   import ModelLoader from "./lib/ModelLoader.svelte";
   import ChatBox from "./lib/ChatBox.svelte";
   import SystemPrompt from "./lib/SystemPrompt.svelte";
 
 
-  let ai: AIOne | null = $state(null);
+  let ai: Backend | null = $state(null);
 
   let loading = $state(false);
   let systemPrompt = $state("");

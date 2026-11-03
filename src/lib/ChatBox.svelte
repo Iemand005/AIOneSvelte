@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type AIOne from "aione-web";
-	import type { Message } from "./aione";
+	import type { Message } from "aione-web";
 	import ChatBubble from "./ChatBubble.svelte";
 	import MessageInput from "./MessageInput.svelte";
 

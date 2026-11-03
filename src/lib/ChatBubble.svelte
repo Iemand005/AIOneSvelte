@@ -1,5 +1,5 @@
 <script lang="ts">
-	import {type Message} from "./aione";
+	import {type Message} from "aione-web";
 	type MessageProps = {
 		message: Message;
 	};

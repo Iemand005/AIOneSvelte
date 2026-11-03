@@ -1,9 +1,10 @@
 <script lang="ts">
 	import type AIOne from "aione-web";
 	import FileButton from "./FileButton.svelte";
+    import type { Backend } from "./backend";
 
 	type Props = {
-		ai: AIOne | null;
+		ai: Backend | null;
 		loading?: boolean;
 		onerror?: (error: unknown) => void;
 	};
@@ -24,7 +25,7 @@
 		progress = 0;
 
 		try {
-			await ai.loadModel(file, value => {
+			await ai.loadModel({ kind: "file", file }, value => {
 				progress = value;
 				console.log(value);
 			});
