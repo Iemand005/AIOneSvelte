@@ -54,7 +54,7 @@
 		Eject
 	</button>
 
-	{#if !loading}
+	{#if true}
 		<progress class="progress" value={Math.round(progress * 100)} max="100">
 		</progress>
 	{/if}
