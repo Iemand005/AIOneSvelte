@@ -24,8 +24,10 @@
 	{#if message.stats}
 		<p class="stats">
 			{message.stats.generatedTokens} tokens · {message.stats.tokensPerSecond.toFixed(1)} t/s
-			{#if message.stats.promptTokens > 0}
-				· prompt {message.stats.promptTokens} @ {message.stats.promptTokensPerSecond.toFixed(1)} t/s
+			{#if message.stats.evaluatedTokens > 0}
+				· prompt {message.stats.promptTokens} tokens{#if message.stats.cachedTokens > 0}
+					({message.stats.cachedTokens} cached){/if}
+				· prefill {message.stats.promptTokensPerSecond.toFixed(1)} t/s
 			{/if}
 		</p>
 	{/if}
