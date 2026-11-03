@@ -26,6 +26,7 @@
 		try {
 			await ai.loadModel(file, value => {
 				progress = value;
+				console.log(value);
 			});
 			loaded = true;
 		} catch (error) {
