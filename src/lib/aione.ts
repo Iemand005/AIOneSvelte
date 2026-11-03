@@ -67,7 +67,7 @@ export class WasmBackend implements Backend {
 		maxTokens = 512,
 		cb: GenerateCallbacks = {}
 	): Promise<GenerateResult> {
-		return this.ai.generate(prompt, { maxTokens, ...cb }); // ADAPT
+		return this.ai.generate(prompt, maxTokens, cb);
 	}
 
 	async cancel(): Promise<void> {
