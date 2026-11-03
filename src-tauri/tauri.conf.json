@@ -14,7 +14,11 @@
       {
         "title": "aione-tauri",
         "width": 800,
-        "height": 600
+        "height": 600,
+        "transparent": true,
+        "windowEffects": {
+          "effects": ["mica"]
+        }
       }
     ],
     "security": {
