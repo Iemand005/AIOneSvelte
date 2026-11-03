@@ -7,9 +7,9 @@
   import SystemPrompt from "./lib/SystemPrompt.svelte";
 
 
-  let ai: AIOne | null = null;
+  let ai: AIOne | null = $state(null);
 
-  let loading = false;
+  let loading = $state(false);
   let systemPrompt = $state("");
   
 

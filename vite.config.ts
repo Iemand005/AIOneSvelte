@@ -99,6 +99,9 @@ function aioneWebAssets(): Plugin {
 export default defineConfig({
   plugins: [svelte(), aioneWebAssets()],
   base: "./",
+  optimizeDeps: {
+    exclude: ['aione-web']
+  },
   server: {
     headers: crossOriginIsolationHeaders
   },
