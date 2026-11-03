@@ -48,6 +48,10 @@
   }
 }
 
+:root[data-tauri] {
+  --bg: transparent;
+}
+
 html, body, main {
   height: 100%;
 }

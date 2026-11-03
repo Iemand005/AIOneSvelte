@@ -6,6 +6,9 @@
   import ChatBox from "./lib/ChatBox.svelte";
   import SystemPrompt from "./lib/SystemPrompt.svelte";
 
+  if (window.__TAURI_INTERNALS__) {
+    document.documentElement.dataset.tauri = "";
+  }
 
   let ai: Backend | null = $state(null);
 
