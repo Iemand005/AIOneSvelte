@@ -174,7 +174,10 @@ export default defineConfig({
     exclude: ['aione-web']
   },
   server: {
-    headers: crossOriginIsolationHeaders
+    headers: crossOriginIsolationHeaders,
+    watch: {
+      ignored: ["**/src-tauri/**"],
+    },
   },
   preview: {
     headers: crossOriginIsolationHeaders
@@ -182,7 +185,4 @@ export default defineConfig({
   resolve: {
     tsconfigPaths: true
   },
-   watch: {
-      ignored: ["**/src-tauri/**"],
-    },
 });
