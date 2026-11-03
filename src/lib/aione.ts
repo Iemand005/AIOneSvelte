@@ -59,7 +59,8 @@ export class WasmBackend implements Backend {
 		else if (src.kind === "url") data = await (await fetch(src.url)).arrayBuffer();
 		else throw new Error("WASM backend can't load from a disk path");
 
-		return this.ai.loadModel(data, onProgress); // ADAPT
+		this.ai.loadModel(data, onProgress);
+		return true;
 	}
 
 	generate(
