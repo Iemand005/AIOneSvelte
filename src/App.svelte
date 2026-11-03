@@ -1,53 +1,53 @@
 
 <script lang="ts">
-  import type AIOne from "aione-web";
-  import { initializeAIOne, type Backend, type Message } from "./lib/aione";
-  import ModelLoader from "./lib/ModelLoader.svelte";
-  import ChatBox from "./lib/ChatBox.svelte";
-  import SystemPrompt from "./lib/SystemPrompt.svelte";
+	import type AIOne from "aione-web";
+	import { initializeAIOne, type Backend, type Message } from "./lib/aione";
+	import ModelLoader from "./lib/ModelLoader.svelte";
+	import ChatBox from "./lib/ChatBox.svelte";
+	import SystemPrompt from "./lib/SystemPrompt.svelte";
 
-  if (window.__TAURI_INTERNALS__) {
-    document.documentElement.dataset.tauri = "";
-  }
+	if (window.__TAURI_INTERNALS__) {
+		document.documentElement.dataset.tauri = "";
+	}
 
-  let ai: Backend | null = $state(null);
+	let ai: Backend | null = $state(null);
 
-  let loading = $state(false);
-  let systemPrompt = $state("");
-  
+	let loading = $state(false);
+	let systemPrompt = $state("");
+	
 
-  initializeAIOne().then(one => ai = one);
+	initializeAIOne().then(one => ai = one);
 </script>
 
 <svelte:head>
-  <title>AIOne Chat</title>
-  <meta name="description" content="Chat with local AI models using AIOne." />
+	<title>AIOne Chat</title>
+	<meta name="description" content="Chat with local AI models using AIOne." />
 </svelte:head>
 
 <main>
-  <header>
-    <ModelLoader {ai} bind:loading/>
-  </header>
+	<header>
+		<ModelLoader {ai} bind:loading/>
+	</header>
 
-  <SystemPrompt bind:systemPrompt />
+	<SystemPrompt bind:systemPrompt />
 
-  <ChatBox {ai} bind:loading bind:systemPrompt />
+	<ChatBox {ai} bind:loading bind:systemPrompt />
 </main>
 
 <style>
-  main {
-    width: min(850px, 100%);
-    min-height: 100vh;
-    margin: auto;
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-  }
+	main {
+		width: min(850px, 100%);
+		min-height: 100vh;
+		margin: auto;
+		display: flex;
+		flex-direction: column;
+		gap: 24px;
+	}
 
-  header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
+	header {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+	}
 
 </style>
