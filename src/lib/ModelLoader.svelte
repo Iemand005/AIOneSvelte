@@ -23,6 +23,8 @@
 
 		loading = true;
 		progress = 0;
+		
+		console.log(ai.kind)
 
 		try {
 			await ai.loadModel({ kind: "file", file }, value => {
