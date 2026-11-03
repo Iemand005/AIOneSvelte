@@ -69,7 +69,7 @@
 
 <form class="card">
 	{#if ai?.kind === "native"}
-	<button onclick={pickNative}>Choose model…</button>
+	<button type="button" onclick={pickNative}>Choose model…</button>
 	{:else}
 	<FileButton class={loaded ? "active model-button" : "model-button"} onselect={pickWeb} />
 	{/if}
