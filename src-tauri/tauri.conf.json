@@ -18,7 +18,8 @@
         "transparent": true,
         "windowEffects": {
           "effects": ["mica"]
-        }
+        },
+        "additionalBrowserArgs": "--enable-features=msWebView2EnableDraggableRegionSupport,OverlayScrollbar,FluentOverlayScrollbar --disable-features=OverscrollHistoryNavigation,msWebOOUI,msPdfOOUI,msSmartScreenProtection"
       }
     ],
     "security": {
