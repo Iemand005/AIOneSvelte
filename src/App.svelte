@@ -198,6 +198,8 @@
 		overflow: hidden;
 		background: var(--sidebar);
 		backdrop-filter: blur(20px);
+
+		border-top: 1px solid var(--border);
 	}
 
 	.history {
