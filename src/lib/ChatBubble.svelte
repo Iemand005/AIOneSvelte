@@ -2,12 +2,13 @@
 	import {type Message} from "aione-web";
 	type MessageProps = {
 		message: Message;
+		id?: string;
 	};
-	
-	let { message }: MessageProps = $props();
+
+	let { message, id }: MessageProps = $props();
 </script>
 
-<article class={message.role}>
+<article {id} class={message.role}>
 	<strong>{message.role === "user" ? "You" : "AIOne"}</strong>
 
 	{#if message.thinking}
