@@ -21,6 +21,7 @@ pub fn run() {
             aione::aione_unload_model,
             aione::aione_is_loaded,
             aione::aione_destroy_session,
+            aione::aione_system_info,
             aione::aione_chat_list,
             aione::aione_chat_create,
             aione::aione_chat_load,

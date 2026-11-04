@@ -29,6 +29,21 @@ interface TokenEvent {
 	thinking: boolean;
 }
 
+export interface HardwareDevice {
+	index: number;
+	name: string;
+	description: string;
+	type: string;
+	memoryFree: number;
+	memoryTotal: number;
+	deviceId: string;
+}
+
+export interface SystemInfo {
+	devices: HardwareDevice[];
+	systemInfo: string;
+}
+
 export function isNativeAIOneAvailable(): boolean {
 	return typeof window !== "undefined" && "__TAURI_INTERNALS__" in window;
 }
@@ -115,6 +130,10 @@ export async function isLoaded(): Promise<boolean> {
 
 export async function destroySession(): Promise<void> {
 	await invoke("aione_destroy_session");
+}
+
+export async function getSystemInfo(): Promise<SystemInfo> {
+	return invoke<SystemInfo>("aione_system_info");
 }
 
 export interface ChatMetadata {

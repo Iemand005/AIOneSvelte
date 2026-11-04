@@ -5,6 +5,7 @@
 	import ModelLoader from "./lib/ModelLoader.svelte";
 	import ChatBox from "./lib/ChatBox.svelte";
 	import ChatHistory from "./lib/ChatHistory.svelte";
+	import Settings from "./lib/Settings.svelte";
 	import SystemPrompt from "./lib/SystemPrompt.svelte";
 
 	if (window.__TAURI_INTERNALS__) {
@@ -20,6 +21,7 @@
 	let currentFolder = $state<string | null>(null);
 	let native = $state(false);
 	let promptOpen = $state(true);
+	let view = $state<"chat" | "settings">("chat");
 
 	let hasSystemPrompt = $derived(systemPrompt.trim().length > 0);
 
@@ -45,6 +47,7 @@
 			const { loadChat } = await import("./lib/aione-native");
 			const chat = await loadChat(folder);
 
+			view = "chat";
 			currentFolder = chat.folder;
 			systemPrompt = chat.systemPrompt;
 			messages = chat.messages.map(message => ({
@@ -57,6 +60,7 @@
 	}
 
 	function newChat() {
+		view = "chat";
 		currentFolder = null;
 		messages = [];
 		systemPrompt = "";
@@ -116,6 +120,32 @@
 			onnew={newChat}
 			ondelete={deleteChat}
 		/>
+
+		<button
+			type="button"
+			class="settings-button"
+			class:active={view === "settings"}
+			aria-pressed={view === "settings"}
+			onclick={() => (view = view === "settings" ? "chat" : "settings")}
+		>
+			<svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+				<path
+					d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z"
+					fill="none"
+					stroke="currentColor"
+					stroke-width="1.8"
+				/>
+				<path
+					d="M19.4 15a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-1.87-.34 1.7 1.7 0 0 0-1 1.55V21a2 2 0 1 1-4 0v-.09a1.7 1.7 0 0 0-1.11-1.55 1.7 1.7 0 0 0-1.87.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.7 1.7 0 0 0 4.6 15a1.7 1.7 0 0 0-1.55-1H3a2 2 0 1 1 0-4h.09A1.7 1.7 0 0 0 4.64 8.9a1.7 1.7 0 0 0-.34-1.87l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.7 1.7 0 0 0 1.87.34H9a1.7 1.7 0 0 0 1-1.55V3a2 2 0 1 1 4 0v.09a1.7 1.7 0 0 0 1 1.55 1.7 1.7 0 0 0 1.87-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.7 1.7 0 0 0-.34 1.87V9a1.7 1.7 0 0 0 1.55 1H21a2 2 0 1 1 0 4h-.09a1.7 1.7 0 0 0-1.51 1z"
+					fill="none"
+					stroke="currentColor"
+					stroke-width="1.4"
+					stroke-linecap="round"
+					stroke-linejoin="round"
+				/>
+			</svg>
+			Settings
+		</button>
 	</aside>
 
 	<section class="workspace">
@@ -124,15 +154,21 @@
 		</header>
 
 		<div class="chat-area">
-			<ChatBox
-				{ai}
-				bind:loading
-				bind:systemPrompt
-				bind:messages
-				bind:chatFolder={currentFolder}
-				onchatcreated={onChatCreated}
-				onpersisted={refreshChats}
-			/>
+			<div class="view" hidden={view !== "chat"}>
+				<ChatBox
+					{ai}
+					bind:loading
+					bind:systemPrompt
+					bind:messages
+					bind:chatFolder={currentFolder}
+					onchatcreated={onChatCreated}
+					onpersisted={refreshChats}
+				/>
+			</div>
+
+			{#if view === "settings"}
+				<Settings onback={() => (view = "chat")} />
+			{/if}
 		</div>
 	</section>
 
@@ -205,6 +241,30 @@
 	.history {
 		padding: 16px 12px;
 		border-right: 1px solid var(--aside-border);
+	}
+
+	.settings-button {
+		display: flex;
+		flex: none;
+		align-items: center;
+		gap: 8px;
+		width: 100%;
+		padding: 8px 10px;
+		background: #5252521c;
+		border-radius: 8px;
+		font: inherit;
+		font-size: 0.85rem;
+		text-align: left;
+		color: var(--text);
+	}
+
+	.settings-button:hover {
+		background: #52525233;
+	}
+
+	.settings-button.active {
+		background: #ffffff14;
+		color: var(--text-h);
 	}
 
 	.prompt {
@@ -291,5 +351,9 @@
 		position: relative;
 		flex: 1;
 		min-height: 0;
+	}
+
+	.view {
+		height: 100%;
 	}
 </style>

@@ -174,6 +174,11 @@ pub async fn aione_destroy_session(state: State<'_, AioneState>) -> Result<(), S
 }
 
 #[tauri::command]
+pub async fn aione_system_info() -> Result<serde_json::Value, String> {
+    run_blocking(|| aione_rs::system_info().map_err(|error| error.to_string())).await
+}
+
+#[tauri::command]
 pub async fn aione_chat_list() -> Result<Vec<ChatMetadata>, String> {
     run_blocking(|| aione_rs::list_chats().map_err(|error| error.to_string())).await
 }
