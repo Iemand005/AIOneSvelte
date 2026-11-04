@@ -14,7 +14,7 @@
 
 	type Props = {
 		ai: Backend | null;
-		loading?: boolean;
+		modelLoading?: boolean;
 		systemPrompt?: string;
 		messages?: ChatNode[];
 		versionSelections?: VersionSelections;
@@ -26,7 +26,7 @@
 
 	let {
 		ai = $bindable(null),
-		loading = $bindable(false),
+		modelLoading = false,
 		systemPrompt = $bindable(""),
 		messages = $bindable<ChatNode[]>([]),
 		versionSelections = $bindable<VersionSelections>({}),
@@ -37,6 +37,7 @@
 	}: Props = $props();
 
 	let prompt = $state("");
+	let loading = $state(false);
 	let streaming = $state(false);
 	let promptProgress = $state(0);
 	let thinking = $state(false);
@@ -62,7 +63,7 @@
 	}
 
 	function switchVersion(message: ChatNode, direction: -1 | 1) {
-		if (loading || generating) return;
+		if (loading || modelLoading || generating) return;
 
 		const siblings = getSiblings(messages, message.parentId);
 		if (siblings.length < 2) return;
@@ -75,7 +76,7 @@
 	}
 
 	async function sendMessage() {
-		if (!ai || !prompt.trim() || loading) return;
+		if (!ai || !prompt.trim() || loading || modelLoading) return;
 
 		const content = prompt.trim();
 		prompt = "";
@@ -209,7 +210,7 @@
 	}
 
 	async function regenerateMessage(target: ChatNode) {
-		if (!ai || loading || generating || target.role !== "assistant") return;
+		if (!ai || loading || modelLoading || generating || target.role !== "assistant") return;
 
 		const targetIndex = activePath.findIndex(message => message.id === target.id);
 		if (targetIndex < 0) return;
@@ -323,7 +324,7 @@
 	}
 
 	async function generateUserInput(maxTokens = 512) {
-		if (!ai || loading || generating) return;
+		if (!ai || loading || modelLoading || generating) return;
 
 		const draft = prompt;
 		const hasDraft = draft.trim().length > 0;
@@ -393,7 +394,7 @@
 					versionIndex={item.versionIndex}
 					versionCount={item.versionCount}
 					regenerating={regeneratingId === item.message.id}
-					disabled={loading || Boolean(generating)}
+					disabled={loading || modelLoading || Boolean(generating)}
 					onregenerate={regenerateMessage}
 					onversion={switchVersion}
 				/>
@@ -431,7 +432,7 @@
 	
 	<MessageInput
 		bind:prompt
-		{loading}
+		loading={loading || modelLoading}
 		{generating}
 		{sendMessage}
 		generateMessage={generateUserInput}

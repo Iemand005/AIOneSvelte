@@ -19,7 +19,7 @@
 
 	let ai: Backend | null = $state(null);
 
-	let loading = $state(false);
+	let modelLoading = $state(false);
 	let systemPrompt = $state("");
 	let messages = $state<ChatNode[]>([]);
 	let versionSelections = $state<VersionSelections>({});
@@ -156,14 +156,14 @@
 
 	<section class="workspace">
 		<header>
-			<ModelLoader {ai} bind:loading />
+			<ModelLoader {ai} bind:loading={modelLoading} />
 		</header>
 
 		<div class="chat-area">
 			<div class="view" hidden={view !== "chat"}>
 				<ChatBox
 					{ai}
-					bind:loading
+					modelLoading={modelLoading}
 					bind:systemPrompt
 					bind:messages
 					bind:versionSelections
