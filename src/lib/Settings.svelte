@@ -59,7 +59,7 @@
 			<button type="button" onclick={refresh} disabled={loading}>
 				{loading ? "Detecting…" : "Refresh"}
 			</button>
-			<button type="button" class="primary" onclick={onback}>Back to chat</button>
+			<button type="button" class="primary" onclick={onback}>Back</button>
 		</div>
 	</header>
 
