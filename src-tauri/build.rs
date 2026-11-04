@@ -52,7 +52,7 @@ fn main() {
 
     reset_if_generator_mismatch(&build_dir);
 
-    let msvc_env = msvc_env();
+    let msvc_env = build_env(&ninja);
 
     let mut configure = Command::new("cmake");
     configure
@@ -136,20 +136,37 @@ fn find_ninja() -> Option<PathBuf> {
     None
 }
 
-/// Environment (PATH, INCLUDE, LIB, ...) of the MSVC toolchain, found via the cc crate.
-/// Empty on non-MSVC targets.
-fn msvc_env() -> Vec<(OsString, OsString)> {
-    let target = env::var("TARGET").unwrap_or_default();
-    if !target.contains("msvc") {
-        return Vec::new();
+fn build_env(ninja: &Path) -> Vec<(OsString, OsString)> {
+    let mut vars = msvc_env();
+
+    // Directory containing ninja.exe (empty if "ninja" is already on PATH)
+    let ninja_dir = ninja.parent().filter(|p| !p.as_os_str().is_empty());
+
+    if let Some(dir) = ninja_dir {
+        // Find PATH in the cc-provided env (case-insensitive), or fall back to the process PATH
+        let existing = vars
+            .iter()
+            .position(|(k, _)| k.to_string_lossy().eq_ignore_ascii_case("path"));
+        let current = match existing {
+            Some(i) => vars.remove(i).1,
+            None => env::var_os("PATH").unwrap_or_default(),
+        };
+        let mut paths = vec![dir.to_path_buf()];
+        paths.extend(env::split_paths(&current));
+        vars.push((
+            OsString::from("PATH"),
+            env::join_paths(paths).expect("valid PATH"),
+        ));
     }
-    match cc::windows_registry::find_tool(&target, "cl.exe") {
-        Some(tool) => tool.env().to_vec(),
-        None => {
-            println!("cargo:warning=Could not locate MSVC via cc; relying on the current environment");
-            Vec::new()
-        }
+
+    // Nested CMake projects (vulkan-shaders-gen) only see environment variables, not -D flags
+    if !vars.is_empty() {
+        vars.push((OsString::from("CC"), OsString::from("cl")));
+        vars.push((OsString::from("CXX"), OsString::from("cl")));
     }
+    vars.push((OsString::from("CMAKE_GENERATOR"), OsString::from("Ninja")));
+
+    vars
 }
 
 fn apply_env(command: &mut Command, vars: &[(OsString, OsString)]) {
