@@ -18,6 +18,7 @@ fn main() {
 
     println!("cargo:rerun-if-env-changed=AIONE_DIR");
     println!("cargo:rerun-if-env-changed=AIONE_LIB_DIR");
+    println!("cargo:rerun-if-env-changed=VULKAN_SDK");
 
     if let Some(prefix) = env::var_os("AIONE_LIB_DIR").map(PathBuf::from) {
         link_prebuilt(&prefix, &out_dir);
