@@ -100,7 +100,7 @@
 								<strong class="value">
 									{device.description || device.name || "Unnamed device"}
 								</strong>
-								<span class="badge">{device.type.toUpperCase()}</span>
+								<span class={`badge ${device.type}`}>{device.type.toUpperCase()}</span>
 							</div>
 
 							<dl>
@@ -147,6 +147,10 @@
 		overflow-y: auto;
 		padding: var(--chatbox-pad);
 		box-sizing: border-box;
+	}
+
+	.gpu {
+		background: linear-gradient(180deg, rgb(119 26 20), rgb(99 23 18));
 	}
 
 	header {
