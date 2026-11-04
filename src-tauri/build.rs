@@ -1,4 +1,5 @@
 use std::env;
+use std::ffi::OsString;
 use std::fs;
 use std::path::{Path, PathBuf};
 use std::process::Command;
@@ -38,11 +39,34 @@ fn main() {
         aione_dir.join("include").display()
     );
     println!("cargo:rerun-if-changed={}", aione_dir.join("src").display());
+    println!("cargo:rerun-if-env-changed=AIONE_BUILD_DIR");
 
-    let build_dir = out_dir.join("aione-build");
+    // Short build dir avoids Windows MAX_PATH problems. Override with AIONE_BUILD_DIR.
+    let build_dir = env::var_os("AIONE_BUILD_DIR")
+        .map(PathBuf::from)
+        .unwrap_or_else(|| out_dir.join("aione-build"));
     let install_dir = out_dir.join("aione-install");
 
+    let use_ninja = ninja_available();
+    if !use_ninja {
+        println!("cargo:warning=ninja not found in PATH, falling back to the default CMake generator");
+    }
+
+    // A build dir configured with another generator can't be reused with Ninja.
+    if use_ninja {
+        reset_if_generator_mismatch(&build_dir);
+    }
+
+    let msvc_env = msvc_env();
+
     let mut configure = Command::new("cmake");
+    if use_ninja {
+        configure.arg("-G").arg("Ninja");
+    }
+    if !msvc_env.is_empty() {
+        configure.arg("-DCMAKE_C_COMPILER=cl");
+        configure.arg("-DCMAKE_CXX_COMPILER=cl");
+    }
     configure
         .arg("-S")
         .arg(&aione_dir)
@@ -62,6 +86,7 @@ fn main() {
         .arg("-DLLAMA_BUILD_EXAMPLES=OFF")
         .arg("-DLLAMA_BUILD_TOOLS=OFF")
         .arg("-DLLAMA_BUILD_SERVER=OFF");
+    apply_env(&mut configure, &msvc_env);
     run(&mut configure);
 
     let mut build = Command::new("cmake");
@@ -72,6 +97,7 @@ fn main() {
         .arg(config)
         .arg("--target")
         .arg("AIOneCore");
+    apply_env(&mut build, &msvc_env);
     run(&mut build);
 
     let mut install = Command::new("cmake");
@@ -82,9 +108,54 @@ fn main() {
         .arg(config)
         .arg("--prefix")
         .arg(&install_dir);
+    apply_env(&mut install, &msvc_env);
     run(&mut install);
 
     link_prebuilt(&install_dir, &out_dir);
+}
+
+fn ninja_available() -> bool {
+    Command::new("ninja")
+        .arg("--version")
+        .output()
+        .map(|o| o.status.success())
+        .unwrap_or(false)
+}
+
+/// Environment (PATH, INCLUDE, LIB, ...) of the MSVC toolchain, found via the cc crate.
+/// Empty on non-MSVC targets.
+fn msvc_env() -> Vec<(OsString, OsString)> {
+    let target = env::var("TARGET").unwrap_or_default();
+    if !target.contains("msvc") {
+        return Vec::new();
+    }
+    match cc::windows_registry::find_tool(&target, "cl.exe") {
+        Some(tool) => tool.env().to_vec(),
+        None => {
+            println!("cargo:warning=Could not locate MSVC via cc; relying on the current environment");
+            Vec::new()
+        }
+    }
+}
+
+fn apply_env(command: &mut Command, vars: &[(OsString, OsString)]) {
+    for (key, value) in vars {
+        command.env(key, value);
+    }
+}
+
+fn reset_if_generator_mismatch(build_dir: &Path) {
+    let cache = build_dir.join("CMakeCache.txt");
+    let Ok(text) = fs::read_to_string(&cache) else {
+        return;
+    };
+    let is_ninja = text
+        .lines()
+        .any(|l| l.starts_with("CMAKE_GENERATOR:INTERNAL=Ninja"));
+    if !is_ninja {
+        println!("cargo:warning=Removing stale CMake build dir (generator changed)");
+        let _ = fs::remove_dir_all(build_dir);
+    }
 }
 
 fn find_aione_dir(manifest_dir: &Path) -> Option<PathBuf> {
