@@ -123,7 +123,15 @@
 		</header>
 
 		<div class="chat-area">
-			<ChatBox {ai} bind:loading bind:systemPrompt bind:messages />
+			<ChatBox
+				{ai}
+				bind:loading
+				bind:systemPrompt
+				bind:messages
+				bind:chatFolder={currentFolder}
+				onchatcreated={onChatCreated}
+				onpersisted={refreshChats}
+			/>
 		</div>
 	</section>
 
