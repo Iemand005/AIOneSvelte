@@ -43,6 +43,30 @@
 	let thinking = $state(false);
 	let generating = $state<"full" | "token" | null>(null);
 	let regeneratingId = $state<string | null>(null);
+	let messagesElement: HTMLDivElement;
+	let followBottom = $state(true);
+
+	function updateScrollPosition(event: Event) {
+		const element = event.currentTarget as HTMLDivElement;
+		followBottom = element.scrollHeight - element.scrollTop - element.clientHeight < 48;
+	}
+
+	function scrollToBottom() {
+		followBottom = true;
+		messagesElement.scrollTo({ top: messagesElement.scrollHeight, behavior: "smooth" });
+	}
+
+	$effect(() => {
+		const lastMessage = activePath[activePath.length - 1];
+		lastMessage?.content;
+		lastMessage?.thinking;
+		loading;
+		promptProgress;
+
+		if (followBottom && messagesElement) {
+			messagesElement.scrollTop = messagesElement.scrollHeight;
+		}
+	});
 
 	let activePath = $derived(buildActivePath(messages, versionSelections));
 	let rendered = $derived(
@@ -385,7 +409,13 @@
 </script>
 
 <section class="chat">
-	<div class="messages" role="log" aria-live="polite">
+	<div
+		class="messages"
+		bind:this={messagesElement}
+		onscroll={updateScrollPosition}
+		role="log"
+		aria-live="polite"
+	>
 		{#each rendered as item (item.message.id)}
 			{#if item.message.role !== "assistant" || item.message.content || item.message.thinking || item.message.stats || regeneratingId === item.message.id}
 				<ChatBubble
@@ -429,6 +459,27 @@
 			</article>
 		{/if}
 	</div>
+
+	{#if !followBottom && activePath.length > 0}
+		<button
+			type="button"
+			class="scroll-bottom"
+			aria-label="Scroll to latest message"
+			title="Scroll to latest message"
+			onclick={scrollToBottom}
+		>
+			<svg viewBox="0 0 24 24" aria-hidden="true">
+				<path
+					d="M12 5v14m-7-7 7 7 7-7"
+					fill="none"
+					stroke="currentColor"
+					stroke-width="2"
+					stroke-linecap="round"
+					stroke-linejoin="round"
+				/>
+			</svg>
+		</button>
+	{/if}
 	
 	<MessageInput
 		bind:prompt
@@ -464,7 +515,35 @@
 
 		padding: var(--chatbox-pad);
 
-		padding-bottom: calc(var(--message-box-size) + 1rem);
+		padding-bottom: calc(var(--message-box-size) + var(--chatbox-pad) * 2 + 1rem);
+	}
+
+	.scroll-bottom {
+		position: absolute;
+		z-index: 2;
+		left: 50%;
+		bottom: calc(var(--message-box-size) + var(--chatbox-pad) * 2 + 0.75rem);
+		display: grid;
+		place-items: center;
+		width: 2.5rem;
+		height: 2.5rem;
+		padding: 0;
+		transform: translateX(-50%);
+		border: 1px solid #ffffff26;
+		border-radius: 50%;
+		background: var(--chat-bubble-bg);
+		color: inherit;
+		box-shadow: 0 2px 10px #00000030;
+		cursor: pointer;
+	}
+
+	.scroll-bottom:hover {
+		background: #77777740;
+	}
+
+	.scroll-bottom svg {
+		width: 1.25rem;
+		height: 1.25rem;
 	}
 
 	.status {
