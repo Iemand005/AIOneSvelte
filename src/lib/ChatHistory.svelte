@@ -63,9 +63,9 @@
 		<ol>
 			{#each turns as turn, position}
 				<li>
-					<button type="button" onclick={() => scrollTo(turn.message.id)}>
+					<button type="button" onclick={() => scrollTo(turn.id)}>
 						<span class="position">{position + 1}</span>
-						<span class="preview">{turn.message.content}</span>
+						<span class="preview">{turn.content}</span>
 					</button>
 				</li>
 			{/each}

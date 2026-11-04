@@ -36,11 +36,11 @@ export function buildActivePath(
 		const siblings = getSiblings(messages, parentId);
 		if (siblings.length === 0) break;
 
-		const selectedId = selections[parentKey(parentId)];
-		const selected = selectedId
+		const selectedId: string | undefined = selections[parentKey(parentId)];
+		const selected: ChatNode | undefined = selectedId
 			? siblings.find(message => message.id === selectedId)
 			: undefined;
-		const next = selected ?? siblings[siblings.length - 1];
+		const next: ChatNode = selected ?? siblings[siblings.length - 1];
 
 		if (visited.has(next.id)) break;
 
