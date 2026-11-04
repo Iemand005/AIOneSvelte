@@ -150,7 +150,7 @@
 	}
 
 	.cpu {
-		--accent-gradient: linear-gradient(180deg, rgb(20, 68, 119), rgb(18, 60, 99));
+		--accent-gradient: linear-gradient(180deg, rgb(12, 90, 139), rgb(18, 60, 99));
 	}
 
 	.gpu {
