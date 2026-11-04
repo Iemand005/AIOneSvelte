@@ -112,12 +112,14 @@
 		box-sizing: border-box;
 		z-index: 1;
 		overflow: hidden;
+		pointer-events: none;
 	}
 
 	.cover,
 	form {
 		position: absolute;
 		inset: var(--chatbox-pad);
+		pointer-events: auto;
 	}
 
 	/* Fills everything outside the bottom half of the pill.
