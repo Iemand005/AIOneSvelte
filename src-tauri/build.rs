@@ -39,7 +39,7 @@ fn main() {
         aione_dir.join("include").display()
     );
     println!("cargo:rerun-if-changed={}", aione_dir.join("src").display());
-        println!("cargo:rerun-if-env-changed=AIONE_BUILD_DIR");
+    println!("cargo:rerun-if-env-changed=AIONE_BUILD_DIR");
 
     // The nested vulkan-shaders-gen configure adds ~150 chars of its own,
     // so on Windows keep the build dir very short.

@@ -1,13 +1,13 @@
-use std::sync::Mutex;
+use std::sync::{Arc, Mutex, MutexGuard};
 
 use serde::Serialize;
 use tauri::{AppHandle, Emitter, State};
 
 use crate::aione_ffi::{GenerateCallbacks, GenerateResult, Session};
 
-#[derive(Default)]
+#[derive(Default, Clone)]
 pub struct AioneState {
-    session: Mutex<Option<Session>>,
+    session: Arc<Mutex<Option<Session>>>,
 }
 
 #[derive(Clone, Serialize)]
@@ -24,102 +24,149 @@ fn ensure_session(session: &mut Option<Session>) -> Result<&mut Session, String>
     Ok(session.as_mut().expect("session was initialized"))
 }
 
-fn lock_state(state: &AioneState) -> Result<std::sync::MutexGuard<'_, Option<Session>>, String> {
-    state
-        .session
+fn lock_session(
+    session: &Mutex<Option<Session>>,
+) -> Result<MutexGuard<'_, Option<Session>>, String> {
+    session
         .lock()
         .map_err(|_| String::from("AIOne session lock poisoned"))
 }
 
-#[tauri::command]
-pub fn aione_create_session(state: State<'_, AioneState>) -> Result<(), String> {
-    let mut session = lock_state(&state)?;
-    ensure_session(&mut session)?;
-    Ok(())
+async fn run_blocking<T, F>(task: F) -> Result<T, String>
+where
+    T: Send + 'static,
+    F: FnOnce() -> Result<T, String> + Send + 'static,
+{
+    tauri::async_runtime::spawn_blocking(task)
+        .await
+        .map_err(|error| format!("AIOne task failed: {error}"))?
 }
 
 #[tauri::command]
-pub fn aione_load_model(
+pub async fn aione_create_session(state: State<'_, AioneState>) -> Result<(), String> {
+    let session_slot = state.session.clone();
+    drop(state);
+
+    run_blocking(move || {
+        let mut session = lock_session(&session_slot)?;
+        ensure_session(&mut session)?;
+        Ok(())
+    })
+    .await
+}
+
+#[tauri::command]
+pub async fn aione_load_model(
     app: AppHandle,
     state: State<'_, AioneState>,
     path: String,
 ) -> Result<bool, String> {
-    let mut session = lock_state(&state)?;
-    let session = ensure_session(&mut session)?;
+    let session_slot = state.session.clone();
+    drop(state);
 
-    let progress_app = app.clone();
-    session
-        .load_model(&path, move |progress| {
-            let _ = progress_app.emit("aione-model-progress", progress);
-        })
-        .map_err(|error| error.to_string())?;
+    run_blocking(move || {
+        let mut session = lock_session(&session_slot)?;
+        let session = ensure_session(&mut session)?;
 
-    Ok(session.is_loaded())
+        let progress_app = app.clone();
+        session
+            .load_model(&path, move |progress| {
+                let _ = progress_app.emit("aione-model-progress", progress);
+            })
+            .map_err(|error| error.to_string())?;
+
+        Ok(session.is_loaded())
+    })
+    .await
 }
 
 #[tauri::command]
-pub fn aione_generate(
+pub async fn aione_generate(
     app: AppHandle,
     state: State<'_, AioneState>,
     prompt: String,
     max_tokens: u32,
 ) -> Result<GenerateResult, String> {
-    let mut session = lock_state(&state)?;
-    let session = ensure_session(&mut session)?;
+    let session_slot = state.session.clone();
+    drop(state);
 
-    let mut callbacks = GenerateCallbacks::default();
+    run_blocking(move || {
+        let mut session = lock_session(&session_slot)?;
+        let session = ensure_session(&mut session)?;
 
-    let token_app = app.clone();
-    callbacks.on_token_reasoning = Some(Box::new(move |token, thinking| {
-        let _ = token_app.emit(
-            "aione-token",
-            TokenEvent {
-                token: token.to_string(),
-                thinking,
-            },
-        );
-    }));
+        let mut callbacks = GenerateCallbacks::default();
 
-    let input_app = app.clone();
-    callbacks.on_input_eval = Some(Box::new(move |progress| {
-        let _ = input_app.emit("aione-input-eval", progress);
-    }));
+        let token_app = app.clone();
+        callbacks.on_token_reasoning = Some(Box::new(move |token, thinking| {
+            let _ = token_app.emit(
+                "aione-token",
+                TokenEvent {
+                    token: token.to_string(),
+                    thinking,
+                },
+            );
+        }));
 
-    let start_app = app.clone();
-    callbacks.on_generation_start = Some(Box::new(move || {
-        let _ = start_app.emit("aione-generation-start", ());
-    }));
+        let input_app = app.clone();
+        callbacks.on_input_eval = Some(Box::new(move |progress| {
+            let _ = input_app.emit("aione-input-eval", progress);
+        }));
 
-    let think_app = app.clone();
-    callbacks.on_think_state_change = Some(Box::new(move |thinking| {
-        let _ = think_app.emit("aione-think-state", thinking);
-    }));
+        let start_app = app.clone();
+        callbacks.on_generation_start = Some(Box::new(move || {
+            let _ = start_app.emit("aione-generation-start", ());
+        }));
 
-    session
-        .generate(&prompt, max_tokens, &mut callbacks)
-        .map_err(|error| error.to_string())
+        let think_app = app.clone();
+        callbacks.on_think_state_change = Some(Box::new(move |thinking| {
+            let _ = think_app.emit("aione-think-state", thinking);
+        }));
+
+        session
+            .generate(&prompt, max_tokens, &mut callbacks)
+            .map_err(|error| error.to_string())
+    })
+    .await
 }
 
 #[tauri::command]
-pub fn aione_unload_model(state: State<'_, AioneState>) -> Result<(), String> {
-    let session = lock_state(&state)?;
+pub async fn aione_unload_model(state: State<'_, AioneState>) -> Result<(), String> {
+    let session_slot = state.session.clone();
+    drop(state);
 
-    if let Some(session) = session.as_ref() {
-        session.unload_model();
-    }
+    run_blocking(move || {
+        let session = lock_session(&session_slot)?;
 
-    Ok(())
+        if let Some(session) = session.as_ref() {
+            session.unload_model();
+        }
+
+        Ok(())
+    })
+    .await
 }
 
 #[tauri::command]
-pub fn aione_is_loaded(state: State<'_, AioneState>) -> Result<bool, String> {
-    let session = lock_state(&state)?;
-    Ok(session.as_ref().map(Session::is_loaded).unwrap_or(false))
+pub async fn aione_is_loaded(state: State<'_, AioneState>) -> Result<bool, String> {
+    let session_slot = state.session.clone();
+    drop(state);
+
+    run_blocking(move || {
+        let session = lock_session(&session_slot)?;
+        Ok(session.as_ref().map(Session::is_loaded).unwrap_or(false))
+    })
+    .await
 }
 
 #[tauri::command]
-pub fn aione_destroy_session(state: State<'_, AioneState>) -> Result<(), String> {
-    let mut session = lock_state(&state)?;
-    *session = None;
-    Ok(())
+pub async fn aione_destroy_session(state: State<'_, AioneState>) -> Result<(), String> {
+    let session_slot = state.session.clone();
+    drop(state);
+
+    run_blocking(move || {
+        let mut session = lock_session(&session_slot)?;
+        *session = None;
+        Ok(())
+    })
+    .await
 }
