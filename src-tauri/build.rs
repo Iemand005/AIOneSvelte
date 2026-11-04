@@ -46,23 +46,18 @@ fn main() {
         .map(PathBuf::from)
         .unwrap_or_else(|| out_dir.join("aione-build"));
     let install_dir = out_dir.join("aione-install");
+    let ninja = find_ninja().unwrap_or_else(|| {
+        panic!("Ninja not found. Run `winget install Ninja-build.Ninja` and open a NEW terminal.")
+    });
 
-    let use_ninja = ninja_available();
-    if !use_ninja {
-        println!("cargo:warning=ninja not found in PATH, falling back to the default CMake generator");
-    }
-
-    // A build dir configured with another generator can't be reused with Ninja.
-    if use_ninja {
-        reset_if_generator_mismatch(&build_dir);
-    }
+    reset_if_generator_mismatch(&build_dir);
 
     let msvc_env = msvc_env();
 
     let mut configure = Command::new("cmake");
-    if use_ninja {
-        configure.arg("-G").arg("Ninja");
-    }
+    configure
+        .arg("-G").arg("Ninja")
+        .arg(format!("-DCMAKE_MAKE_PROGRAM={}", ninja.display()));
     if !msvc_env.is_empty() {
         configure.arg("-DCMAKE_C_COMPILER=cl");
         configure.arg("-DCMAKE_CXX_COMPILER=cl");
@@ -114,12 +109,31 @@ fn main() {
     link_prebuilt(&install_dir, &out_dir);
 }
 
-fn ninja_available() -> bool {
-    Command::new("ninja")
+fn find_ninja() -> Option<PathBuf> {
+    // 1. Ninja on PATH
+    if Command::new("ninja")
         .arg("--version")
         .output()
         .map(|o| o.status.success())
         .unwrap_or(false)
+    {
+        return Some(PathBuf::from("ninja"));
+    }
+
+    // 2. Ninja bundled with Visual Studio's CMake component
+    let pf = env::var_os("ProgramFiles").map(PathBuf::from)?;
+    let vs_root = pf.join("Microsoft Visual Studio");
+    for version in fs::read_dir(&vs_root).ok()?.flatten() {
+        for edition in fs::read_dir(version.path()).into_iter().flatten().flatten() {
+            let candidate = edition
+                .path()
+                .join(r"Common7\IDE\CommonExtensions\Microsoft\CMake\Ninja\ninja.exe");
+            if candidate.is_file() {
+                return Some(candidate);
+            }
+        }
+    }
+    None
 }
 
 /// Environment (PATH, INCLUDE, LIB, ...) of the MSVC toolchain, found via the cc crate.
