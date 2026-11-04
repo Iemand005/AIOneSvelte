@@ -100,7 +100,7 @@
 								<strong class="value">
 									{device.description || device.name || "Unnamed device"}
 								</strong>
-								<span class={`badge ${device.type}`}>{device.type.toUpperCase()}</span>
+								<span class={`badge ${device.type}`}>{device.type === "igpu" ? "iGPU" : device.type.toUpperCase()}</span>
 							</div>
 
 							<dl>
