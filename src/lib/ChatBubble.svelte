@@ -40,13 +40,14 @@
         padding: 0.75rem 1rem;
         border-radius: calc(var(--message-box-size) / 2);
         background: var(--chat-bubble-bg);
-        color: white;
+        /* color: white; */
         align-self: flex-start;
         overflow-wrap: anywhere;
     }
 
     article.user {
         align-self: flex-end;
+        color: white;
         background: var(--accent-gradient);
         border-bottom-right-radius: 0.25rem;
     }
