@@ -254,7 +254,6 @@
 		padding: 0;
 		border-radius: 8px;
 		background: #ffffff0d;
-		color: #cfcfcf;
 		transition: background-color 120ms ease, color 120ms ease;
 	}
 

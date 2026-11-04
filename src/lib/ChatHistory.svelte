@@ -113,7 +113,6 @@
 		padding: 8px 10px;
 		background: none;
 		border-radius: 8px;
-		color: #cfcfcf;
 		font: inherit;
 		font-size: 0.85rem;
 		text-align: left;
