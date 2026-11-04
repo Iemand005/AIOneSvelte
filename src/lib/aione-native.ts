@@ -177,9 +177,15 @@ export async function loadChat(folder: string): Promise<ChatData> {
 export async function appendChatMessage(
 	folder: string,
 	role: string,
-	content: string
+	content: string,
+	parentId = 0
 ): Promise<ChatMessage> {
-	return invoke<ChatMessage>("aione_chat_append", { folder, role, content });
+	return invoke<ChatMessage>("aione_chat_append", {
+		folder,
+		role,
+		content,
+		parentId
+	});
 }
 
 export async function updateChatMetadata(

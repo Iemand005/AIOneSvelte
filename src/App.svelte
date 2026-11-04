@@ -166,6 +166,7 @@
 					bind:loading
 					bind:systemPrompt
 					bind:messages
+					bind:versionSelections
 					bind:chatFolder={currentFolder}
 					onchatcreated={onChatCreated}
 					onpersisted={refreshChats}

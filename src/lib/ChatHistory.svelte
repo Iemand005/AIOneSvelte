@@ -1,12 +1,12 @@
 <script lang="ts">
-	import type { Message } from "aione-web";
 	import type { ChatMetadata } from "./aione-native";
+	import type { ChatNode } from "./chat";
 
 	type Props = {
 		chats: ChatMetadata[];
 		currentFolder: string | null;
 		persist: boolean;
-		messages: Message[];
+		messages: ChatNode[];
 		onselect: (folder: string) => void;
 		onnew: () => void;
 		ondelete: (folder: string) => void;
@@ -14,14 +14,10 @@
 
 	let { chats, currentFolder, persist, messages, onselect, onnew, ondelete }: Props = $props();
 
-	let turns = $derived(
-		messages
-			.map((message, index) => ({ message, index }))
-			.filter(({ message }) => message.role === "user")
-	);
+	let turns = $derived(messages.filter(message => message.role === "user"));
 
-	function scrollTo(index: number) {
-		document.getElementById(`message-${index}`)?.scrollIntoView({
+	function scrollTo(id: string) {
+		document.getElementById(`message-${id}`)?.scrollIntoView({
 			behavior: "smooth",
 			block: "start"
 		});
@@ -67,7 +63,7 @@
 		<ol>
 			{#each turns as turn, position}
 				<li>
-					<button type="button" onclick={() => scrollTo(turn.index)}>
+					<button type="button" onclick={() => scrollTo(turn.message.id)}>
 						<span class="position">{position + 1}</span>
 						<span class="preview">{turn.message.content}</span>
 					</button>
