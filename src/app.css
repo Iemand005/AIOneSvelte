@@ -20,6 +20,8 @@
 
 	--message-box-size: 45px;
 
+	--chat-bubble-bg: #cbcbcb;
+
 	--sidebar: rgba(215, 213, 212, 0.6);
 
   font: 18px/145% var(--sans);
@@ -49,6 +51,8 @@
     --sidebar: rgba(18, 16, 15, 0.6);
 
 		--message-input-gradient: linear-gradient(0deg, #46454587, #36363666);
+
+		--chat-bubble-bg: #292929;
   }
 }
 
