@@ -196,7 +196,7 @@
 		gap: 12px;
 		min-height: 0;
 		overflow: hidden;
-		background: rgba(18, 16, 15, 0.6);
+		background: var(--sidebar);
 		backdrop-filter: blur(20px);
 	}
 
@@ -235,7 +235,7 @@
 		font-weight: 600;
 		letter-spacing: 0.08em;
 		text-transform: uppercase;
-		color: #b8b8b8;
+		color: --text-h;
 	}
 
 	.indicator {
