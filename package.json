@@ -24,6 +24,6 @@
   "dependencies": {
     "@tauri-apps/api": "^2.12.4",
     "@tauri-apps/plugin-dialog": "^2.8.4",
-    "aione-web": "^1.0.3"
+    "aione-web": "1.0.3"
   }
 }
