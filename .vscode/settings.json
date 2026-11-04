@@ -16,6 +16,7 @@
         "statusBar.noFolderForeground": "#FEFCFD",
 		"button.background": "#2ba029",
 		"button.hoverBackground": "#20ac3c",
-        "badge.background": "#20ac3c"
+        "badge.background": "#20ac3c",
+        "activityBarBadge.background": "#20ac3c"
     }
 }
