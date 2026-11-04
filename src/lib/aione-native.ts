@@ -1,5 +1,6 @@
 import { invoke } from "@tauri-apps/api/core";
 import { listen, type UnlistenFn } from "@tauri-apps/api/event";
+import type { ChatPromptMessage } from "./backend";
 
 export interface GenerateStats {
 	promptTokens: number;
@@ -118,6 +119,16 @@ export async function generate(
 	} finally {
 		for (const unlisten of unlisteners) unlisten();
 	}
+}
+
+export async function formatChatPrompt(
+	messages: ChatPromptMessage[],
+	addGenerationPrompt = true
+): Promise<string> {
+	return invoke<string>("aione_format_chat_prompt", {
+		messages,
+		addGenerationPrompt
+	});
 }
 
 export async function unloadModel(): Promise<void> {

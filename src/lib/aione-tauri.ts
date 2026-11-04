@@ -1,6 +1,6 @@
 import { invoke } from "@tauri-apps/api/core";
 import * as native from "./aione-native"; // your existing functions
-import type { Backend, ModelSource, GenerateCallbacks } from "./backend";
+import type { Backend, ChatPromptMessage, ModelSource, GenerateCallbacks } from "./backend";
 
 export class NativeBackend implements Backend {
   readonly kind = "native" as const;
@@ -16,6 +16,9 @@ export class NativeBackend implements Backend {
   }
   generate(prompt: string, maxTokens = 512, cb: GenerateCallbacks = {}) {
     return native.generate(prompt, maxTokens, cb);
+  }
+  formatChatPrompt(messages: ChatPromptMessage[], addGenerationPrompt = true) {
+    return native.formatChatPrompt(messages, addGenerationPrompt);
   }
   cancel() { return invoke<void>("aione_cancel_generation"); }
   unloadModel() { return native.unloadModel(); }

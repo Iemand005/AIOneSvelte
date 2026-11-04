@@ -135,23 +135,25 @@
 		const assistant = messages[messages.length - 1];
 		selectNode(assistant);
 
-		const conversation = [
+		const promptMessages = [
 			...(systemPrompt.trim()
 				? [{ role: "system" as const, content: systemPrompt.trim() }]
 				: []),
-			...ancestors,
-			user
-		]
-			.map(m => `${m.role}: ${m.content}`)
-			.join("\n");
+			...ancestors.map(message => ({
+				role: message.role,
+				content: message.content
+			})),
+			{ role: "user" as const, content: user.content }
+		];
 
 		loading = true;
 		promptProgress = 0;
 		thinking = false;
 
 		try {
+			const promptText = await ai.formatChatPrompt(promptMessages, true);
 			const result = await ai.generate(
-				`${conversation}\nassistant:`,
+				promptText,
 				512,
 				{
 					onPromptProgress: value => {
@@ -240,14 +242,15 @@
 		selectNode(assistant);
 		regeneratingId = assistant.id;
 
-		const conversation = [
+		const promptMessages = [
 			...(systemPrompt.trim()
 				? [{ role: "system" as const, content: systemPrompt.trim() }]
 				: []),
-			...ancestors
-		]
-			.map(message => `${message.role}: ${message.content}`)
-			.join("\n");
+			...ancestors.map(message => ({
+				role: message.role,
+				content: message.content
+			}))
+		];
 
 		loading = true;
 		streaming = true;
@@ -255,8 +258,9 @@
 		thinking = false;
 
 		try {
+			const promptText = await ai.formatChatPrompt(promptMessages, true);
 			const result = await ai.generate(
-				`${conversation}\nassistant:`,
+				promptText,
 				512,
 				{
 					onThinkingChange: value => {
