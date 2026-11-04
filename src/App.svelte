@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type { Message } from "aione-web";
 	import { initializeAIOne, type Backend } from "./lib/aione";
+	import type { ChatMetadata } from "./lib/aione-native";
 	import ModelLoader from "./lib/ModelLoader.svelte";
 	import ChatBox from "./lib/ChatBox.svelte";
 	import ChatHistory from "./lib/ChatHistory.svelte";
@@ -15,11 +16,83 @@
 	let loading = $state(false);
 	let systemPrompt = $state("");
 	let messages = $state<Message[]>([]);
+	let chats = $state<ChatMetadata[]>([]);
+	let currentFolder = $state<string | null>(null);
+	let native = $state(false);
 	let promptOpen = $state(true);
 
 	let hasSystemPrompt = $derived(systemPrompt.trim().length > 0);
 
-	initializeAIOne().then(one => ai = one);
+	initializeAIOne().then(async one => {
+		ai = one;
+		native = one.kind === "native";
+		if (native) await refreshChats();
+	});
+
+	async function refreshChats() {
+		if (!ai || ai.kind !== "native") return;
+
+		try {
+			const { listChats } = await import("./lib/aione-native");
+			chats = await listChats();
+		} catch (error) {
+			console.error(error);
+		}
+	}
+
+	async function openChat(folder: string) {
+		try {
+			const { loadChat } = await import("./lib/aione-native");
+			const chat = await loadChat(folder);
+
+			currentFolder = chat.folder;
+			systemPrompt = chat.systemPrompt;
+			messages = chat.messages.map(message => ({
+				role: message.role as Message["role"],
+				content: message.content
+			}));
+		} catch (error) {
+			console.error(error);
+		}
+	}
+
+	function newChat() {
+		currentFolder = null;
+		messages = [];
+		systemPrompt = "";
+	}
+
+	async function deleteChat(folder: string) {
+		try {
+			const { deleteChat: removeChat } = await import("./lib/aione-native");
+			await removeChat(folder);
+
+			if (currentFolder === folder) newChat();
+			await refreshChats();
+		} catch (error) {
+			console.error(error);
+		}
+	}
+
+	function onChatCreated(chat: ChatMetadata) {
+		currentFolder = chat.folder;
+		void refreshChats();
+	}
+
+	$effect(() => {
+		const folder = currentFolder;
+		const value = systemPrompt;
+
+		if (!native || !folder) return;
+
+		const timer = setTimeout(() => {
+			import("./lib/aione-native")
+				.then(({ updateChatMetadata }) => updateChatMetadata(folder, null, null, value))
+				.catch(console.error);
+		}, 500);
+
+		return () => clearTimeout(timer);
+	});
 </script>
 
 <svelte:head>
@@ -33,7 +106,15 @@
 			<h2>History</h2>
 		</div>
 
-		<ChatHistory {messages} />
+		<ChatHistory
+			{chats}
+			{currentFolder}
+			persist={native}
+			{messages}
+			onselect={openChat}
+			onnew={newChat}
+			ondelete={deleteChat}
+		/>
 	</aside>
 
 	<section class="workspace">
