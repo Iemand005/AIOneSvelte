@@ -3,6 +3,7 @@
 	import type { Message } from "aione-web";
 	import ChatBubble from "./ChatBubble.svelte";
 	import MessageInput from "./MessageInput.svelte";
+	import type { ChatMetadata } from "./aione-native";
     import type { Backend } from "./backend";
 
 	type Props = {
@@ -10,6 +11,9 @@
 		loading?: boolean;
 		systemPrompt?: string;
 		messages?: Message[];
+		chatFolder?: string | null;
+		onchatcreated?: (chat: ChatMetadata) => void;
+		onpersisted?: () => void;
 		onerror?: (error: unknown) => void;
 	};
 
@@ -18,6 +22,9 @@
 		loading = $bindable(false),
 		systemPrompt = $bindable(""),
 		messages = $bindable<Message[]>([]),
+		chatFolder = $bindable<string | null>(null),
+		onchatcreated,
+		onpersisted,
 		onerror
 	}: Props = $props();
 
@@ -29,8 +36,35 @@
 	async function sendMessage() {
 		if (!ai || !prompt.trim() || loading) return;
 
-		messages.push({ role: "user", content: prompt.trim() });
+		const content = prompt.trim();
 		prompt = "";
+
+		let store: typeof import("./aione-native") | null = null;
+		if (ai.kind === "native") {
+			try {
+				store = await import("./aione-native");
+
+				if (!chatFolder) {
+					const chat = await store.createChat(
+						content.slice(0, 60),
+						"",
+						systemPrompt.trim()
+					);
+					chatFolder = chat.folder;
+					onchatcreated?.(chat);
+				} else {
+					await store.updateChatMetadata(chatFolder, null, null, systemPrompt.trim());
+				}
+
+				if (chatFolder) {
+					await store.appendChatMessage(chatFolder, "user", content);
+				}
+			} catch (error) {
+				onerror?.(error);
+			}
+		}
+
+		messages.push({ role: "user", content });
 
 		const index = messages.length;
 		const conversation = [
@@ -77,6 +111,15 @@
 
 			if (!messages[index].content && !messages[index].thinking) {
 				messages[index].content = result.content;
+			}
+
+			if (store && chatFolder && messages[index].content) {
+				try {
+					await store.appendChatMessage(chatFolder, "assistant", messages[index].content);
+					onpersisted?.();
+				} catch (error) {
+					onerror?.(error);
+				}
 			}
 		} catch (error) {
 			messages[index].content = `Error: ${String(error)}`;
