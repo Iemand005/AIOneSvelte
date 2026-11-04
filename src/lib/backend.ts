@@ -11,6 +11,11 @@ export interface GenerateCallbacks {
   onGenerationStart?: () => void;
 }
 
+export interface ChatPromptMessage {
+  role: "system" | "user" | "assistant";
+  content: string;
+}
+
 export type ModelSource =
   | { kind: "path"; path: string }
   | { kind: "file"; file: File }
@@ -20,6 +25,7 @@ export interface Backend {
   readonly kind: "native" | "wasm";
   loadModel(src: ModelSource, onProgress?: (p: number) => void): Promise<boolean>;
   generate(prompt: string, maxTokens?: number, cb?: GenerateCallbacks): Promise<GenerateResult>;
+  formatChatPrompt(messages: ChatPromptMessage[], addGenerationPrompt?: boolean): Promise<string>;
   cancel(): Promise<void>;
   unloadModel(): Promise<void>;
   isLoaded(): Promise<boolean>;

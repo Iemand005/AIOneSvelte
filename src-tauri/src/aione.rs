@@ -132,6 +132,26 @@ pub async fn aione_generate(
 }
 
 #[tauri::command]
+pub async fn aione_format_chat_prompt(
+    state: State<'_, AioneState>,
+    messages: Vec<aione_rs::ChatPromptMessage>,
+    add_generation_prompt: bool,
+) -> Result<String, String> {
+    let session_slot = state.session.clone();
+    drop(state);
+
+    run_blocking(move || {
+        let mut session = lock_session(&session_slot)?;
+        let session = ensure_session(&mut session)?;
+
+        session
+            .format_chat_prompt(&messages, add_generation_prompt)
+            .map_err(|error| error.to_string())
+    })
+    .await
+}
+
+#[tauri::command]
 pub async fn aione_unload_model(state: State<'_, AioneState>) -> Result<(), String> {
     let session_slot = state.session.clone();
     drop(state);

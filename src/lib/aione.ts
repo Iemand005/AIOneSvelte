@@ -1,6 +1,7 @@
 import AIOne, { type GenerateStats } from "aione-web";
 import type {
 	Backend,
+	ChatPromptMessage,
 	GenerateCallbacks,
 	GenerateResult,
 	ModelSource,
@@ -68,6 +69,16 @@ export class WasmBackend implements Backend {
 		cb: GenerateCallbacks = {}
 	): Promise<GenerateResult> {
 		return this.ai.generate(prompt, maxTokens, cb);
+	}
+
+	async formatChatPrompt(
+		messages: ChatPromptMessage[],
+		addGenerationPrompt = true
+	): Promise<string> {
+		const prompt = messages
+			.map(message => `${message.role}: ${message.content}`)
+			.join("\n");
+		return addGenerationPrompt ? `${prompt}\nassistant:` : prompt;
 	}
 
 	async cancel(): Promise<void> {
