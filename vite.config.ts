@@ -5,6 +5,7 @@ import { dirname, extname, join, relative, resolve, sep } from 'node:path'
 import { defineConfig, type Plugin } from 'vite'
 
 const host = process.env.TAURI_DEV_HOST;
+const isTauri = Boolean(process.env.TAURI_ENV_PLATFORM);
 
 const require = createRequire(import.meta.url)
 const aioneWebDir = dirname(require.resolve('aione-web/package.json'))
@@ -58,6 +59,8 @@ function aioneWebAssets(): Plugin {
   return {
     name: 'aione-web-assets',
     configureServer(server) {
+      if (isTauri) return;
+
       server.middlewares.use((req, res, next) => {
         const pathname = decodeURIComponent((req.url ?? '').split('?')[0])
         const asset = AIONE_WEB_ASSETS.find(({ url }) => pathname.endsWith(`/${url}`))
@@ -83,6 +86,8 @@ function aioneWebAssets(): Plugin {
       })
     },
     generateBundle() {
+      if (isTauri) return;
+
       for (const asset of AIONE_WEB_ASSETS) {
         const source = findAssetSource(asset)
         if (!source) continue
