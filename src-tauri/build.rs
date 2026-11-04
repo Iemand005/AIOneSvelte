@@ -136,6 +136,22 @@ fn find_ninja() -> Option<PathBuf> {
     None
 }
 
+/// Environment (PATH, INCLUDE, LIB, ...) of the MSVC toolchain, found via the cc crate.
+/// Empty on non-MSVC targets.
+fn msvc_env() -> Vec<(OsString, OsString)> {
+    let target = env::var("TARGET").unwrap_or_default();
+    if !target.contains("msvc") {
+        return Vec::new();
+    }
+    match cc::windows_registry::find_tool(&target, "cl.exe") {
+        Some(tool) => tool.env().to_vec(),
+        None => {
+            println!("cargo:warning=Could not locate MSVC via cc; relying on the current environment");
+            Vec::new()
+        }
+    }
+}
+
 fn build_env(ninja: &Path) -> Vec<(OsString, OsString)> {
     let mut vars = msvc_env();
 
