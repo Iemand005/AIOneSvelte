@@ -1,7 +1,12 @@
 <script lang="ts">
-	import type { Message } from "aione-web";
 	import { initializeAIOne, type Backend } from "./lib/aione";
 	import type { ChatMetadata } from "./lib/aione-native";
+	import {
+		buildActivePath,
+		nodesFromPersisted,
+		type ChatNode,
+		type VersionSelections
+	} from "./lib/chat";
 	import ModelLoader from "./lib/ModelLoader.svelte";
 	import ChatBox from "./lib/ChatBox.svelte";
 	import ChatHistory from "./lib/ChatHistory.svelte";
@@ -16,7 +21,8 @@
 
 	let loading = $state(false);
 	let systemPrompt = $state("");
-	let messages = $state<Message[]>([]);
+	let messages = $state<ChatNode[]>([]);
+	let versionSelections = $state<VersionSelections>({});
 	let chats = $state<ChatMetadata[]>([]);
 	let currentFolder = $state<string | null>(null);
 	let native = $state(false);
@@ -24,6 +30,7 @@
 	let view = $state<"chat" | "settings">("chat");
 
 	let hasSystemPrompt = $derived(systemPrompt.trim().length > 0);
+	let activeMessages = $derived(buildActivePath(messages, versionSelections));
 
 	initializeAIOne().then(async one => {
 		ai = one;
@@ -50,10 +57,8 @@
 			view = "chat";
 			currentFolder = chat.folder;
 			systemPrompt = chat.systemPrompt;
-			messages = chat.messages.map(message => ({
-				role: message.role as Message["role"],
-				content: message.content
-			}));
+			messages = nodesFromPersisted(chat.messages);
+			versionSelections = {};
 		} catch (error) {
 			console.error(error);
 		}
@@ -63,6 +68,7 @@
 		view = "chat";
 		currentFolder = null;
 		messages = [];
+		versionSelections = {};
 		systemPrompt = "";
 	}
 
@@ -115,7 +121,7 @@
 			{chats}
 			{currentFolder}
 			persist={native}
-			{messages}
+			messages={activeMessages}
 			onselect={openChat}
 			onnew={newChat}
 			ondelete={deleteChat}

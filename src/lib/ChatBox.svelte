@@ -1,16 +1,23 @@
 <script lang="ts">
-	import type AIOne from "aione-web";
-	import type { Message } from "aione-web";
 	import ChatBubble from "./ChatBubble.svelte";
 	import MessageInput from "./MessageInput.svelte";
 	import type { ChatMetadata } from "./aione-native";
-    import type { Backend } from "./backend";
+	import type { Backend } from "./backend";
+	import {
+		buildActivePath,
+		createMessageId,
+		getSiblings,
+		parentKey,
+		type ChatNode,
+		type VersionSelections
+	} from "./chat";
 
 	type Props = {
 		ai: Backend | null;
 		loading?: boolean;
 		systemPrompt?: string;
-		messages?: Message[];
+		messages?: ChatNode[];
+		versionSelections?: VersionSelections;
 		chatFolder?: string | null;
 		onchatcreated?: (chat: ChatMetadata) => void;
 		onpersisted?: () => void;
@@ -21,7 +28,8 @@
 		ai = $bindable(null),
 		loading = $bindable(false),
 		systemPrompt = $bindable(""),
-		messages = $bindable<Message[]>([]),
+		messages = $bindable<ChatNode[]>([]),
+		versionSelections = $bindable<VersionSelections>({}),
 		chatFolder = $bindable<string | null>(null),
 		onchatcreated,
 		onpersisted,
@@ -33,12 +41,58 @@
 	let promptProgress = $state(0);
 	let thinking = $state(false);
 	let generating = $state<"full" | "token" | null>(null);
+	let regeneratingId = $state<string | null>(null);
+
+	let activePath = $derived(buildActivePath(messages, versionSelections));
+	let rendered = $derived(
+		activePath.map(message => {
+			const siblings = getSiblings(messages, message.parentId);
+			const versionIndex = siblings.findIndex(item => item.id === message.id);
+
+			return {
+				message,
+				versionIndex: versionIndex < 0 ? 0 : versionIndex,
+				versionCount: siblings.length
+			};
+		})
+	);
+
+	function selectNode(node: ChatNode) {
+		versionSelections[parentKey(node.parentId)] = node.id;
+	}
+
+	function switchVersion(message: ChatNode, direction: -1 | 1) {
+		if (loading || generating) return;
+
+		const siblings = getSiblings(messages, message.parentId);
+		if (siblings.length < 2) return;
+
+		const current = siblings.findIndex(item => item.id === message.id);
+		if (current < 0) return;
+
+		const next = (current + direction + siblings.length) % siblings.length;
+		versionSelections[parentKey(message.parentId)] = siblings[next].id;
+	}
 
 	async function sendMessage() {
 		if (!ai || !prompt.trim() || loading) return;
 
 		const content = prompt.trim();
 		prompt = "";
+
+		const ancestors = [...activePath];
+		const parent = ancestors.length ? ancestors[ancestors.length - 1] : null;
+		const parentNativeId = parent?.nativeId ?? 0;
+
+		messages.push({
+			id: createMessageId(),
+			parentId: parent?.id ?? null,
+			role: "user",
+			content
+		});
+
+		const user = messages[messages.length - 1];
+		selectNode(user);
 
 		let store: typeof import("./aione-native") | null = null;
 		if (ai.kind === "native") {
@@ -58,26 +112,39 @@
 				}
 
 				if (chatFolder) {
-					await store.appendChatMessage(chatFolder, "user", content);
+					const saved = await store.appendChatMessage(
+						chatFolder,
+						"user",
+						content,
+						parentNativeId
+					);
+					user.nativeId = saved.id;
 				}
 			} catch (error) {
 				onerror?.(error);
 			}
 		}
 
-		messages.push({ role: "user", content });
+		messages.push({
+			id: createMessageId(),
+			parentId: user.id,
+			role: "assistant",
+			content: ""
+		});
 
-		const index = messages.length;
+		const assistant = messages[messages.length - 1];
+		selectNode(assistant);
+
 		const conversation = [
 			...(systemPrompt.trim()
 				? [{ role: "system" as const, content: systemPrompt.trim() }]
 				: []),
-			...messages
+			...ancestors,
+			user
 		]
 			.map(m => `${m.role}: ${m.content}`)
 			.join("\n");
 
-		messages.push({ role: "assistant", content: "" });
 		loading = true;
 		promptProgress = 0;
 		thinking = false;
@@ -100,34 +167,138 @@
 						streaming = true;
 
 						if (isThinking) {
-							messages[index].thinking = (messages[index].thinking ?? "") + token;
+							assistant.thinking = (assistant.thinking ?? "") + token;
 						} else {
-							messages[index].content += token;
+							assistant.content += token;
 						}
 					}
 				}
 			);
 
-			messages[index].stats = result.stats;
+			assistant.stats = result.stats;
 
-			if (!messages[index].content && !messages[index].thinking) {
-				messages[index].content = result.content;
+			if (!assistant.content && !assistant.thinking) {
+				assistant.content = result.content;
 			}
 
-			if (store && chatFolder && messages[index].content) {
+			if (store && chatFolder && assistant.content) {
 				try {
-					await store.appendChatMessage(chatFolder, "assistant", messages[index].content);
+					const saved = await store.appendChatMessage(
+						chatFolder,
+						"assistant",
+						assistant.content,
+						user.nativeId ?? 0
+					);
+					assistant.nativeId = saved.id;
 					onpersisted?.();
 				} catch (error) {
 					onerror?.(error);
 				}
 			}
 		} catch (error) {
-			messages[index].content = `Error: ${String(error)}`;
+			assistant.content = `Error: ${String(error)}`;
 			onerror?.(error);
 		} finally {
 			loading = false;
 			streaming = false;
+			promptProgress = 0;
+			thinking = false;
+		}
+	}
+
+	async function regenerateMessage(target: ChatNode) {
+		if (!ai || loading || generating || target.role !== "assistant") return;
+
+		const targetIndex = activePath.findIndex(message => message.id === target.id);
+		if (targetIndex < 0) return;
+
+		const ancestors = activePath.slice(0, targetIndex);
+		const parentNode = messages.find(message => message.id === target.parentId) ?? null;
+		const parentNativeId = parentNode?.nativeId ?? 0;
+
+		let store: typeof import("./aione-native") | null = null;
+		if (ai.kind === "native") {
+			try {
+				store = await import("./aione-native");
+
+				if (chatFolder) {
+					await store.updateChatMetadata(chatFolder, null, null, systemPrompt.trim());
+				}
+			} catch (error) {
+				onerror?.(error);
+			}
+		}
+
+		messages.push({
+			id: createMessageId(),
+			parentId: target.parentId,
+			role: "assistant",
+			content: ""
+		});
+
+		const assistant = messages[messages.length - 1];
+		selectNode(assistant);
+		regeneratingId = assistant.id;
+
+		const conversation = [
+			...(systemPrompt.trim()
+				? [{ role: "system" as const, content: systemPrompt.trim() }]
+				: []),
+			...ancestors
+		]
+			.map(message => `${message.role}: ${message.content}`)
+			.join("\n");
+
+		loading = true;
+		streaming = true;
+		promptProgress = 0;
+		thinking = false;
+
+		try {
+			const result = await ai.generate(
+				`${conversation}\nassistant:`,
+				512,
+				{
+					onThinkingChange: value => {
+						thinking = value;
+					},
+					onToken: (token, isThinking) => {
+						if (isThinking) {
+							assistant.thinking = (assistant.thinking ?? "") + token;
+						} else {
+							assistant.content += token;
+						}
+					}
+				}
+			);
+
+			assistant.stats = result.stats;
+
+			if (!assistant.content && !assistant.thinking) {
+				assistant.content = result.content;
+			}
+
+			if (store && chatFolder && assistant.content) {
+				try {
+					const saved = await store.appendChatMessage(
+						chatFolder,
+						"assistant",
+						assistant.content,
+						parentNativeId
+					);
+					assistant.nativeId = saved.id;
+					onpersisted?.();
+				} catch (error) {
+					onerror?.(error);
+				}
+			}
+		} catch (error) {
+			assistant.content = `Error: ${String(error)}`;
+			onerror?.(error);
+		} finally {
+			loading = false;
+			streaming = false;
+			regeneratingId = null;
 			promptProgress = 0;
 			thinking = false;
 		}
@@ -154,7 +325,7 @@
 		const hasDraft = draft.trim().length > 0;
 		const singleToken = maxTokens === 1;
 
-		const context = messages
+		const context = activePath
 			.filter(message => message.content.trim())
 			.map(message => `${message.role}: ${message.content}`)
 			.join("\n");
@@ -210,9 +381,18 @@
 
 <section class="chat">
 	<div class="messages" role="log" aria-live="polite">
-		{#each messages as message, index}
-			{#if message.role !== "assistant" || message.content || message.thinking || message.stats}
-				<ChatBubble {message} id={`message-${index}`} />
+		{#each rendered as item (item.message.id)}
+			{#if item.message.role !== "assistant" || item.message.content || item.message.thinking || item.message.stats || regeneratingId === item.message.id}
+				<ChatBubble
+					message={item.message}
+					id={`message-${item.message.id}`}
+					versionIndex={item.versionIndex}
+					versionCount={item.versionCount}
+					regenerating={regeneratingId === item.message.id}
+					disabled={loading || Boolean(generating)}
+					onregenerate={regenerateMessage}
+					onversion={switchVersion}
+				/>
 			{/if}
 		{/each}
 

@@ -1,11 +1,27 @@
 <script lang="ts">
-	import {type Message} from "aione-web";
+	import type { ChatNode } from "./chat";
+
 	type MessageProps = {
-		message: Message;
+		message: ChatNode;
 		id?: string;
+		versionIndex?: number;
+		versionCount?: number;
+		regenerating?: boolean;
+		disabled?: boolean;
+		onregenerate?: (message: ChatNode) => void;
+		onversion?: (message: ChatNode, direction: -1 | 1) => void;
 	};
 
-	let { message, id }: MessageProps = $props();
+	let {
+		message,
+		id,
+		versionIndex = 0,
+		versionCount = 1,
+		regenerating = false,
+		disabled = false,
+		onregenerate,
+		onversion
+	}: MessageProps = $props();
 </script>
 
 <article {id} class={message.role}>
@@ -31,6 +47,87 @@
 				· prefill {message.stats.promptTokensPerSecond.toFixed(1)} t/s
 			{/if}
 		</p>
+	{/if}
+
+	{#if message.role === "assistant" || versionCount > 1}
+		<div class="actions">
+			{#if versionCount > 1}
+				<div class="versions">
+					<button
+						type="button"
+						class="icon"
+						aria-label="Previous version"
+						title="Previous version"
+						disabled={disabled}
+						onclick={() => onversion?.(message, -1)}
+					>
+						<svg viewBox="0 0 24 24" aria-hidden="true">
+							<path
+								d="M15 6l-6 6 6 6"
+								fill="none"
+								stroke="currentColor"
+								stroke-width="2"
+								stroke-linecap="round"
+								stroke-linejoin="round"
+							/>
+						</svg>
+					</button>
+					<span class="count">{versionIndex + 1}/{versionCount}</span>
+					<button
+						type="button"
+						class="icon"
+						aria-label="Next version"
+						title="Next version"
+						disabled={disabled}
+						onclick={() => onversion?.(message, 1)}
+					>
+						<svg viewBox="0 0 24 24" aria-hidden="true">
+							<path
+								d="M9 6l6 6-6 6"
+								fill="none"
+								stroke="currentColor"
+								stroke-width="2"
+								stroke-linecap="round"
+								stroke-linejoin="round"
+							/>
+						</svg>
+					</button>
+				</div>
+			{/if}
+
+			{#if message.role === "assistant"}
+				<button
+					type="button"
+					class="regenerate"
+					title="Regenerate this message"
+					disabled={disabled || regenerating}
+					onclick={() => onregenerate?.(message)}
+				>
+					{#if regenerating}
+						<span class="spinner" aria-hidden="true"></span>
+					{:else}
+						<svg viewBox="0 0 24 24" aria-hidden="true">
+							<path
+								d="M20 11a8 8 0 1 0-.8 4.7"
+								fill="none"
+								stroke="currentColor"
+								stroke-width="2"
+								stroke-linecap="round"
+							/>
+							<path
+								d="M20 5v6h-6"
+								fill="none"
+								stroke="currentColor"
+								stroke-width="2"
+								stroke-linecap="round"
+								stroke-linejoin="round"
+							/>
+						</svg>
+					{/if}
+					<span>Regenerate</span>
+				</button>
+			{/if}
+		</div>
 	{/if}
 </article>
 
@@ -84,5 +181,75 @@
         color: #9a9a9a;
         font-size: 0.75rem;
         font-variant-numeric: tabular-nums;
+    }
+
+    .actions {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 6px;
+        margin-top: 8px;
+        color: #b9b9b9;
+    }
+
+    .versions {
+        display: flex;
+        align-items: center;
+        gap: 2px;
+    }
+
+    .count {
+        min-width: 2.4em;
+        text-align: center;
+        font-size: 0.75rem;
+        font-variant-numeric: tabular-nums;
+    }
+
+    .actions button {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        padding: 3px 6px;
+        border-radius: 6px;
+        background: #ffffff0d;
+        color: inherit;
+        font: inherit;
+        font-size: 0.75rem;
+        line-height: 1;
+    }
+
+    .actions button:hover:not(:disabled) {
+        background: #ffffff1f;
+        color: #fff;
+    }
+
+    .actions button:disabled {
+        opacity: 0.5;
+        cursor: default;
+    }
+
+    .actions .icon {
+        padding: 3px;
+    }
+
+    .actions svg {
+        width: 15px;
+        height: 15px;
+    }
+
+    .spinner {
+        width: 13px;
+        height: 13px;
+        box-sizing: border-box;
+        border: 2px solid currentColor;
+        border-right-color: transparent;
+        border-radius: 50%;
+        animation: spin 0.7s linear infinite;
+    }
+
+    @keyframes spin {
+        to {
+            transform: rotate(360deg);
+        }
     }
 </style>
