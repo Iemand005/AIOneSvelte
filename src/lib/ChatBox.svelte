@@ -43,6 +43,7 @@
 	let thinking = $state(false);
 	let generating = $state<"full" | "token" | null>(null);
 	let stopping = $state(false);
+	let canStopGeneration = $state(false);
 	let regeneratingId = $state<string | null>(null);
 	let messagesElement: HTMLDivElement;
 	let followBottom = $state(true);
@@ -88,7 +89,7 @@
 	}
 
 	async function stopGeneration() {
-		if (!ai?.canCancel || stopping || (!loading && !generating)) return;
+		if (!ai?.canCancel || !canStopGeneration || stopping) return;
 
 		stopping = true;
 		try {
@@ -191,6 +192,7 @@
 
 		try {
 			const promptText = await ai.formatChatPrompt(promptMessages, true);
+			canStopGeneration = ai.canCancel;
 			const result = await ai.generate(
 				promptText,
 				512,
@@ -242,6 +244,7 @@
 		} finally {
 			loading = false;
 			streaming = false;
+			canStopGeneration = false;
 			promptProgress = 0;
 			thinking = false;
 		}
@@ -298,6 +301,7 @@
 
 		try {
 			const promptText = await ai.formatChatPrompt(promptMessages, true);
+			canStopGeneration = ai.canCancel;
 			const result = await ai.generate(
 				promptText,
 				512,
@@ -342,6 +346,7 @@
 			loading = false;
 			streaming = false;
 			regeneratingId = null;
+			canStopGeneration = false;
 			promptProgress = 0;
 			thinking = false;
 		}
@@ -389,6 +394,7 @@
 		generating = singleToken ? "token" : "full";
 
 		try {
+			canStopGeneration = ai.canCancel;
 			const result = await ai.generate(generationPrompt, maxTokens, {
 				onToken: (token, isThinking) => {
 					if (isThinking) return;
@@ -417,6 +423,7 @@
 		} catch (error) {
 			onerror?.(error);
 		} finally {
+			canStopGeneration = false;
 			generating = null;
 		}
 	}
@@ -499,7 +506,7 @@
 		bind:prompt
 		loading={loading || modelLoading}
 		{generating}
-		canStop={Boolean(ai?.canCancel && (loading || generating) && !stopping)}
+		canStop={Boolean(canStopGeneration && !stopping)}
 		stopGeneration={stopGeneration}
 		{sendMessage}
 		generateMessage={generateUserInput}
