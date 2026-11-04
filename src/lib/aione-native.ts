@@ -116,3 +116,62 @@ export async function isLoaded(): Promise<boolean> {
 export async function destroySession(): Promise<void> {
 	await invoke("aione_destroy_session");
 }
+
+export interface ChatMetadata {
+	folder: string;
+	title: string;
+	model: string;
+	systemPrompt: string;
+	created: number;
+	updated: number;
+}
+
+export interface ChatMessage {
+	id: number;
+	parentId: number;
+	role: string;
+	content: string;
+	creationTime: number;
+	finishTime: number;
+}
+
+export interface ChatData extends ChatMetadata {
+	messages: ChatMessage[];
+}
+
+export async function listChats(): Promise<ChatMetadata[]> {
+	return invoke<ChatMetadata[]>("aione_chat_list");
+}
+
+export async function createChat(
+	title: string,
+	model: string,
+	systemPrompt: string
+): Promise<ChatMetadata> {
+	return invoke<ChatMetadata>("aione_chat_create", { title, model, systemPrompt });
+}
+
+export async function loadChat(folder: string): Promise<ChatData> {
+	return invoke<ChatData>("aione_chat_load", { folder });
+}
+
+export async function appendChatMessage(
+	folder: string,
+	role: string,
+	content: string
+): Promise<ChatMessage> {
+	return invoke<ChatMessage>("aione_chat_append", { folder, role, content });
+}
+
+export async function updateChatMetadata(
+	folder: string,
+	title: string | null,
+	model: string | null,
+	systemPrompt: string | null
+): Promise<void> {
+	await invoke("aione_chat_update", { folder, title, model, systemPrompt });
+}
+
+export async function deleteChat(folder: string): Promise<void> {
+	await invoke("aione_chat_delete", { folder });
+}
