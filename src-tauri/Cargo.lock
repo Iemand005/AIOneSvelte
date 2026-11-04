@@ -18,10 +18,18 @@ dependencies = [
 ]
 
 [[package]]
-name = "aione-tauri"
+name = "aione-rs"
 version = "0.1.0"
 dependencies = [
  "cc",
+ "serde",
+]
+
+[[package]]
+name = "aione-tauri"
+version = "0.1.0"
+dependencies = [
+ "aione-rs",
  "serde",
  "serde_json",
  "tauri",

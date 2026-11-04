@@ -1,5 +1,4 @@
 mod aione;
-mod aione_ffi;
 
 use aione::AioneState;
 

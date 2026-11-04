@@ -3,7 +3,7 @@ use std::sync::{Arc, Mutex, MutexGuard};
 use serde::Serialize;
 use tauri::{AppHandle, Emitter, State};
 
-use crate::aione_ffi::{GenerateCallbacks, GenerateResult, Session};
+use aione_rs::{GenerateCallbacks, GenerateResult, Session};
 
 #[derive(Default, Clone)]
 pub struct AioneState {
