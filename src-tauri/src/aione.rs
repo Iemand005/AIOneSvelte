@@ -205,9 +205,16 @@ pub async fn aione_chat_append(
     folder: String,
     role: String,
     content: String,
+    parent_id: Option<u64>,
 ) -> Result<ChatMessage, String> {
     run_blocking(move || {
-        aione_rs::append_message(&folder, &role, &content).map_err(|error| error.to_string())
+        aione_rs::append_message_with_parent(
+            &folder,
+            &role,
+            &content,
+            parent_id.unwrap_or(0),
+        )
+        .map_err(|error| error.to_string())
     })
     .await
 }
