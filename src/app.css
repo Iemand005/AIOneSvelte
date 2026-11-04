@@ -13,7 +13,7 @@
   --mono: ui-monospace, Consolas, monospace;
 
 	
-	--accent-gradient: linear-gradient(0deg, #ffffff9c, #ffffff40);
+	--message-input-gradient: linear-gradient(0deg, #ffffff9c, #ffffff40);
   --accent-gradient: linear-gradient(180deg, rgb(119 26 20), rgb(99 23 18));
 	
 	--chatbox-pad: 32px;
@@ -47,6 +47,8 @@
     --shadow: rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
 
     --sidebar: rgba(18, 16, 15, 0.6);
+
+		--message-input-gradient: linear-gradient(0deg, #46454587, #36363666);
   }
 }
 

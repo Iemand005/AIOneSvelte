@@ -77,6 +77,7 @@
 		border-radius: 1000px;
 
 		background: linear-gradient(0deg, #46454587, #36363666);
+		background: var(--message-input-gradient);
 		backdrop-filter: blur(10px);
 
 		transition: border-color 100ms ease-out;
