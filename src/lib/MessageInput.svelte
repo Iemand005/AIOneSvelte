@@ -1,13 +1,17 @@
 <script lang="ts">
 	type MessageInputProps = {
 		sendMessage: () => void;
+		generateMessage?: () => void;
 		loading?: boolean;
+		generating?: boolean;
 		prompt?: string;
 	};
 
 	let {
 		sendMessage,
+		generateMessage,
 		loading = false,
+		generating = false,
 		prompt = $bindable(""),
 	}: MessageInputProps = $props();
 </script>
@@ -26,7 +30,7 @@
 			id="message-input"
 			placeholder="Message..."
 			bind:value={prompt}
-			disabled={loading}
+			disabled={loading || generating}
 			onkeydown={event => {
 				if (event.key === "Enter" && !event.shiftKey) {
 					event.preventDefault();
@@ -34,7 +38,32 @@
 				}
 			}}
 		/>
-		<button type="submit" disabled={loading || !prompt.trim()}>↵</button>
+		<button
+			type="button"
+			class="generate"
+			title={prompt.trim() ? "Continue this message" : "Generate a message for me"}
+			aria-label={prompt.trim() ? "Continue this message" : "Generate a message for me"}
+			disabled={loading || generating}
+			onclick={() => generateMessage?.()}
+		>
+			{#if generating}
+				<span class="spinner" aria-hidden="true"></span>
+			{:else}
+				<svg viewBox="0 0 24 24" aria-hidden="true">
+					<path
+						d="M12 3l1.8 4.7L18.5 9.5l-4.7 1.8L12 16l-1.8-4.7L5.5 9.5l4.7-1.8L12 3z"
+						fill="currentColor"
+					/>
+					<path
+						d="M19 14l.9 2.4 2.4.9-2.4.9-.9 2.4-.9-2.4-2.4-.9 2.4-.9.9-2.4z"
+						fill="currentColor"
+					/>
+				</svg>
+			{/if}
+		</button>
+		<button type="submit" class="send" disabled={loading || generating || !prompt.trim()}>
+			↵
+		</button>
 	</form>
 </div>
 
@@ -72,6 +101,7 @@
 		box-sizing: border-box;
 
 		display: flex;
+		gap: 5px;
 		padding: 5px;
 
 		border-radius: 1000px;
@@ -141,5 +171,48 @@
 		background: linear-gradient(180deg, rgb(79 13 10), rgb(99 23 18));
 		box-shadow: inset 0 0 10px #000000a3;
 		color: #a5a5a5;
+	}
+
+	button.generate {
+		display: grid;
+		place-items: center;
+		background: #ffffff14;
+		color: #e6e6e6;
+	}
+
+	button.generate::before {
+		display: none;
+	}
+
+	button.generate:hover {
+		background: #ffffff26;
+		color: #fff;
+	}
+
+	button.generate:active {
+		background: #ffffff0a;
+		box-shadow: none;
+		color: #fff;
+	}
+
+	button.generate svg {
+		width: 18px;
+		height: 18px;
+	}
+
+	.spinner {
+		width: 16px;
+		height: 16px;
+		box-sizing: border-box;
+		border: 2px solid currentColor;
+		border-right-color: transparent;
+		border-radius: 50%;
+		animation: spin 0.7s linear infinite;
+	}
+
+	@keyframes spin {
+		to {
+			transform: rotate(360deg);
+		}
 	}
 </style>

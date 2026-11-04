@@ -32,6 +32,7 @@
 	let streaming = $state(false);
 	let promptProgress = $state(0);
 	let thinking = $state(false);
+	let generating = $state(false);
 
 	async function sendMessage() {
 		if (!ai || !prompt.trim() || loading) return;
@@ -131,6 +132,67 @@
 			thinking = false;
 		}
 	}
+
+	function cleanGenerated(text: string) {
+		let value = text.trim();
+		value = value.replace(/^(user|assistant)\s*:\s*/i, "");
+
+		if (
+			(value.startsWith('"') && value.endsWith('"')) ||
+			(value.startsWith("'") && value.endsWith("'"))
+		) {
+			value = value.slice(1, -1).trim();
+		}
+
+		return value;
+	}
+
+	async function generateUserInput() {
+		if (!ai || loading || generating) return;
+
+		const draft = prompt;
+		const hasDraft = draft.trim().length > 0;
+
+		const context = messages
+			.filter(message => message.content.trim())
+			.map(message => `${message.role}: ${message.content}`)
+			.join("\n");
+
+		const instruction = hasDraft
+			? "The user is drafting a message. Continue it naturally in the user's voice. Output only the continuation text, without repeating what is already written and without quotes or commentary."
+			: "Write the next message the user would send in the conversation below. Output only the message text, without quotes or commentary.";
+
+		const generationPrompt = [
+			`system: ${instruction}`,
+			context,
+			hasDraft ? `user: ${draft}` : "user:"
+		]
+			.filter(Boolean)
+			.join("\n");
+
+		let streamed = "";
+		generating = true;
+
+		try {
+			const result = await ai.generate(generationPrompt, 256, {
+				onToken: (token, isThinking) => {
+					if (isThinking) return;
+					streamed += token;
+					prompt = hasDraft ? `${draft}${streamed}` : streamed;
+				}
+			});
+
+			const text = cleanGenerated(result.content?.trim() || streamed);
+
+			if (text) {
+				prompt = hasDraft ? `${draft.trimEnd()} ${text}` : text;
+			}
+		} catch (error) {
+			onerror?.(error);
+		} finally {
+			generating = false;
+		}
+	}
 </script>
 
 <section class="chat">
@@ -170,7 +232,7 @@
 		{/if}
 	</div>
 	
-	<MessageInput bind:prompt {loading} {sendMessage} />
+	<MessageInput bind:prompt {loading} {generating} {sendMessage} generateMessage={generateUserInput} />
 </section>
 
 <style>
