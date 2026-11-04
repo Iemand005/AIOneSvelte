@@ -39,12 +39,19 @@ fn main() {
         aione_dir.join("include").display()
     );
     println!("cargo:rerun-if-changed={}", aione_dir.join("src").display());
-    println!("cargo:rerun-if-env-changed=AIONE_BUILD_DIR");
+        println!("cargo:rerun-if-env-changed=AIONE_BUILD_DIR");
 
-    // Short build dir avoids Windows MAX_PATH problems. Override with AIONE_BUILD_DIR.
+    // The nested vulkan-shaders-gen configure adds ~150 chars of its own,
+    // so on Windows keep the build dir very short.
     let build_dir = env::var_os("AIONE_BUILD_DIR")
         .map(PathBuf::from)
-        .unwrap_or_else(|| out_dir.join("aione-build"));
+        .unwrap_or_else(|| {
+            if cfg!(windows) {
+                PathBuf::from(format!(r"C:\ab\{}", config.to_lowercase()))
+            } else {
+                out_dir.join("aione-build")
+            }
+        });
     let install_dir = out_dir.join("aione-install");
     let ninja = find_ninja().unwrap_or_else(|| {
         panic!("Ninja not found. Run `winget install Ninja-build.Ninja` and open a NEW terminal.")
