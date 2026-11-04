@@ -13,7 +13,7 @@
   --mono: ui-monospace, Consolas, monospace;
 
 	
-	-ms-accelerator: linear-gradient(0deg, #ffffff9c, #ffffff40);
+	--accent-gradient: linear-gradient(0deg, #ffffff9c, #ffffff40);
   --accent-gradient: linear-gradient(180deg, rgb(119 26 20), rgb(99 23 18));
 	
 	--chatbox-pad: 32px;
