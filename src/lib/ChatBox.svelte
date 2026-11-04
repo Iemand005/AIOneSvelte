@@ -192,15 +192,16 @@
 
 		try {
 			const promptText = await ai.formatChatPrompt(promptMessages, true);
-			canStopGeneration = ai.canCancel;
 			const result = await ai.generate(
 				promptText,
 				512,
 				{
 					onPromptProgress: value => {
+						canStopGeneration = ai.canCancel;
 						promptProgress = value;
 					},
 					onGenerationStart: () => {
+						canStopGeneration = ai.canCancel;
 						promptProgress = 1;
 					},
 					onThinkingChange: value => {
@@ -301,11 +302,16 @@
 
 		try {
 			const promptText = await ai.formatChatPrompt(promptMessages, true);
-			canStopGeneration = ai.canCancel;
 			const result = await ai.generate(
 				promptText,
 				512,
 				{
+					onPromptProgress: () => {
+						canStopGeneration = ai.canCancel;
+					},
+					onGenerationStart: () => {
+						canStopGeneration = ai.canCancel;
+					},
 					onThinkingChange: value => {
 						thinking = value;
 					},
@@ -394,8 +400,13 @@
 		generating = singleToken ? "token" : "full";
 
 		try {
-			canStopGeneration = ai.canCancel;
 			const result = await ai.generate(generationPrompt, maxTokens, {
+				onPromptProgress: () => {
+					canStopGeneration = ai.canCancel;
+				},
+				onGenerationStart: () => {
+					canStopGeneration = ai.canCancel;
+				},
 				onToken: (token, isThinking) => {
 					if (isThinking) return;
 					streamed += token;
