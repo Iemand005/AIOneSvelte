@@ -275,6 +275,7 @@
 		flex-direction: column;
 		min-width: 0;
 		min-height: 0;
+		border-left: 1px solid black;		
 	}
 
 	header {
