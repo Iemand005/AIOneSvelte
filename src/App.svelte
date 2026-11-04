@@ -43,7 +43,7 @@
 
 		try {
 			const { listChats } = await import("./lib/aione-native");
-			chats = await listChats();
+			chats = (await listChats()).sort((left, right) => right.updated - left.updated);
 		} catch (error) {
 			console.error(error);
 		}
@@ -64,12 +64,23 @@
 		}
 	}
 
-	function newChat() {
+	async function newChat() {
 		view = "chat";
 		currentFolder = null;
 		messages = [];
 		versionSelections = {};
 		systemPrompt = "";
+
+		if (!native) return;
+
+		try {
+			const { createChat } = await import("./lib/aione-native");
+			const chat = await createChat("New chat", "", "");
+			currentFolder = chat.folder;
+			chats = [chat, ...chats.filter(item => item.folder !== chat.folder)];
+		} catch (error) {
+			console.error(error);
+		}
 	}
 
 	async function deleteChat(folder: string) {
