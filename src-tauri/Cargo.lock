@@ -21,6 +21,7 @@ dependencies = [
 name = "aione-tauri"
 version = "0.1.0"
 dependencies = [
+ "cc",
  "serde",
  "serde_json",
  "tauri",
