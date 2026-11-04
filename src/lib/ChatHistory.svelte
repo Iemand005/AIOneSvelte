@@ -119,7 +119,7 @@
 	}
 
 	button:hover {
-		background: #ffffff0d;
+		background: #52525233;
 	}
 
 	.new-chat {
