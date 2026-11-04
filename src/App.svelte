@@ -85,15 +85,12 @@
 
 <style>
 	.layout {
-		--history-width: 220px;
-		--prompt-width: 320px;
+		--history-width: clamp(150px, 22vw, 240px);
+		--prompt-width: clamp(240px, 28vw, 340px);
 		--aside-border: #ffffff14;
 
 		display: grid;
-		grid-template-columns:
-			minmax(160px, var(--history-width))
-			minmax(0, 1fr)
-			minmax(260px, var(--prompt-width));
+		grid-template-columns: var(--history-width) minmax(0, 1fr) var(--prompt-width);
 		width: 100%;
 		height: 100dvh;
 		overflow: hidden;
@@ -101,10 +98,7 @@
 	}
 
 	.layout.prompt-collapsed {
-		grid-template-columns:
-			minmax(160px, var(--history-width))
-			minmax(0, 1fr)
-			56px;
+		grid-template-columns: var(--history-width) minmax(0, 1fr) 56px;
 	}
 
 	aside {
