@@ -179,7 +179,7 @@
 
 			assistant.stats = result.stats;
 
-			if (!assistant.content && !assistant.thinking) {
+			if (!assistant.content) {
 				assistant.content = result.content;
 			}
 
@@ -278,7 +278,7 @@
 
 			assistant.stats = result.stats;
 
-			if (!assistant.content && !assistant.thinking) {
+			if (!assistant.content) {
 				assistant.content = result.content;
 			}
 
