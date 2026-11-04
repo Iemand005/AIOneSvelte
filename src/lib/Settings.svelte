@@ -158,7 +158,7 @@
 	}
 
 	.igpu {
-		--accent-gradient: linear-gradient(180deg, rgb(37, 119, 20), rgb(31, 99, 18));
+		--accent-gradient: linear-gradient(180deg, rgb(99, 20, 119), rgb(94, 18, 99));
 	}
 
 	header {
