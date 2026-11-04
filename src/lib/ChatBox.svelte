@@ -42,6 +42,7 @@
 	let promptProgress = $state(0);
 	let thinking = $state(false);
 	let generating = $state<"full" | "token" | null>(null);
+	let stopping = $state(false);
 	let regeneratingId = $state<string | null>(null);
 	let messagesElement: HTMLDivElement;
 	let followBottom = $state(true);
@@ -84,6 +85,19 @@
 
 	function selectNode(node: ChatNode) {
 		versionSelections[parentKey(node.parentId)] = node.id;
+	}
+
+	async function stopGeneration() {
+		if (!ai?.canCancel || stopping || (!loading && !generating)) return;
+
+		stopping = true;
+		try {
+			await ai.cancel();
+		} catch (error) {
+			onerror?.(error);
+		} finally {
+			stopping = false;
+		}
 	}
 
 	function switchVersion(message: ChatNode, direction: -1 | 1) {
@@ -485,6 +499,8 @@
 		bind:prompt
 		loading={loading || modelLoading}
 		{generating}
+		canStop={Boolean(ai?.canCancel && (loading || generating) && !stopping)}
+		stopGeneration={stopGeneration}
 		{sendMessage}
 		generateMessage={generateUserInput}
 		generateToken={() => generateUserInput(1)}

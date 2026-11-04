@@ -42,6 +42,7 @@ async function threadedRuntimeAvailable() {
 
 export class WasmBackend implements Backend {
 	readonly kind = "wasm" as const;
+	readonly canCancel = false;
 
 	private constructor(private ai: AIOneInstance) {}
 

@@ -4,6 +4,7 @@ import type { Backend, ChatPromptMessage, ModelSource, GenerateCallbacks } from 
 
 export class NativeBackend implements Backend {
   readonly kind = "native" as const;
+  readonly canCancel = true;
 
   static async create() {
     await native.createSession();
@@ -20,7 +21,7 @@ export class NativeBackend implements Backend {
   formatChatPrompt(messages: ChatPromptMessage[], addGenerationPrompt = true) {
     return native.formatChatPrompt(messages, addGenerationPrompt);
   }
-  cancel() { return invoke<void>("aione_cancel_generation"); }
+  async cancel() { await invoke<void>("aione_cancel_generation"); }
   unloadModel() { return native.unloadModel(); }
   isLoaded() { return native.isLoaded(); }
   close() { return native.destroySession(); }

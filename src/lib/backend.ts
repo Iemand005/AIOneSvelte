@@ -23,6 +23,7 @@ export type ModelSource =
 
 export interface Backend {
   readonly kind: "native" | "wasm";
+  readonly canCancel: boolean;
   loadModel(src: ModelSource, onProgress?: (p: number) => void): Promise<boolean>;
   generate(prompt: string, maxTokens?: number, cb?: GenerateCallbacks): Promise<GenerateResult>;
   formatChatPrompt(messages: ChatPromptMessage[], addGenerationPrompt?: boolean): Promise<string>;

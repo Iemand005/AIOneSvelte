@@ -18,6 +18,7 @@ pub fn run() {
             aione::aione_create_session,
             aione::aione_load_model,
             aione::aione_generate,
+            aione::aione_cancel_generation,
             aione::aione_format_chat_prompt,
             aione::aione_unload_model,
             aione::aione_is_loaded,

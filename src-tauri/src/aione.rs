@@ -1,3 +1,4 @@
+use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::{Arc, Mutex, MutexGuard};
 
 use serde::Serialize;
@@ -10,6 +11,7 @@ use aione_rs::{
 #[derive(Default, Clone)]
 pub struct AioneState {
     session: Arc<Mutex<Option<Session>>>,
+    cancel_generation: Arc<AtomicBool>,
 }
 
 #[derive(Clone, Serialize)]
@@ -90,7 +92,10 @@ pub async fn aione_generate(
     max_tokens: u32,
 ) -> Result<GenerateResult, String> {
     let session_slot = state.session.clone();
+    let cancel_generation = state.cancel_generation.clone();
     drop(state);
+
+    cancel_generation.store(false, Ordering::Relaxed);
 
     run_blocking(move || {
         let mut session = lock_session(&session_slot)?;
@@ -124,11 +129,19 @@ pub async fn aione_generate(
             let _ = think_app.emit("aione-think-state", thinking);
         }));
 
+        let cancel_flag = cancel_generation.clone();
+        callbacks.should_stop = Some(Box::new(move || cancel_flag.load(Ordering::Relaxed)));
+
         session
             .generate(&prompt, max_tokens, &mut callbacks)
             .map_err(|error| error.to_string())
     })
     .await
+}
+
+#[tauri::command]
+pub fn aione_cancel_generation(state: State<'_, AioneState>) {
+    state.cancel_generation.store(true, Ordering::Relaxed);
 }
 
 #[tauri::command]

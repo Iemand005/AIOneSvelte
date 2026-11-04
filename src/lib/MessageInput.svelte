@@ -3,8 +3,10 @@
 		sendMessage: () => void;
 		generateMessage?: () => void;
 		generateToken?: () => void;
+		stopGeneration?: () => void;
 		loading?: boolean;
 		generating?: "full" | "token" | null;
+		canStop?: boolean;
 		prompt?: string;
 	};
 
@@ -12,8 +14,10 @@
 		sendMessage,
 		generateMessage,
 		generateToken,
+		stopGeneration,
 		loading = false,
 		generating = null,
+		canStop = false,
 		prompt = $bindable(""),
 	}: MessageInputProps = $props();
 
@@ -26,7 +30,8 @@
 	<form
 		onsubmit={event => {
 			event.preventDefault();
-			sendMessage();
+			if (canStop) stopGeneration?.();
+			else sendMessage();
 		}}
 	>
 		<input
@@ -95,8 +100,26 @@
 				</svg>
 			{/if}
 		</button>
-		<button type="submit" class="send" disabled={busy || !prompt.trim()}>
-			↵
+		<button
+			type="submit"
+			class="send"
+			aria-label={canStop ? "Stop generation" : "Send message"}
+			title={canStop ? "Stop generation" : "Send message"}
+			disabled={busy ? !canStop : !prompt.trim()}
+			onclick={event => {
+				if (canStop) {
+					event.preventDefault();
+					stopGeneration?.();
+				}
+			}}
+		>
+			{#if canStop}
+				<svg viewBox="0 0 24 24" aria-hidden="true">
+					<rect x="6" y="6" width="12" height="12" rx="2" fill="currentColor" />
+				</svg>
+			{:else}
+				↵
+			{/if}
 		</button>
 	</form>
 </div>
@@ -235,6 +258,11 @@
 	button.generate svg {
 		width: 18px;
 		height: 18px;
+	}
+
+	button.send svg {
+		width: 20px;
+		height: 20px;
 	}
 
 	.spinner {
