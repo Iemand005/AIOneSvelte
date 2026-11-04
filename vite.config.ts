@@ -8,7 +8,7 @@ const host = process.env.TAURI_DEV_HOST;
 const isTauri = Boolean(process.env.TAURI_ENV_PLATFORM);
 
 const require = createRequire(import.meta.url)
-const aioneWebDir = dirname(require.resolve('aione-web/package.json'))
+const aioneWebDir = dirname(require.resolve('aione-web'))
 
 interface AioneAsset {
   url: string
