@@ -63,9 +63,10 @@
 	}
 
 	async function deleteChat(folder: string) {
+		return;
 		try {
 			const { deleteChat: removeChat } = await import("./lib/aione-native");
-			await removeChat(folder);
+			// await removeChat(folder);
 
 			if (currentFolder === folder) newChat();
 			await refreshChats();
