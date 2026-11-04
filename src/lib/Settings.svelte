@@ -150,7 +150,7 @@
 	}
 
 	.gpu {
-		background: linear-gradient(180deg, rgb(37, 119, 20), rgb(31, 99, 18));
+		--accent-gradient: linear-gradient(180deg, rgb(37, 119, 20), rgb(31, 99, 18));
 	}
 
 	header {
