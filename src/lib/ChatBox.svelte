@@ -32,7 +32,7 @@
 	let streaming = $state(false);
 	let promptProgress = $state(0);
 	let thinking = $state(false);
-	let generating = $state(false);
+	let generating = $state<"full" | "token" | null>(null);
 
 	async function sendMessage() {
 		if (!ai || !prompt.trim() || loading) return;
@@ -147,11 +147,12 @@
 		return value;
 	}
 
-	async function generateUserInput() {
+	async function generateUserInput(maxTokens = 512) {
 		if (!ai || loading || generating) return;
 
 		const draft = prompt;
 		const hasDraft = draft.trim().length > 0;
+		const singleToken = maxTokens === 1;
 
 		const context = messages
 			.filter(message => message.content.trim())
@@ -171,10 +172,10 @@
 			.join("\n");
 
 		let streamed = "";
-		generating = true;
+		generating = singleToken ? "token" : "full";
 
 		try {
-			const result = await ai.generate(generationPrompt, 256, {
+			const result = await ai.generate(generationPrompt, maxTokens, {
 				onToken: (token, isThinking) => {
 					if (isThinking) return;
 					streamed += token;
@@ -182,7 +183,19 @@
 				}
 			});
 
-			const text = cleanGenerated(result.content?.trim() || streamed);
+			const raw = result.content || streamed;
+
+			if (singleToken) {
+				const token = raw.replace(/^[\r\n]+/, "");
+
+				if (token) {
+					prompt = hasDraft ? `${draft}${token}` : token;
+				}
+
+				return;
+			}
+
+			const text = cleanGenerated(raw.trim() || streamed);
 
 			if (text) {
 				prompt = hasDraft ? `${draft.trimEnd()} ${text}` : text;
@@ -190,7 +203,7 @@
 		} catch (error) {
 			onerror?.(error);
 		} finally {
-			generating = false;
+			generating = null;
 		}
 	}
 </script>
@@ -232,7 +245,14 @@
 		{/if}
 	</div>
 	
-	<MessageInput bind:prompt {loading} {generating} {sendMessage} generateMessage={generateUserInput} />
+	<MessageInput
+		bind:prompt
+		{loading}
+		{generating}
+		{sendMessage}
+		generateMessage={generateUserInput}
+		generateToken={() => generateUserInput(1)}
+	/>
 </section>
 
 <style>

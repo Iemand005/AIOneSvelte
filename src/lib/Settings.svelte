@@ -1,4 +1,5 @@
 <script lang="ts">
+	import Card from "./Card.svelte";
 	import { getHardwareInfo, type HardwareInfo } from "./system-info";
 
 	type Props = {
@@ -68,22 +69,22 @@
 		<p class="status">Detecting hardware…</p>
 	{:else if info}
 		<div class="grid">
-			<div class="card">
+			<Card>
 				<span class="label">Backend</span>
-				<strong>{info.backend}</strong>
-			</div>
-			<div class="card">
+				<strong class="value">{info.backend}</strong>
+			</Card>
+			<Card>
 				<span class="label">Platform</span>
-				<strong>{info.platform || "Unknown"}</strong>
-			</div>
-			<div class="card">
+				<strong class="value">{info.platform || "Unknown"}</strong>
+			</Card>
+			<Card>
 				<span class="label">CPU threads</span>
-				<strong>{info.cpuCores ?? "Unknown"}</strong>
-			</div>
-			<div class="card">
+				<strong class="value">{info.cpuCores ?? "Unknown"}</strong>
+			</Card>
+			<Card>
 				<span class="label">System memory</span>
-				<strong>{info.memoryGB ? `${info.memoryGB} GB` : "Unknown"}</strong>
-			</div>
+				<strong class="value">{info.memoryGB ? `${info.memoryGB} GB` : "Unknown"}</strong>
+			</Card>
 		</div>
 
 		<section class="section">
@@ -94,9 +95,11 @@
 			{:else}
 				<ul class="devices">
 					{#each info.devices as device}
-						<li class="card device">
+						<Card as="li">
 							<div class="device-head">
-								<strong>{device.description || device.name || "Unnamed device"}</strong>
+								<strong class="value">
+									{device.description || device.name || "Unnamed device"}
+								</strong>
 								<span class="badge">{device.type.toUpperCase()}</span>
 							</div>
 
@@ -119,7 +122,7 @@
 									</div>
 								{/if}
 							</dl>
-						</li>
+						</Card>
 					{/each}
 				</ul>
 			{/if}
@@ -200,16 +203,6 @@
 		gap: 10px;
 	}
 
-	.card {
-		display: flex;
-		flex-direction: column;
-		gap: 4px;
-		padding: 14px 16px;
-		border: 1px solid var(--border);
-		border-radius: 12px;
-		background: #5252521c;
-	}
-
 	.label {
 		color: #7d7d7d;
 		font-size: 0.72rem;
@@ -217,7 +210,7 @@
 		text-transform: uppercase;
 	}
 
-	.card strong {
+	.value {
 		color: var(--text-h);
 		font-size: 0.95rem;
 		overflow-wrap: anywhere;
@@ -247,10 +240,6 @@
 		list-style: none;
 	}
 
-	.device {
-		gap: 10px;
-	}
-
 	.device-head {
 		display: flex;
 		align-items: center;
@@ -273,7 +262,7 @@
 		display: grid;
 		grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
 		gap: 8px 16px;
-		margin: 0;
+		margin: 6px 0 0;
 	}
 
 	dl div {

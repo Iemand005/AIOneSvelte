@@ -2,18 +2,22 @@
 	type MessageInputProps = {
 		sendMessage: () => void;
 		generateMessage?: () => void;
+		generateToken?: () => void;
 		loading?: boolean;
-		generating?: boolean;
+		generating?: "full" | "token" | null;
 		prompt?: string;
 	};
 
 	let {
 		sendMessage,
 		generateMessage,
+		generateToken,
 		loading = false,
-		generating = false,
+		generating = null,
 		prompt = $bindable(""),
 	}: MessageInputProps = $props();
+
+	let busy = $derived(loading || Boolean(generating));
 </script>
 
 <div class="bar">
@@ -30,7 +34,7 @@
 			id="message-input"
 			placeholder="Message..."
 			bind:value={prompt}
-			disabled={loading || generating}
+			disabled={busy}
 			onkeydown={event => {
 				if (event.key === "Enter" && !event.shiftKey) {
 					event.preventDefault();
@@ -43,10 +47,10 @@
 			class="generate"
 			title={prompt.trim() ? "Continue this message" : "Generate a message for me"}
 			aria-label={prompt.trim() ? "Continue this message" : "Generate a message for me"}
-			disabled={loading || generating}
+			disabled={busy}
 			onclick={() => generateMessage?.()}
 		>
-			{#if generating}
+			{#if generating === "full"}
 				<span class="spinner" aria-hidden="true"></span>
 			{:else}
 				<svg viewBox="0 0 24 24" aria-hidden="true">
@@ -61,7 +65,37 @@
 				</svg>
 			{/if}
 		</button>
-		<button type="submit" class="send" disabled={loading || generating || !prompt.trim()}>
+		<button
+			type="button"
+			class="generate"
+			title="Add one token"
+			aria-label="Add one token to the message"
+			disabled={busy}
+			onclick={() => generateToken?.()}
+		>
+			{#if generating === "token"}
+				<span class="spinner" aria-hidden="true"></span>
+			{:else}
+				<svg viewBox="0 0 24 24" aria-hidden="true">
+					<path
+						d="M5 12h9M10.5 8l4 4-4 4"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="2"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+					/>
+					<path
+						d="M19 7v10"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="2"
+						stroke-linecap="round"
+					/>
+				</svg>
+			{/if}
+		</button>
+		<button type="submit" class="send" disabled={busy || !prompt.trim()}>
 			↵
 		</button>
 	</form>
