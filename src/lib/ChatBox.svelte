@@ -206,7 +206,7 @@
 		padding: 0.75rem 1rem;
 		border-radius: calc(var(--message-box-size) / 2);
 		border-bottom-left-radius: 0.25rem;
-		background: #292929;
+		background: var(--chat-bubble-bg);
 		color: white;
 	}
 
