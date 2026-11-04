@@ -9,6 +9,7 @@
 		ai: Backend | null;
 		loading?: boolean;
 		systemPrompt?: string;
+		messages?: Message[];
 		onerror?: (error: unknown) => void;
 	};
 
@@ -16,6 +17,7 @@
 		ai = $bindable(null),
 		loading = $bindable(false),
 		systemPrompt = $bindable(""),
+		messages = $bindable<Message[]>([]),
 		onerror
 	}: Props = $props();
 
@@ -23,7 +25,6 @@
 	let streaming = $state(false);
 	let promptProgress = $state(0);
 	let thinking = $state(false);
-	let messages: Message[] = $state([]);
 
 	async function sendMessage() {
 		if (!ai || !prompt.trim() || loading) return;
@@ -91,9 +92,9 @@
 
 <section class="chat">
 	<div class="messages" role="log" aria-live="polite">
-		{#each messages as message}
+		{#each messages as message, index}
 			{#if message.role !== "assistant" || message.content || message.thinking || message.stats}
-				<ChatBubble {message} />
+				<ChatBubble {message} id={`message-${index}`} />
 			{/if}
 		{/each}
 
