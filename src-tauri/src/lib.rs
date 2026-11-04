@@ -21,6 +21,12 @@ pub fn run() {
             aione::aione_unload_model,
             aione::aione_is_loaded,
             aione::aione_destroy_session,
+            aione::aione_chat_list,
+            aione::aione_chat_create,
+            aione::aione_chat_load,
+            aione::aione_chat_append,
+            aione::aione_chat_update,
+            aione::aione_chat_delete,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

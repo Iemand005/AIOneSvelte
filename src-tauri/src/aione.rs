@@ -3,7 +3,9 @@ use std::sync::{Arc, Mutex, MutexGuard};
 use serde::Serialize;
 use tauri::{AppHandle, Emitter, State};
 
-use aione_rs::{GenerateCallbacks, GenerateResult, Session};
+use aione_rs::{
+    ChatData, ChatMessage, ChatMetadata, GenerateCallbacks, GenerateResult, Session,
+};
 
 #[derive(Default, Clone)]
 pub struct AioneState {
@@ -169,4 +171,62 @@ pub async fn aione_destroy_session(state: State<'_, AioneState>) -> Result<(), S
         Ok(())
     })
     .await
+}
+
+#[tauri::command]
+pub async fn aione_chat_list() -> Result<Vec<ChatMetadata>, String> {
+    run_blocking(|| aione_rs::list_chats().map_err(|error| error.to_string())).await
+}
+
+#[tauri::command]
+pub async fn aione_chat_create(
+    title: String,
+    model: String,
+    system_prompt: String,
+) -> Result<ChatMetadata, String> {
+    run_blocking(move || {
+        aione_rs::create_chat(&title, &model, &system_prompt).map_err(|error| error.to_string())
+    })
+    .await
+}
+
+#[tauri::command]
+pub async fn aione_chat_load(folder: String) -> Result<ChatData, String> {
+    run_blocking(move || aione_rs::load_chat(&folder).map_err(|error| error.to_string())).await
+}
+
+#[tauri::command]
+pub async fn aione_chat_append(
+    folder: String,
+    role: String,
+    content: String,
+) -> Result<ChatMessage, String> {
+    run_blocking(move || {
+        aione_rs::append_message(&folder, &role, &content).map_err(|error| error.to_string())
+    })
+    .await
+}
+
+#[tauri::command]
+pub async fn aione_chat_update(
+    folder: String,
+    title: Option<String>,
+    model: Option<String>,
+    system_prompt: Option<String>,
+) -> Result<(), String> {
+    run_blocking(move || {
+        aione_rs::update_chat_metadata(
+            &folder,
+            title.as_deref(),
+            model.as_deref(),
+            system_prompt.as_deref(),
+        )
+        .map_err(|error| error.to_string())
+    })
+    .await
+}
+
+#[tauri::command]
+pub async fn aione_chat_delete(folder: String) -> Result<(), String> {
+    run_blocking(move || aione_rs::delete_chat(&folder).map_err(|error| error.to_string())).await
 }
