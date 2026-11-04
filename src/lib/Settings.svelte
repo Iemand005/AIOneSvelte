@@ -149,8 +149,8 @@
 		box-sizing: border-box;
 	}
 
-	.gpu {
-		--accent-gradient: linear-gradient(180deg, rgb(20, 68, 119), rgb(31, 99, 18));
+	.cpu {
+		--accent-gradient: linear-gradient(180deg, rgb(20, 68, 119), rgb(18, 81, 99));
 	}
 
 	.gpu {
