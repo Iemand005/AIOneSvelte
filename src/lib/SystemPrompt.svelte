@@ -30,7 +30,6 @@
 		background: #5252521c;
 		border: 1px solid #303139;
 		border-radius: 9px;
-		color: #eee;
 		font: inherit;
 		font-size: 0.9rem;
 		line-height: 1.5;
