@@ -7,3 +7,4 @@ aind the badges for vision cappable and vision capablililty mabey and the geeen 
 
 background prompt processing/adding tokens cached while typing + alsoo predicting one/two tokens in the future in the useer input with the same function as write for ,me which simply continues x amount of t okens of the user input fireld like AIOneQT already did bbefore. wouuld be nice to make stabe def aso  workx
 
+Reloading graphics devices without restrating the app and settings page where hardware is visible
