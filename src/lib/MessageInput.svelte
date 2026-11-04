@@ -111,6 +111,7 @@
 		height: calc(var(--message-box-size) + var(--chatbox-pad) * 2);
 		box-sizing: border-box;
 		z-index: 1;
+		overflow: hidden;
 	}
 
 	.cover,
