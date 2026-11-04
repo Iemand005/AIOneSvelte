@@ -22,7 +22,7 @@
 
 	--chat-bubble-bg: #e0dfdf9f;
 
-	--sidebar: rgba(215, 213, 212, 0.6);
+	--sidebar: rgb(215 213 212 / 17%);
 
   font: 18px/145% var(--sans);
   letter-spacing: 0.18px;
