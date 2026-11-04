@@ -125,7 +125,7 @@
 	.new-chat {
 		justify-content: center;
 		margin-bottom: 8px;
-		background: #ffffff0d;
+		background: #5252521c;
 	}
 
 	.chat {
