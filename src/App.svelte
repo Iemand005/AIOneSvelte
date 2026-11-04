@@ -277,8 +277,8 @@
 		flex-direction: column;
 		min-width: 0;
 		min-height: 0;
-		border-left: 1px solid rgba(180, 180, 180, 0.375);		
-		border-right: 1px solid rgba(180, 180, 180, 0.375);		
+		border-left: 1px solid var(--border);		
+		border-right: 1px solid var(--border);		
 	}
 
 	header {
