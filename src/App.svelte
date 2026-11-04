@@ -235,7 +235,7 @@
 		font-weight: 600;
 		letter-spacing: 0.08em;
 		text-transform: uppercase;
-		color: --text-h;
+		color: var(--text);
 	}
 
 	.indicator {
