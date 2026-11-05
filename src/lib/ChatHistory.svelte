@@ -12,16 +12,7 @@
 		ondelete: (folder: string) => void;
 	};
 
-	let { chats, currentFolder, messages, onselect, onnew, ondelete }: Props = $props();
-
-	let turns = $derived(messages.filter(message => message.role === "user"));
-
-	function scrollTo(id: string) {
-		document.getElementById(`message-${id}`)?.scrollIntoView({
-			behavior: "smooth",
-			block: "start"
-		});
-	}
+	let { chats, currentFolder, onselect, onnew, ondelete }: Props = $props();
 
 	function formatDate(value: number) {
 		return new Date(value).toLocaleDateString(undefined, {
@@ -134,13 +125,6 @@
 	.delete:hover {
 		color: #ff8a7a;
 		background: #ffffff14;
-	}
-
-	.position {
-		flex: none;
-		min-width: 1.2em;
-		color: #7d7d7d;
-		font-variant-numeric: tabular-nums;
 	}
 
 	.preview {
