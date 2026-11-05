@@ -26,8 +26,6 @@
 	}
 
 	function formatBytes(value: number) {
-		if (!value) return "—";
-
 		const units = ["B", "KB", "MB", "GB", "TB"];
 		let size = value;
 		let unit = 0;
@@ -108,13 +106,15 @@
 									<dt>Backend name</dt>
 									<dd>{device.name || "—"}</dd>
 								</div>
-								<div>
-									<dt>Memory</dt>
-									<dd>
-										{formatBytes(device.memoryFree)} free of
-										{formatBytes(device.memoryTotal)}
-									</dd>
-								</div>
+								{#if device.memoryFree}
+									<div>
+										<dt>Memory</dt>
+										<dd>
+											{formatBytes(device.memoryFree)} free of
+											{formatBytes(device.memoryTotal)}
+										</dd>
+									</div>
+								{/if}
 								{#if device.deviceId}
 									<div>
 										<dt>PCI bus</dt>
