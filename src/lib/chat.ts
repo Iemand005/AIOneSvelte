@@ -93,7 +93,7 @@ export function nodesFromPersisted(source: PersistedMessage[]): ChatNode[] {
 	);
 
 	return valid.map(message => {
-		const id = ids.get(String(message.id));
+		const id = ids.get(String(message.id))!;
 		const parentNative = String(message.parentId);
 		return {
 			id,
