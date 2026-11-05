@@ -8,6 +8,7 @@ export interface ChatNode {
 	nativeId?: number;
 	role: ChatRole;
 	content: string;
+	creationTime?: number;
 	thinking?: string;
 	stats?: GenerateStats;
 }
@@ -21,7 +22,14 @@ export function parentKey(parentId: string | null): string {
 }
 
 export function getSiblings(messages: ChatNode[], parentId: string | null): ChatNode[] {
-	return messages.filter(message => message.parentId === parentId);
+	return messages
+		.map((message, index) => ({ message, index }))
+		.filter(({ message }) => message.parentId === parentId)
+		.sort((left, right) =>
+			(left.message.creationTime ?? 0) - (right.message.creationTime ?? 0) ||
+			left.index - right.index
+		)
+		.map(({ message }) => message);
 }
 
 export function buildActivePath(
@@ -40,7 +48,13 @@ export function buildActivePath(
 		const selected: ChatNode | undefined = selectedId
 			? siblings.find(message => message.id === selectedId)
 			: undefined;
-		const next: ChatNode = selected ?? siblings[siblings.length - 1];
+		let next: ChatNode = selected ?? siblings[0];
+
+		if (!selected && !messages.some(message => message.parentId === next.id)) {
+			next =
+				siblings.find(sibling => messages.some(message => message.parentId === sibling.id)) ??
+				next;
+		}
 
 		if (visited.has(next.id)) break;
 
@@ -49,8 +63,11 @@ export function buildActivePath(
 		parentId = next.id;
 	}
 
-	if (path.length === 0 && messages.length > 0) {
-		return messages;
+	if (path.length < 2 && messages.length > 1) {
+		return messages
+			.sort((left, right) =>
+				(left.creationTime ?? 0) - (right.creationTime ?? 0)
+			);
 	}
 
 	return path;
@@ -77,22 +94,38 @@ interface PersistedMessage {
 
 export function nodesFromPersisted(source: PersistedMessage[]): ChatNode[] {
 	const systemIds = new Set<string>();
-	const ids = new Map<string, string>();
+	const latestById = new Map<string, PersistedMessage>();
+	const idOrder: string[] = [];
 
 	for (const message of source) {
 		const nativeKey = String(message.id);
-
-		if (message.role === "system") {
-			systemIds.add(nativeKey);
-		} else {
-			ids.set(nativeKey, createMessageId());
-		}
+		if (!latestById.has(nativeKey)) idOrder.push(nativeKey);
+		latestById.set(nativeKey, message);
 	}
 
-	const nodes: ChatNode[] = [];
+	const valid = idOrder
+		.map(nativeKey => latestById.get(nativeKey)!)
+		.filter(message => {
+			const isValid = ["system", "user", "assistant"].includes(message.role);
+			if (!isValid) return false;
+			if (message.role === "system") systemIds.add(String(message.id));
+			return true;
+		});
+	const ids = new Map(
+		valid
+			.filter(message => message.role !== "system")
+			.map(message => [String(message.id), createMessageId()])
+	);
 
-	for (const message of source) {
-		if (message.role === "system") continue;
+	const nodes: ChatNode[] = [];
+	let lastId = "0";
+	const validIds = new Set(valid.map(message => String(message.id)));
+
+	for (const message of valid) {
+		if (message.role === "system") {
+			lastId = String(message.id);
+			continue;
+		}
 
 		const id = ids.get(String(message.id));
 		if (!id) continue;
@@ -101,7 +134,7 @@ export function nodesFromPersisted(source: PersistedMessage[]): ChatNode[] {
 		let parentId: string | null = null;
 
 		if (message.parentId !== 0 && !systemIds.has(parentNative)) {
-			parentId = ids.get(parentNative) ?? null;
+			parentId = ids.get(validIds.has(parentNative) ? parentNative : lastId) ?? null;
 		}
 
 		nodes.push({
@@ -109,8 +142,10 @@ export function nodesFromPersisted(source: PersistedMessage[]): ChatNode[] {
 			parentId,
 			nativeId: message.id,
 			role: message.role === "assistant" ? "assistant" : "user",
-			content: message.content
+			content: message.content,
+			creationTime: message.creationTime
 		});
+		lastId = String(message.id);
 	}
 
 	return nodes;
