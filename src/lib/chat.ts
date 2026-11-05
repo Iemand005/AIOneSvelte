@@ -5,7 +5,7 @@ export type ChatRole = "user" | "assistant";
 export interface ChatNode {
 	id: string;
 	parentId: string | null;
-	nativeId?: number;
+	nativeId?: string;
 	role: ChatRole;
 	content: string;
 	creationTime?: number;
@@ -79,8 +79,8 @@ export function createMessageId(): string {
 }
 
 export interface PersistedMessage {
-	id: number;
-	parentId: number;
+	id: string;
+	parentId: string;
 	role: string;
 	content: string;
 	creationTime?: number;

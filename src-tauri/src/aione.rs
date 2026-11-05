@@ -238,14 +238,19 @@ pub async fn aione_chat_append(
     folder: String,
     role: String,
     content: String,
-    parent_id: Option<u64>,
+    parent_id: Option<String>,
 ) -> Result<ChatMessage, String> {
     run_blocking(move || {
+        let parent_id = parent_id
+            .as_deref()
+            .unwrap_or("0")
+            .parse::<u64>()
+            .map_err(|error| format!("Invalid chat parent ID: {error}"))?;
         aione_rs::append_message_with_parent(
             &folder,
             &role,
             &content,
-            parent_id.unwrap_or(0),
+            parent_id,
         )
         .map_err(|error| error.to_string())
     })

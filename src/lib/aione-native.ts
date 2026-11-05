@@ -157,8 +157,8 @@ export interface ChatMetadata {
 }
 
 export interface ChatMessage {
-	id: number;
-	parentId: number;
+	id: string;
+	parentId: string;
 	role: string;
 	content: string;
 	creationTime: number;
@@ -167,7 +167,7 @@ export interface ChatMessage {
 
 export interface ChatData extends ChatMetadata {
 	messages: ChatMessage[];
-	activePath: number[];
+	activePath: string[];
 }
 
 export async function listChats(): Promise<ChatMetadata[]> {
@@ -190,7 +190,7 @@ export async function appendChatMessage(
 	folder: string,
 	role: string,
 	content: string,
-	parentId = 0
+	parentId = "0"
 ): Promise<ChatMessage> {
 	return invoke<ChatMessage>("aione_chat_append", {
 		folder,

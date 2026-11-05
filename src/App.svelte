@@ -58,10 +58,10 @@
 			currentFolder = chat.folder;
 			systemPrompt = chat.systemPrompt;
 			messages = nodesFromPersisted(chat.messages);
-			const pathIds = new Set(chat.activePath.map(String));
+			const pathIds = new Set(chat.activePath);
 			versionSelections = Object.fromEntries(
 				messages
-					.filter(message => message.nativeId !== undefined && pathIds.has(String(message.nativeId)))
+					.filter(message => message.nativeId !== undefined && pathIds.has(message.nativeId))
 					.map(message => [message.parentId ?? "__root__", message.id])
 			);
 		} catch (error) {

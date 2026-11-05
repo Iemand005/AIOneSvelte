@@ -122,7 +122,7 @@
 
 		const ancestors = [...activePath];
 		const parent = ancestors.length ? ancestors[ancestors.length - 1] : null;
-		const parentNativeId = parent?.nativeId ?? 0;
+		const parentNativeId = parent?.nativeId ?? "0";
 
 		messages.push({
 			id: createMessageId(),
@@ -231,7 +231,7 @@
 						chatFolder,
 						"assistant",
 						assistant.content,
-						user.nativeId ?? 0
+						user.nativeId ?? "0"
 					);
 					assistant.nativeId = saved.id;
 					onpersisted?.();
@@ -259,7 +259,7 @@
 
 		const ancestors = activePath.slice(0, targetIndex);
 		const parentNode = messages.find(message => message.id === target.parentId) ?? null;
-		const parentNativeId = parentNode?.nativeId ?? 0;
+		const parentNativeId = parentNode?.nativeId ?? "0";
 
 		let store: typeof import("./aione-native") | null = null;
 		if (ai.kind === "native") {
