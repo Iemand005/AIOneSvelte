@@ -175,6 +175,7 @@
 		text-overflow: ellipsis;
 
 		padding: 0;
+		margin: 0;
 	}
 
 	.date {
