@@ -30,17 +30,13 @@
 		let size = value;
 		let unit = 0;
 
-		while (size >= 1024 && unit < units.length - 1) {
-			size /= 1024;
-			unit += 1;
-		}
+		while (size >= 1024 && unit < units.length - 1)
+			size /= 1024, unit += 1;
 
 		return `${size.toFixed(unit >= 3 ? 1 : 0)} ${units[unit]}`;
 	}
 
-	$effect(() => {
-		void refresh();
-	});
+	$effect(() => void refresh());
 </script>
 
 <section class="settings">
@@ -86,7 +82,7 @@
 		</div>
 
 		<section class="section">
-			<h2>GPU / compute devices</h2>
+			<h2>Compute devices</h2>
 
 			{#if info.devices.length === 0}
 				<p class="status">No compute devices were reported.</p>
