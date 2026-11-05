@@ -176,6 +176,8 @@
 
 		padding: 0;
 		margin: 0;
+		height: 1.3em;
+		line-height: 1.3em;
 	}
 
 	.date {
