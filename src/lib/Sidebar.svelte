@@ -125,7 +125,7 @@
 	}
 
 	h2 {
-		display: flex;
+		/* display: flex; */
 		flex: 1;
 		align-items: center;
 		margin: 0;
