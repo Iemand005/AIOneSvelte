@@ -25,7 +25,7 @@
 	let versionSelections = $state<VersionSelections>({});
 	let chats = $state<ChatMetadata[]>([]);
 	let currentFolder = $state<string | null>(null);
-	let native = $state(false);
+	let persist = $state(false);
 	let promptOpen = $state(true);
 	let view = $state<"chat" | "settings">("chat");
 
@@ -34,15 +34,17 @@
 
 	initializeAIOne().then(async one => {
 		ai = one;
-		native = one.kind === "native";
-		if (native) await refreshChats();
+		persist = true;
+		await refreshChats();
 	});
 
 	async function refreshChats() {
-		if (!ai || ai.kind !== "native") return;
+		if (!ai) return;
 
 		try {
-			const { listChats } = await import("./lib/aione-native");
+			const { listChats } = ai.kind === "native"
+				? await import("./lib/aione-native")
+				: await import("./lib/browser-chat-store");
 			chats = (await listChats()).sort((left, right) => right.updated - left.updated);
 		} catch (error) {
 			console.error(error);
@@ -51,7 +53,10 @@
 
 	async function openChat(folder: string) {
 		try {
-			const { loadChat } = await import("./lib/aione-native");
+			if (!ai) return;
+			const { loadChat } = ai.kind === "native"
+				? await import("./lib/aione-native")
+				: await import("./lib/browser-chat-store");
 			const chat = await loadChat(folder);
 
 			view = "chat";
@@ -76,10 +81,11 @@
 		versionSelections = {};
 		systemPrompt = "";
 
-		if (!native) return;
-
 		try {
-			const { createChat } = await import("./lib/aione-native");
+			if (!ai) return;
+			const { createChat } = ai.kind === "native"
+				? await import("./lib/aione-native")
+				: await import("./lib/browser-chat-store");
 			const chat = await createChat("New chat", "", "");
 			currentFolder = chat.folder;
 			chats = [chat, ...chats.filter(item => item.folder !== chat.folder)];
@@ -89,10 +95,12 @@
 	}
 
 	async function deleteChat(folder: string) {
-		return;
 		try {
-			const { deleteChat: removeChat } = await import("./lib/aione-native");
-			// await removeChat(folder);
+			if (!ai) return;
+			const { deleteChat: removeChat } = ai.kind === "native"
+				? await import("./lib/aione-native")
+				: await import("./lib/browser-chat-store");
+			await removeChat(folder);
 
 			if (currentFolder === folder) newChat();
 			await refreshChats();
@@ -109,11 +117,14 @@
 	$effect(() => {
 		const folder = currentFolder;
 		const value = systemPrompt;
+		const backend = ai;
 
-		if (!native || !folder) return;
+		if (!persist || !folder || !backend) return;
 
 		const timer = setTimeout(() => {
-			import("./lib/aione-native")
+			(backend.kind === "native"
+				? import("./lib/aione-native")
+				: import("./lib/browser-chat-store"))
 				.then(({ updateChatMetadata }) => updateChatMetadata(folder, null, null, value))
 				.catch(console.error);
 		}, 500);
@@ -136,7 +147,7 @@
 		<ChatHistory
 			{chats}
 			{currentFolder}
-			persist={native}
+			persist={persist}
 			messages={activeMessages}
 			onselect={openChat}
 			onnew={newChat}

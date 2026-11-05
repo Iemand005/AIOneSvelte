@@ -24,6 +24,11 @@
 		onerror?: (error: unknown) => void;
 	};
 
+	type ChatStore = Pick<
+		typeof import("./aione-native"),
+		"appendChatMessage" | "createChat" | "updateChatMetadata"
+	>;
+
 	let {
 		ai = $bindable(null),
 		modelLoading = false,
@@ -105,7 +110,7 @@
 		assistant: ChatNode,
 		promptMessages: ChatPromptMessage[],
 		parentNativeId: string,
-		store: typeof import("./aione-native") | null,
+		store: ChatStore | null,
 		onPromptProgress?: (progress: number) => void
 	) {
 		if (!ai) return;
@@ -203,35 +208,35 @@
 		const user = messages[messages.length - 1];
 		selectNode(user);
 
-		let store: typeof import("./aione-native") | null = null;
-		if (ai.kind === "native") {
-			try {
-				store = await import("./aione-native");
+		let store: ChatStore | null = null;
+		try {
+			store = ai.kind === "native"
+				? await import("./aione-native")
+				: await import("./browser-chat-store");
 
-				if (!chatFolder) {
-					const chat = await store.createChat(
-						content.slice(0, 60),
-						"",
-						systemPrompt.trim()
-					);
-					chatFolder = chat.folder;
-					onchatcreated?.(chat);
-				} else {
-					await store.updateChatMetadata(chatFolder, null, null, systemPrompt.trim());
-				}
-
-				if (chatFolder) {
-					const saved = await store.appendChatMessage(
-						chatFolder,
-						"user",
-						content,
-						parentNativeId
-					);
-					user.nativeId = saved.id;
-				}
-			} catch (error) {
-				onerror?.(error);
+			if (!chatFolder) {
+				const chat = await store.createChat(
+					content.slice(0, 60),
+					"",
+					systemPrompt.trim()
+				);
+				chatFolder = chat.folder;
+				onchatcreated?.(chat);
+			} else {
+				await store.updateChatMetadata(chatFolder, null, null, systemPrompt.trim());
 			}
+
+			if (chatFolder) {
+				const saved = await store.appendChatMessage(
+					chatFolder,
+					"user",
+					content,
+					parentNativeId
+				);
+				user.nativeId = saved.id;
+			}
+		} catch (error) {
+			onerror?.(error);
 		}
 
 		messages.push({
@@ -288,17 +293,17 @@
 		const parentNode = messages.find(message => message.id === target.parentId) ?? null;
 		const parentNativeId = parentNode?.nativeId ?? "0";
 
-		let store: typeof import("./aione-native") | null = null;
-		if (ai.kind === "native") {
-			try {
-				store = await import("./aione-native");
+		let store: ChatStore | null = null;
+		try {
+			store = ai.kind === "native"
+				? await import("./aione-native")
+				: await import("./browser-chat-store");
 
-				if (chatFolder) {
-					await store.updateChatMetadata(chatFolder, null, null, systemPrompt.trim());
-				}
-			} catch (error) {
-				onerror?.(error);
+			if (chatFolder) {
+				await store.updateChatMetadata(chatFolder, null, null, systemPrompt.trim());
 			}
+		} catch (error) {
+			onerror?.(error);
 		}
 
 		messages.push({
