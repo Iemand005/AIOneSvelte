@@ -25,7 +25,6 @@
 	let versionSelections = $state<VersionSelections>({});
 	let chats = $state<ChatMetadata[]>([]);
 	let currentFolder = $state<string | null>(null);
-	let persist = $state(false);
 	let promptOpen = $state(true);
 	let view = $state<"chat" | "settings">("chat");
 
@@ -34,7 +33,6 @@
 
 	initializeAIOne().then(async one => {
 		ai = one;
-		persist = true;
 		await refreshChats();
 	});
 
@@ -119,7 +117,7 @@
 		const value = systemPrompt;
 		const backend = ai;
 
-		if (!persist || !folder || !backend) return;
+		if (!folder || !backend) return;
 
 		const timer = setTimeout(() => {
 			(backend.kind === "native"
@@ -140,7 +138,6 @@
 
 <main class="layout" class:prompt-collapsed={!promptOpen}>
 	<aside class="history" aria-label="Chat history">
-		{#if persist}
 		<div class="aside-header">
 			<h2>History</h2>
 		</div>
@@ -153,7 +150,6 @@
 			onnew={newChat}
 			ondelete={deleteChat}
 		/>
-		{/if}
 
 		<button
 			type="button"
