@@ -63,11 +63,45 @@
 	}
 
 	function pickWeb(file: File) {
-		if (file) loadModel({ kind: "file", file });
+		if (file && file.name.toLowerCase().endsWith(".gguf")) {
+			void loadModel({ kind: "file", file });
+		}
 	}
+
+	function handleDragOver(event: DragEvent) {
+		event.preventDefault();
+	}
+
+	function handleDrop(event: DragEvent) {
+		event.preventDefault();
+		const file = [...(event.dataTransfer?.files ?? [])].find(item =>
+			item.name.toLowerCase().endsWith(".gguf")
+		);
+		if (file) pickWeb(file);
+	}
+
+	$effect(() => {
+		if (ai?.kind !== "native") return;
+		let active = true;
+		let unlisten: (() => void) | undefined;
+		void import("@tauri-apps/api/webview").then(({ getCurrentWebview }) =>
+			getCurrentWebview().onDragDropEvent(event => {
+				if (event.payload.type !== "drop") return;
+				const path = event.payload.paths.find(item => item.toLowerCase().endsWith(".gguf"));
+				if (path) void loadModel({ kind: "path", path });
+			}).then(dispose => {
+				if (active) unlisten = dispose;
+				else dispose();
+			})
+		).catch(error => onerror?.(error));
+		return () => {
+			active = false;
+			unlisten?.();
+		};
+	});
 </script>
 
-<form class="card">
+<form class="card" ondragover={handleDragOver} ondrop={handleDrop}>
 	{#if ai?.kind === "native"}
 	<button type="button" onclick={pickNative}>Choose model…</button>
 	{:else}
