@@ -140,6 +140,7 @@
 
 <main class="layout" class:prompt-collapsed={!promptOpen}>
 	<aside class="history" aria-label="Chat history">
+		{#if persist}
 		<div class="aside-header">
 			<h2>History</h2>
 		</div>
@@ -153,6 +154,7 @@
 			onnew={newChat}
 			ondelete={deleteChat}
 		/>
+		{/if}
 
 		<button
 			type="button"
