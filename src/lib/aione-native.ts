@@ -167,6 +167,7 @@ export interface ChatMessage {
 
 export interface ChatData extends ChatMetadata {
 	messages: ChatMessage[];
+	activePath: number[];
 }
 
 export async function listChats(): Promise<ChatMetadata[]> {

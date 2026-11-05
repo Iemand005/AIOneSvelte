@@ -48,13 +48,7 @@ export function buildActivePath(
 		const selected: ChatNode | undefined = selectedId
 			? siblings.find(message => message.id === selectedId)
 			: undefined;
-		let next: ChatNode = selected ?? siblings[0];
-
-		if (!selected && !messages.some(message => message.parentId === next.id)) {
-			next =
-				siblings.find(sibling => messages.some(message => message.parentId === sibling.id)) ??
-				next;
-		}
+		const next: ChatNode = selected ?? siblings[0];
 
 		if (visited.has(next.id)) break;
 
@@ -84,7 +78,7 @@ export function createMessageId(): string {
 	return `msg-${Date.now().toString(36)}-${fallbackId.toString(36)}`;
 }
 
-interface PersistedMessage {
+export interface PersistedMessage {
 	id: number;
 	parentId: number;
 	role: string;
@@ -93,58 +87,21 @@ interface PersistedMessage {
 }
 
 export function nodesFromPersisted(source: PersistedMessage[]): ChatNode[] {
-	const systemIds = new Set<string>();
-	const latestById = new Map<string, PersistedMessage>();
-	const idOrder: string[] = [];
-
-	for (const message of source) {
-		if (!["system", "user", "assistant"].includes(message.role)) continue;
-
-		const nativeKey = String(message.id);
-		if (!latestById.has(nativeKey)) idOrder.push(nativeKey);
-		latestById.set(nativeKey, message);
-	}
-
-	const valid = idOrder.map(nativeKey => latestById.get(nativeKey)!);
-	for (const message of valid) {
-		if (message.role === "system") systemIds.add(String(message.id));
-	}
+	const valid = source.filter(message => message.role !== "system");
 	const ids = new Map(
-		valid
-			.filter(message => message.role !== "system")
-			.map(message => [String(message.id), createMessageId()])
+		valid.map(message => [String(message.id), createMessageId()])
 	);
 
-	const nodes: ChatNode[] = [];
-	let lastId = "0";
-	const validIds = new Set(valid.map(message => String(message.id)));
-
-	for (const message of valid) {
-		if (message.role === "system") {
-			lastId = String(message.id);
-			continue;
-		}
-
+	return valid.map(message => {
 		const id = ids.get(String(message.id));
-		if (!id) continue;
-
 		const parentNative = String(message.parentId);
-		let parentId: string | null = null;
-
-		if (message.parentId !== 0 && !systemIds.has(parentNative)) {
-			parentId = ids.get(validIds.has(parentNative) ? parentNative : lastId) ?? null;
-		}
-
-		nodes.push({
+		return {
 			id,
-			parentId,
+			parentId: ids.get(parentNative) ?? null,
 			nativeId: message.id,
 			role: message.role === "assistant" ? "assistant" : "user",
 			content: message.content,
 			creationTime: message.creationTime
-		});
-		lastId = String(message.id);
-	}
-
-	return nodes;
+		} satisfies ChatNode;
+	});
 }
