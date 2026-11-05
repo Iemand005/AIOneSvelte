@@ -35,7 +35,7 @@
 	{/if}
 
 	{#if message.content}
-		<Markdown content={message.content}/>
+		<MarkdownRenderer content={message.content}/>
 		<p>{message.content}</p>
 	{/if}
 
