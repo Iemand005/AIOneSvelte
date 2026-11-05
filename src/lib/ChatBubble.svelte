@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { ChatNode } from "./chat";
+	import { MarkdownRenderer } from "svelte-md-parser";
 
 	type MessageProps = {
 		message: ChatNode;
