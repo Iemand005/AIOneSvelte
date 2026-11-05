@@ -98,19 +98,17 @@ export function nodesFromPersisted(source: PersistedMessage[]): ChatNode[] {
 	const idOrder: string[] = [];
 
 	for (const message of source) {
+		if (!["system", "user", "assistant"].includes(message.role)) continue;
+
 		const nativeKey = String(message.id);
 		if (!latestById.has(nativeKey)) idOrder.push(nativeKey);
 		latestById.set(nativeKey, message);
 	}
 
-	const valid = idOrder
-		.map(nativeKey => latestById.get(nativeKey)!)
-		.filter(message => {
-			const isValid = ["system", "user", "assistant"].includes(message.role);
-			if (!isValid) return false;
-			if (message.role === "system") systemIds.add(String(message.id));
-			return true;
-		});
+	const valid = idOrder.map(nativeKey => latestById.get(nativeKey)!);
+	for (const message of valid) {
+		if (message.role === "system") systemIds.add(String(message.id));
+	}
 	const ids = new Map(
 		valid
 			.filter(message => message.role !== "system")
