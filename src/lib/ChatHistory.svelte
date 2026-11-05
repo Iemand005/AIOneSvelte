@@ -1,5 +1,5 @@
 <script lang="ts">
-    import MarkdownRenderer from "../../../../SvelteMDParser/dist/MarkdownRenderer.svelte";
+	import { MarkdownRenderer } from "svelte-md-parser";
 	import type { ChatMetadata } from "./aione-native";
 	import type { ChatNode } from "./chat";
 
