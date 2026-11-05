@@ -148,7 +148,6 @@
 		<ChatHistory
 			{chats}
 			{currentFolder}
-			persist={persist}
 			messages={activeMessages}
 			onselect={openChat}
 			onnew={newChat}

@@ -6,14 +6,13 @@
 	type Props = {
 		chats: ChatMetadata[];
 		currentFolder: string | null;
-		persist: boolean;
 		messages: ChatNode[];
 		onselect: (folder: string) => void;
 		onnew: () => void;
 		ondelete: (folder: string) => void;
 	};
 
-	let { chats, currentFolder, persist, messages, onselect, onnew, ondelete }: Props = $props();
+	let { chats, currentFolder, messages, onselect, onnew, ondelete }: Props = $props();
 
 	let turns = $derived(messages.filter(message => message.role === "user"));
 
@@ -33,40 +32,25 @@
 </script>
 
 <nav class="chat-history" aria-label="Chat history">
-	{#if persist}
-		<button type="button" class="new-chat" onclick={onnew}>+ New chat</button>
+	<button type="button" class="new-chat" onclick={onnew}>+ New chat</button>
 
-		{#if chats.length === 0}
-			<p class="empty">No saved chats yet.</p>
-		{:else}
-			<ol>
-				{#each chats as chat}
-					<li class:active={chat.folder === currentFolder}>
-						<button type="button" class="chat" onclick={() => onselect(chat.folder)}>
-							<span class="preview"><MarkdownRenderer content={chat.title || "Untitled"}/></span>
-							<span class="date">{formatDate(chat.updated)}</span>
-						</button>
-						<button
-							type="button"
-							class="delete"
-							aria-label={`Delete ${chat.title || "chat"}`}
-							onclick={() => ondelete(chat.folder)}
-						>
-							×
-						</button>
-					</li>
-				{/each}
-			</ol>
-		{/if}
-	{:else if turns.length === 0}
-		<p class="empty">Your messages will appear here.</p>
+	{#if chats.length === 0}
+		<p class="empty">No saved chats yet.</p>
 	{:else}
 		<ol>
-			{#each turns as turn, position}
-				<li>
-					<button type="button" onclick={() => scrollTo(turn.id)}>
-						<span class="position">{position + 1}</span>
-						<span class="preview">{turn.content}</span>
+			{#each chats as chat}
+				<li class:active={chat.folder === currentFolder}>
+					<button type="button" class="chat" onclick={() => onselect(chat.folder)}>
+						<span class="preview"><MarkdownRenderer content={chat.title || "Untitled"}/></span>
+						<span class="date">{formatDate(chat.updated)}</span>
+					</button>
+					<button
+						type="button"
+						class="delete"
+						aria-label={`Delete ${chat.title || "chat"}`}
+						onclick={() => ondelete(chat.folder)}
+					>
+						×
 					</button>
 				</li>
 			{/each}
