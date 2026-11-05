@@ -81,6 +81,7 @@ button {
   border-radius: 9px;
   background-color: var(--surface);
   color: inherit;
+  font: inherit;
   cursor: pointer;
   transition: background-color 120ms ease;
 }

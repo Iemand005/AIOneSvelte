@@ -74,15 +74,13 @@
 		{#if !collapsed}<h2>{title}</h2>{/if}
 	</header>
 	{#if !collapsed}<div class="content">{@render children()}</div>{/if}
-	<div
+	<button
+		type="button"
 		class="resize-handle"
-		role="separator"
-		aria-orientation="vertical"
 		aria-label={`Resize ${title}`}
-		tabindex="0"
 		onpointerdown={startResize}
 		onkeydown={resizeWithKeyboard}
-	></div>
+	></button>
 </aside>
 
 <style>
@@ -180,6 +178,10 @@
 		inset-block: 0;
 		right: 0;
 		width: 8px;
+		padding: 0;
+		border: 0;
+		border-radius: 0;
+		background: none;
 		cursor: col-resize;
 		touch-action: none;
 	}
