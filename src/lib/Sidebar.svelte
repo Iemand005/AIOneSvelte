@@ -22,17 +22,23 @@
 	let startWidth = 0;
 
 	function startResize(event: PointerEvent) {
-		if (collapsed) return;
 		resizing = true;
 		startX = event.clientX;
-		startWidth = width;
+		startWidth = collapsed ? 48 : width;
 		event.preventDefault();
 	}
 
 	function resize(event: PointerEvent) {
 		if (!resizing) return;
 		const delta = (event.clientX - startX) * (side === "left" ? 1 : -1);
-		width = Math.max(180, Math.min(440, startWidth + delta));
+		const nextWidth = startWidth + delta;
+
+		if (nextWidth <= 48) {
+			collapsed = true;
+		} else if (nextWidth >= 180) {
+			collapsed = false;
+			width = Math.min(440, nextWidth);
+		}
 	}
 
 	function resizeWithKeyboard(event: KeyboardEvent) {
@@ -68,17 +74,15 @@
 		</button>
 	</header>
 	{#if !collapsed}<div class="content">{@render children()}</div>{/if}
-	{#if !collapsed}
-		<div
-			class="resize-handle"
-			role="separator"
-			aria-orientation="vertical"
-			aria-label={`Resize ${title}`}
-			tabindex="0"
-			onpointerdown={startResize}
-			onkeydown={resizeWithKeyboard}
-		></div>
-	{/if}
+	<div
+		class="resize-handle"
+		role="separator"
+		aria-orientation="vertical"
+		aria-label={`Resize ${title}`}
+		tabindex="0"
+		onpointerdown={startResize}
+		onkeydown={resizeWithKeyboard}
+	></div>
 </aside>
 
 <style>
@@ -176,9 +180,13 @@
 		z-index: 1;
 		inset-block: 0;
 		right: 0;
-		width: 5px;
+		width: 8px;
 		cursor: col-resize;
 		touch-action: none;
+	}
+
+	.resize-handle:hover {
+		background: color-mix(in srgb, var(--text) 20%, transparent);
 	}
 
 	.left .resize-handle {
