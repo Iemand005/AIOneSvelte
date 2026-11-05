@@ -169,9 +169,9 @@
 
 	:global(.preview *) {
 		max-width: 100%;
-		display: inline-block	;
+		display: inline-block;
+		overflow: hidden;
 		text-overflow: ellipsis;
-    overflow: hidden;
 	}
 
 	.date {
