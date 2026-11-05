@@ -168,7 +168,8 @@
 	}
 
 	:global(.preview > *) {
-		
+		max-width: 100%;
+		display: inline-block	;
 	}
 
 	.date {
