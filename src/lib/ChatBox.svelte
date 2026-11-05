@@ -592,12 +592,12 @@
 		height: 4px;
 		overflow: hidden;
 		border-radius: 999px;
-		background: #00000080;
+		background: var(--progress-track);
 	}
 
 	.progress-fill {
 		height: 100%;
-		background: linear-gradient(90deg, rgb(119 26 20), rgb(224 83 63));
+		background: var(--progress-gradient);
 		transition: width 120ms ease-out;
 	}
 </style>

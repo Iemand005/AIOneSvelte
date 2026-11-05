@@ -211,7 +211,7 @@
         gap: 4px;
         padding: 3px 6px;
         border-radius: 6px;
-        background: #ffffff0d;
+        background: var(--surface-subtle);
         color: inherit;
         font: inherit;
         font-size: 0.75rem;
@@ -219,7 +219,7 @@
     }
 
     .actions button:hover:not(:disabled) {
-        background: #ffffff1f;
+        background: var(--surface-strong);
         color: #fff;
     }
 

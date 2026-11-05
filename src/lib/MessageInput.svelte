@@ -166,7 +166,6 @@
 
 		border-radius: 1000px;
 
-		background: linear-gradient(0deg, #46454587, #36363666);
 		background: var(--message-input-gradient);
 		backdrop-filter: blur(10px);
 
@@ -174,7 +173,7 @@
 	}
 
 	form:has(input:focus) {
-		border-color: rgb(139 46 38);
+		border-color: var(--focus);
 	}
 
 	input {
@@ -236,7 +235,7 @@
 	button.generate {
 		display: grid;
 		place-items: center;
-		background: #ffffff14;
+		background: var(--surface-active);
 		color: #e6e6e6;
 	}
 

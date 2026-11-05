@@ -60,7 +60,6 @@
 	aria-label={title}
 >
 	<header>
-		{#if !collapsed}<h2>{title}</h2>{/if}
 		<button
 			type="button"
 			class="toggle"
@@ -72,6 +71,7 @@
 				<path d="M9 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
 			</svg>
 		</button>
+		{#if !collapsed}<h2>{title}</h2>{/if}
 	</header>
 	{#if !collapsed}<div class="content">{@render children()}</div>{/if}
 	<div
@@ -117,14 +117,18 @@
 		display: flex;
 		flex: none;
 		align-items: center;
-		justify-content: space-between;
 		gap: 8px;
 		min-height: 32px;
 		padding: 0;
 	}
 
+	.sidebar:not(.left) header {
+		flex-direction: row-reverse;
+	}
+
 	h2 {
 		display: flex;
+		flex: 1;
 		align-items: center;
 		margin: 0;
 		font-size: 0.78rem;
@@ -142,12 +146,7 @@
 		height: 32px;
 		padding: 0;
 		border-radius: 8px;
-		background: #ffffff0d;
-	}
-
-	.toggle:hover {
-		background: #ffffff1a;
-		color: #fff;
+		background: var(--surface-subtle);
 	}
 
 	.toggle svg {

@@ -211,20 +211,14 @@
 		align-items: center;
 		gap: 8px;
 		padding: 8px 10px;
-		background: #5252521c;
 		border-radius: 8px;
 		font: inherit;
 		font-size: 0.85rem;
 		text-align: left;
-		color: var(--text);
-	}
-
-	.settings-button:hover {
-		background: #52525233;
 	}
 
 	.settings-button.active {
-		background: #ffffff14;
+		background: var(--surface-active);
 		color: var(--text-h);
 	}
 

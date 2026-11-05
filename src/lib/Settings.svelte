@@ -179,7 +179,7 @@
 
 	header p {
 		margin: 4px 0 0;
-		color: #7d7d7d;
+		color: var(--muted);
 		font-size: 0.9rem;
 	}
 
@@ -191,16 +191,10 @@
 	.actions button {
 		padding: 9px 14px;
 		font-size: 0.85rem;
-		color: var(--text);
-		background: #5252521c;
-	}
-
-	.actions button:hover:not(:disabled) {
-		background: #52525233;
 	}
 
 	.actions button:disabled {
-		opacity: 0.6;
+		opacity: 0.5;
 		cursor: default;
 	}
 
@@ -216,7 +210,7 @@
 	}
 
 	.label {
-		color: #7d7d7d;
+		color: var(--muted);
 		font-size: 0.72rem;
 		letter-spacing: 0.08em;
 		text-transform: uppercase;
@@ -284,7 +278,7 @@
 	}
 
 	dt {
-		color: #7d7d7d;
+		color: var(--muted);
 		font-size: 0.7rem;
 	}
 
@@ -310,11 +304,11 @@
 
 	.status {
 		margin: 0;
-		color: #7d7d7d;
+		color: var(--muted);
 		font-size: 0.9rem;
 	}
 
 	.status.error {
-		color: #ff8a7a;
+		color: var(--danger);
 	}
 </style>

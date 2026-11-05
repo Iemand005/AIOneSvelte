@@ -27,8 +27,8 @@
 		min-height: 0;
 		box-sizing: border-box;
 		padding: 12px;
-		background: #5252521c;
-		border: 1px solid #303139;
+		background: var(--surface);
+		border: 1px solid var(--border);
 		border-radius: 9px;
 		font: inherit;
 		font-size: 0.9rem;
@@ -37,11 +37,11 @@
 	}
 
 	textarea::placeholder {
-		color: #7a7a7a;
+		color: var(--muted);
 	}
 
 	textarea:focus {
 		outline: none;
-		border-color: rgb(139 46 38);
+		border-color: var(--focus);
 	}
 </style>

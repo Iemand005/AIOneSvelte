@@ -128,7 +128,7 @@
 	</div>
 {/if}
 
-<form class="card">
+<form>
 	{#if ai?.kind === "native"}
 		<button type="button" onclick={pickNative}>{modelName ?? "Choose model…"}</button>
 	{:else}
@@ -187,6 +187,11 @@
 		border-radius: 0;
 	}
 
+	button:disabled {
+		opacity: 0.5;
+		cursor: default;
+	}
+
 	.drop-overlay {
 		position: fixed;
 		z-index: 1000;
@@ -226,7 +231,7 @@
 		inset: auto 0 0 0;
 		height: 5px !important;
 		width: 100%;
-		background: #00000080;
+		background: var(--progress-track);
 		pointer-events: none;
 		z-index: 2;
 	}

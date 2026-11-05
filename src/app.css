@@ -4,25 +4,24 @@
   --bg: #fff;
   --border: rgba(180, 180, 180, 0.375);
   --code-bg: #f4f3ec;
-  --accent-bg: rgba(170, 59, 255, 0.1);
-  --social-bg: rgba(244, 243, 236, 0.5);
-  --shadow: rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
-
-  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --mono: ui-monospace, Consolas, monospace;
-
-	
-	--message-input-gradient: linear-gradient(0deg, #ffffff9c, #ffffff40);
+  --surface: #5252521c;
+  --surface-hover: #52525233;
+  --surface-active: #ffffff14;
+  --surface-strong: #ffffff1f;
+  --surface-subtle: #ffffff0d;
+  --muted: #7d7d7d;
+  --danger: #ff8a7a;
+  --focus: rgb(139 46 38);
+  --progress-track: #00000080;
+  --progress-gradient: linear-gradient(90deg, rgb(119 26 20), rgb(224 83 63));
+  --message-input-gradient: linear-gradient(0deg, #ffffff9c, #ffffff40);
   --accent-gradient: linear-gradient(180deg, rgb(119 26 20), rgb(99 23 18));
-	
-	--chatbox-pad: 32px;
-
-	--message-box-size: 45px;
-
-	--chat-bubble-bg: #e0dfdf9f;
-
-	--sidebar: rgb(215 213 212 / 17%);
+  --chatbox-pad: 32px;
+  --message-box-size: 45px;
+  --chat-bubble-bg: #e0dfdf9f;
+  --sidebar: rgb(215 213 212 / 17%);
+  --sans: system-ui, "Segoe UI", Roboto, sans-serif;
+  --mono: ui-monospace, Consolas, monospace;
 
   font: 18px/145% var(--sans);
   letter-spacing: 0.18px;
@@ -42,17 +41,9 @@
     --bg: #171413;
     --border: #2e303a;
     --code-bg: #1f2028;
-    --accent: #c084fc;
-    --accent-bg: rgba(192, 132, 252, 0.15);
-    --accent-border: rgba(192, 132, 252, 0.5);
-    --social-bg: rgba(47, 48, 58, 0.5);
-    --shadow: rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
-
     --sidebar: rgba(18, 16, 15, 0.6);
-
-		--message-input-gradient: linear-gradient(0deg, #46454587, #36363666);
-
-		--chat-bubble-bg: #292929;
+    --message-input-gradient: linear-gradient(0deg, #46454587, #36363666);
+    --chat-bubble-bg: #292929;
   }
 }
 
@@ -60,32 +51,43 @@
   --bg: transparent;
 }
 
-html, body, main {
+html,
+body,
+main {
   height: 100%;
 }
 
-html, body {
-	color: var(--text);
+html,
+body {
+  color: var(--text);
   background-color: var(--bg);
   overscroll-behavior-x: none;
 }
 
 body {
-	margin: 0;
-	font-family: system-ui, sans-serif;
+  margin: 0;
+  font-family: var(--sans);
 }
 
 header {
-	padding: 10px;
+  padding: 10px;
 }
 
-.button, button {
-	display: inline-block;
-	background-color: #4b4b4c69;
-	padding: 12px 20px;
-	border-radius: 9px;
-	cursor: pointer;
-	border: none;
+.button,
+button {
+  display: inline-block;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 9px;
+  background-color: var(--surface);
+  color: inherit;
+  cursor: pointer;
+  transition: background-color 120ms ease;
+}
+
+.button:hover,
+button:hover {
+  background-color: var(--surface-hover);
 }
 
 textarea {

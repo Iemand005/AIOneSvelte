@@ -72,7 +72,7 @@
 	}
 
 	li.active {
-		background: #ffffff14;
+		background: var(--surface-active);
 	}
 
 	button {
@@ -88,14 +88,10 @@
 		text-align: left;
 	}
 
-	button:hover {
-		background: #52525233;
-	}
-
 	.new-chat {
 		justify-content: center;
 		margin-bottom: 8px;
-		background: #5252521c;
+		background: var(--surface);
 	}
 
 	.chat {
@@ -110,7 +106,7 @@
 		width: 28px;
 		padding: 0;
 		justify-content: center;
-		color: #8a8a8a;
+		color: var(--muted);
 		font-size: 1rem;
 		opacity: 0;
 	}
@@ -121,8 +117,8 @@
 	}
 
 	.delete:hover {
-		color: #ff8a7a;
-		background: #ffffff14;
+		color: var(--danger);
+		background: var(--surface-active);
 	}
 
 	.preview {
@@ -155,14 +151,14 @@
 
 	.date {
 		flex: none;
-		color: #7d7d7d;
+		color: var(--muted);
 		font-size: 0.72rem;
 	}
 
 	.empty {
 		margin: 4px 0 0;
 		padding: 0 10px;
-		color: #7d7d7d;
+		color: var(--muted);
 		font-size: 0.85rem;
 	}
 </style>
