@@ -57,13 +57,6 @@ export function buildActivePath(
 		parentId = next.id;
 	}
 
-	if (path.length < 2 && messages.length > 1) {
-		return messages
-			.sort((left, right) =>
-				(left.creationTime ?? 0) - (right.creationTime ?? 0)
-			);
-	}
-
 	return path;
 }
 
@@ -91,16 +84,37 @@ export function nodesFromPersisted(source: PersistedMessage[]): ChatNode[] {
 	const ids = new Map(
 		valid.map(message => [String(message.id), createMessageId()])
 	);
-
-	return valid.map(message => {
+	return valid.map((message, messageIndex) => {
 		const id = ids.get(String(message.id));
 		if (id === undefined) {
 			throw new Error(`Missing frontend ID for persisted message ${message.id}`);
 		}
 		const parentNative = String(message.parentId);
+		let resolvedParentNative = parentNative;
+		if (parentNative !== "0" && !ids.has(parentNative)) {
+			const roundedParent = Number(parentNative);
+			const expectedParent = BigInt(parentNative);
+			let closestId: string | undefined;
+			let closestDistance: bigint | undefined;
+
+			for (let index = 0; index < messageIndex; index += 1) {
+				const candidateId = String(valid[index].id);
+				if (Number(candidateId) !== roundedParent) continue;
+
+				const difference = BigInt(candidateId) - expectedParent;
+				const distance = difference < 0n ? -difference : difference;
+				if (closestDistance === undefined || distance < closestDistance) {
+					closestId = candidateId;
+					closestDistance = distance;
+				}
+			}
+
+			if (closestId !== undefined) resolvedParentNative = closestId;
+		}
+
 		return {
 			id,
-			parentId: ids.get(parentNative) ?? null,
+			parentId: ids.get(resolvedParentNative) ?? null,
 			nativeId: message.id,
 			role: message.role === "assistant" ? "assistant" : "user",
 			content: message.content,
