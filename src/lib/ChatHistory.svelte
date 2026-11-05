@@ -161,9 +161,14 @@
 
 	.preview {
 		min-width: 0;
+		max-width: 100%;;
 		overflow: hidden;
 		white-space: nowrap;
 		text-overflow: ellipsis;
+	}
+
+	:global(.preview > *) {
+		
 	}
 
 	.date {
