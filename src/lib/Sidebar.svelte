@@ -34,6 +34,13 @@
 		const delta = (event.clientX - startX) * (side === "left" ? 1 : -1);
 		width = Math.max(180, Math.min(440, startWidth + delta));
 	}
+
+	function resizeWithKeyboard(event: KeyboardEvent) {
+		if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") return;
+		event.preventDefault();
+		const delta = (event.key === "ArrowRight" ? 1 : -1) * (side === "left" ? 1 : -1) * 16;
+		width = Math.max(180, Math.min(440, width + delta));
+	}
 </script>
 
 <svelte:window onpointermove={resize} onpointerup={() => (resizing = false)} />
@@ -67,7 +74,9 @@
 			role="separator"
 			aria-orientation="vertical"
 			aria-label={`Resize ${title}`}
+			tabindex="0"
 			onpointerdown={startResize}
+			onkeydown={resizeWithKeyboard}
 		></div>
 	{/if}
 </aside>
