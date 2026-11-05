@@ -183,6 +183,10 @@
 		line-height: 1.3em;
 	}
 
+	span {
+		line-height: 1em;
+	}
+
 	.date {
 		flex: none;
 		color: #7d7d7d;
