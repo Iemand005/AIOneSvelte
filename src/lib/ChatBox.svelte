@@ -2,7 +2,7 @@
 	import ChatBubble from "./ChatBubble.svelte";
 	import MessageInput from "./MessageInput.svelte";
 	import type { ChatMetadata } from "./aione-native";
-	import type { Backend } from "./backend";
+	import type { Backend, ChatPromptMessage } from "./backend";
 	import {
 		buildActivePath,
 		createMessageId,
@@ -103,22 +103,23 @@
 
 	async function generateAssistant(
 		assistant: ChatNode,
-		promptMessages: { role: "system" | "user" | "assistant"; content: string }[],
+		promptMessages: ChatPromptMessage[],
 		parentNativeId: string,
 		store: typeof import("./aione-native") | null,
 		onPromptProgress?: (progress: number) => void
 	) {
 		if (!ai) return;
+		const backend = ai;
 
 		try {
-			const promptText = await ai.formatChatPrompt(promptMessages, true);
-			const result = await ai.generate(promptText, 512, {
+			const promptText = await backend.formatChatPrompt(promptMessages, true);
+			const result = await backend.generate(promptText, 512, {
 				onPromptProgress: value => {
-					canStopGeneration = ai?.canCancel ?? false;
+					canStopGeneration = backend.canCancel;
 					onPromptProgress?.(value);
 				},
 				onGenerationStart: () => {
-					canStopGeneration = ai?.canCancel ?? false;
+					canStopGeneration = backend.canCancel;
 					onPromptProgress?.(1);
 				},
 				onThinkingChange: value => {
