@@ -165,6 +165,9 @@
 		overflow: hidden;
 		white-space: nowrap;
 		text-overflow: ellipsis;
+
+		height: 1.3em;
+		line-height: 1.3em;
 	}
 
 	:global(.preview *) {
