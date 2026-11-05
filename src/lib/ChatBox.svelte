@@ -88,6 +88,74 @@
 		versionSelections[parentKey(node.parentId)] = node.id;
 	}
 
+	function appendAssistantToken(
+		assistant: ChatNode,
+		token: string,
+		isThinking: boolean
+	) {
+		if (isThinking) {
+			assistant.thinking = (assistant.thinking ?? "") + token;
+			return;
+		}
+
+		assistant.content += token;
+	}
+
+	async function generateAssistant(
+		assistant: ChatNode,
+		promptMessages: { role: "system" | "user" | "assistant"; content: string }[],
+		parentNativeId: string,
+		store: typeof import("./aione-native") | null,
+		onPromptProgress?: (progress: number) => void
+	) {
+		if (!ai) return;
+
+		try {
+			const promptText = await ai.formatChatPrompt(promptMessages, true);
+			const result = await ai.generate(promptText, 512, {
+				onPromptProgress: value => {
+					canStopGeneration = ai?.canCancel ?? false;
+					onPromptProgress?.(value);
+				},
+				onGenerationStart: () => {
+					canStopGeneration = ai?.canCancel ?? false;
+					onPromptProgress?.(1);
+				},
+				onThinkingChange: value => {
+					thinking = value;
+				},
+				onToken: (token, isThinking) => {
+					streaming = true;
+					appendAssistantToken(assistant, token, isThinking);
+				}
+			});
+
+			assistant.stats = result.stats;
+
+			if (!assistant.content) {
+				assistant.content = result.content;
+			}
+
+			if (store && chatFolder && assistant.content) {
+				try {
+					const saved = await store.appendChatMessage(
+						chatFolder,
+						"assistant",
+						assistant.content,
+						parentNativeId
+					);
+					assistant.nativeId = saved.id;
+					onpersisted?.();
+				} catch (error) {
+					onerror?.(error);
+				}
+			}
+		} catch (error) {
+			assistant.content = `Error: ${String(error)}`;
+			onerror?.(error);
+		}
+	}
+
 	async function stopGeneration() {
 		if (!ai?.canCancel || !canStopGeneration || stopping) return;
 
@@ -191,57 +259,15 @@
 		thinking = false;
 
 		try {
-			const promptText = await ai.formatChatPrompt(promptMessages, true);
-			const result = await ai.generate(
-				promptText,
-				512,
-				{
-					onPromptProgress: value => {
-						canStopGeneration = ai.canCancel;
-						promptProgress = value;
-					},
-					onGenerationStart: () => {
-						canStopGeneration = ai.canCancel;
-						promptProgress = 1;
-					},
-					onThinkingChange: value => {
-						thinking = value;
-					},
-					onToken: (token, isThinking) => {
-						streaming = true;
-
-						if (isThinking) {
-							assistant.thinking = (assistant.thinking ?? "") + token;
-						} else {
-							assistant.content += token;
-						}
-					}
+			await generateAssistant(
+				assistant,
+				promptMessages,
+				user.nativeId ?? "0",
+				store,
+				value => {
+					promptProgress = value;
 				}
 			);
-
-			assistant.stats = result.stats;
-
-			if (!assistant.content) {
-				assistant.content = result.content;
-			}
-
-			if (store && chatFolder && assistant.content) {
-				try {
-					const saved = await store.appendChatMessage(
-						chatFolder,
-						"assistant",
-						assistant.content,
-						user.nativeId ?? "0"
-					);
-					assistant.nativeId = saved.id;
-					onpersisted?.();
-				} catch (error) {
-					onerror?.(error);
-				}
-			}
-		} catch (error) {
-			assistant.content = `Error: ${String(error)}`;
-			onerror?.(error);
 		} finally {
 			loading = false;
 			streaming = false;
@@ -301,53 +327,12 @@
 		thinking = false;
 
 		try {
-			const promptText = await ai.formatChatPrompt(promptMessages, true);
-			const result = await ai.generate(
-				promptText,
-				512,
-				{
-					onPromptProgress: () => {
-						canStopGeneration = ai.canCancel;
-					},
-					onGenerationStart: () => {
-						canStopGeneration = ai.canCancel;
-					},
-					onThinkingChange: value => {
-						thinking = value;
-					},
-					onToken: (token, isThinking) => {
-						if (isThinking) {
-							assistant.thinking = (assistant.thinking ?? "") + token;
-						} else {
-							assistant.content += token;
-						}
-					}
-				}
+			await generateAssistant(
+				assistant,
+				promptMessages,
+				parentNativeId,
+				store
 			);
-
-			assistant.stats = result.stats;
-
-			if (!assistant.content) {
-				assistant.content = result.content;
-			}
-
-			if (store && chatFolder && assistant.content) {
-				try {
-					const saved = await store.appendChatMessage(
-						chatFolder,
-						"assistant",
-						assistant.content,
-						parentNativeId
-					);
-					assistant.nativeId = saved.id;
-					onpersisted?.();
-				} catch (error) {
-					onerror?.(error);
-				}
-			}
-		} catch (error) {
-			assistant.content = `Error: ${String(error)}`;
-			onerror?.(error);
 		} finally {
 			loading = false;
 			streaming = false;
