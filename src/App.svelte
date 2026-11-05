@@ -136,7 +136,7 @@
 </script>
 
 <svelte:head>
-	<title>AIOne Chat</title>
+	<title>AIOne</title>
 	<meta name="description" content="Chat with local AI models using AIOne." />
 </svelte:head>
 
