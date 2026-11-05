@@ -125,9 +125,7 @@
 	}
 
 	h2 {
-		/* display: flex; */
 		flex: 1;
-		align-items: center;
 		margin: 0;
 		font-size: 0.78rem;
 		font-weight: 600;
