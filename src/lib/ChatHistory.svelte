@@ -1,4 +1,5 @@
 <script lang="ts">
+    import MarkdownRenderer from "../../../../SvelteMDParser/dist/MarkdownRenderer.svelte";
 	import type { ChatMetadata } from "./aione-native";
 	import type { ChatNode } from "./chat";
 
@@ -42,7 +43,7 @@
 				{#each chats as chat}
 					<li class:active={chat.folder === currentFolder}>
 						<button type="button" class="chat" onclick={() => onselect(chat.folder)}>
-							<span class="preview">{chat.title || "Untitled"}</span>
+							<span class="preview"><MarkdownRenderer content={chat.title || "Untitled"}/></span>
 							<span class="date">{formatDate(chat.updated)}</span>
 						</button>
 						<button
