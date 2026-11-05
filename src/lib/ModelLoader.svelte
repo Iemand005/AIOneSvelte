@@ -17,6 +17,7 @@
 
 	let loaded = $state(false);
 	let progress = $state(0);
+	let dragActive = $state(false);
 
 	async function loadModel(src: ModelSource) {
 		if (!ai) return;
@@ -70,14 +71,20 @@
 
 	function handleDragOver(event: DragEvent) {
 		event.preventDefault();
+		dragActive = true;
 	}
 
 	function handleDrop(event: DragEvent) {
 		event.preventDefault();
+		dragActive = false;
 		const file = [...(event.dataTransfer?.files ?? [])].find(item =>
 			item.name.toLowerCase().endsWith(".gguf")
 		);
 		if (file) pickWeb(file);
+	}
+
+	function handleDragLeave(event: DragEvent) {
+		if (!event.relatedTarget) dragActive = false;
 	}
 
 	$effect(() => {
@@ -86,7 +93,16 @@
 		let unlisten: (() => void) | undefined;
 		void import("@tauri-apps/api/webview").then(({ getCurrentWebview }) =>
 			getCurrentWebview().onDragDropEvent(event => {
-				if (event.payload.type !== "drop") return;
+				if (event.payload.type === "enter") {
+					dragActive = event.payload.paths.some(path => path.toLowerCase().endsWith(".gguf"));
+					return;
+				}
+				if (event.payload.type === "over") return;
+				if (event.payload.type === "leave") {
+					dragActive = false;
+					return;
+				}
+				dragActive = false;
 				const path = event.payload.paths.find(item => item.toLowerCase().endsWith(".gguf"));
 				if (path) void loadModel({ kind: "path", path });
 			}).then(dispose => {
@@ -101,7 +117,18 @@
 	});
 </script>
 
-<form class="card" ondragover={handleDragOver} ondrop={handleDrop}>
+<svelte:window ondragover={handleDragOver} ondrop={handleDrop} ondragleave={handleDragLeave} />
+
+{#if dragActive}
+	<div class="drop-overlay" aria-live="polite">
+		<div class="drop-message">
+			<strong>Drop to load model</strong>
+			<span>GGUF files only</span>
+		</div>
+	</div>
+{/if}
+
+<form class="card">
 	{#if ai?.kind === "native"}
 	<button type="button" onclick={pickNative}>Choose model…</button>
 	{:else}
@@ -139,6 +166,40 @@
 
 		flex-direction: row;
 		align-items: stretch;
+	}
+
+	.drop-overlay {
+		position: fixed;
+		z-index: 1000;
+		inset: 0;
+		display: grid;
+		place-items: center;
+		padding: 24px;
+		background: color-mix(in srgb, var(--bg) 82%, transparent);
+		backdrop-filter: blur(6px);
+		pointer-events: none;
+	}
+
+	.drop-message {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 8px;
+		padding: 32px 48px;
+		border: 2px dashed var(--border);
+		border-radius: 18px;
+		background: var(--sidebar);
+		color: var(--text-h);
+		text-align: center;
+	}
+
+	.drop-message strong {
+		font-size: 1.2rem;
+	}
+
+	.drop-message span {
+		color: var(--text);
+		font-size: 0.9rem;
 	}
 
 	progress {
