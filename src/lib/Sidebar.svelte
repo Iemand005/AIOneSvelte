@@ -1,0 +1,187 @@
+<script lang="ts">
+	import type { Snippet } from "svelte";
+
+	type Props = {
+		title: string;
+		side: "left" | "right";
+		width?: number;
+		collapsed?: boolean;
+		children: Snippet;
+	};
+
+	let {
+		title,
+		side,
+		width = $bindable(side === "left" ? 220 : 300),
+		collapsed = $bindable(false),
+		children
+	}: Props = $props();
+
+	let resizing = $state(false);
+	let startX = 0;
+	let startWidth = 0;
+
+	function startResize(event: PointerEvent) {
+		if (collapsed) return;
+		resizing = true;
+		startX = event.clientX;
+		startWidth = width;
+		event.preventDefault();
+	}
+
+	function resize(event: PointerEvent) {
+		if (!resizing) return;
+		const delta = (event.clientX - startX) * (side === "left" ? 1 : -1);
+		width = Math.max(180, Math.min(440, startWidth + delta));
+	}
+</script>
+
+<svelte:window onpointermove={resize} onpointerup={() => (resizing = false)} />
+
+<aside
+	class="sidebar"
+	class:collapsed
+	class:resizing
+	class:left={side === "left"}
+	style:--sidebar-width={`${collapsed ? 48 : width}px`}
+	aria-label={title}
+>
+	<header>
+		{#if !collapsed}<h2>{title}</h2>{/if}
+		<button
+			type="button"
+			class="toggle"
+			aria-expanded={!collapsed}
+			aria-label={`${collapsed ? "Expand" : "Collapse"} ${title}`}
+			onclick={() => (collapsed = !collapsed)}
+		>
+			<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+				<path d="M9 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+			</svg>
+		</button>
+	</header>
+	{#if !collapsed}<div class="content">{@render children()}</div>{/if}
+	{#if !collapsed}
+		<div
+			class="resize-handle"
+			role="separator"
+			aria-orientation="vertical"
+			aria-label={`Resize ${title}`}
+			onpointerdown={startResize}
+		></div>
+	{/if}
+</aside>
+
+<style>
+	.sidebar {
+		position: relative;
+		display: flex;
+		flex: 0 0 var(--sidebar-width);
+		flex-direction: column;
+		gap: 12px;
+		min-width: 0;
+		min-height: 0;
+		overflow: hidden;
+		padding: 16px 12px;
+		box-sizing: border-box;
+		background: var(--sidebar);
+		backdrop-filter: blur(20px);
+		border-block-start: 1px solid var(--border);
+		border-inline-start: 1px solid var(--border);
+		transition: flex-basis 180ms ease, padding 180ms ease;
+	}
+
+	.sidebar.left {
+		border-inline-start: 0;
+		border-inline-end: 1px solid var(--border);
+	}
+
+	.sidebar.collapsed {
+		padding-inline: 6px;
+	}
+
+	header {
+		display: flex;
+		flex: none;
+		align-items: center;
+		justify-content: space-between;
+		gap: 8px;
+		min-height: 32px;
+		padding: 0;
+	}
+
+	h2 {
+		display: flex;
+		align-items: center;
+		margin: 0;
+		font-size: 0.78rem;
+		font-weight: 600;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+		color: var(--text);
+	}
+
+	.toggle {
+		display: grid;
+		place-items: center;
+		flex: none;
+		width: 32px;
+		height: 32px;
+		padding: 0;
+		border-radius: 8px;
+		background: #ffffff0d;
+	}
+
+	.toggle:hover {
+		background: #ffffff1a;
+		color: #fff;
+	}
+
+	.toggle svg {
+		transition: transform 160ms ease;
+	}
+
+	.left .toggle svg {
+		transform: rotate(180deg);
+	}
+
+	.collapsed .toggle svg {
+		transform: rotate(180deg);
+	}
+
+	.left.collapsed .toggle svg {
+		transform: none;
+	}
+
+	.content {
+		display: flex;
+		flex: 1;
+		flex-direction: column;
+		gap: 12px;
+		min-height: 0;
+		overflow: auto;
+	}
+
+	.resize-handle {
+		position: absolute;
+		z-index: 1;
+		inset-block: 0;
+		right: 0;
+		width: 5px;
+		cursor: col-resize;
+		touch-action: none;
+	}
+
+	.left .resize-handle {
+		right: 0;
+	}
+
+	.sidebar:not(.left) .resize-handle {
+		left: 0;
+	}
+
+	.resizing {
+		user-select: none;
+		transition: none;
+	}
+</style>

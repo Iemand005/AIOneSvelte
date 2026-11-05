@@ -15,6 +15,7 @@
 	type Props = {
 		ai: Backend | null;
 		modelLoading?: boolean;
+		outputTokens?: number;
 		systemPrompt?: string;
 		messages?: ChatNode[];
 		versionSelections?: VersionSelections;
@@ -32,6 +33,7 @@
 	let {
 		ai = $bindable(null),
 		modelLoading = false,
+		outputTokens = 512,
 		systemPrompt = $bindable(""),
 		messages = $bindable<ChatNode[]>([]),
 		versionSelections = $bindable<VersionSelections>({}),
@@ -118,7 +120,7 @@
 
 		try {
 			const promptText = await backend.formatChatPrompt(promptMessages, true);
-			const result = await backend.generate(promptText, 512, {
+			const result = await backend.generate(promptText, outputTokens, {
 				onPromptProgress: value => {
 					canStopGeneration = backend.canCancel;
 					onPromptProgress?.(value);
