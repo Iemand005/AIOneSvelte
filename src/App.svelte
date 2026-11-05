@@ -236,7 +236,6 @@
 	.layout {
 		--history-width: clamp(150px, 22vw, 240px);
 		--prompt-width: clamp(240px, 28vw, 340px);
-		--aside-border: #ffffff14;
 
 		display: grid;
 		grid-template-columns: var(--history-width) minmax(0, 1fr) var(--prompt-width);
@@ -263,7 +262,7 @@
 
 	.history {
 		padding: 16px 12px;
-		border-right: 1px solid var(--aside-border);
+		border-right: 1px solid var(--border);
 	}
 
 	.settings-button {
@@ -292,7 +291,7 @@
 
 	.prompt {
 		padding: 16px 12px;
-		border-left: 1px solid var(--aside-border);
+		border-left: 1px solid var(--border);
 	}
 
 	.prompt.collapsed {
