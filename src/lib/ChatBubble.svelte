@@ -138,7 +138,6 @@
         padding: 0.75rem 1rem;
         border-radius: calc(var(--message-box-size) / 2);
         background: var(--chat-bubble-bg);
-        /* color: white; */
         align-self: flex-start;
         overflow-wrap: anywhere;
     }

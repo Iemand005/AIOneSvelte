@@ -11,8 +11,8 @@ export type { GenerateStats, Backend, ModelSource, GenerateCallbacks, GenerateRe
 
 const BASE_URL = import.meta.env.BASE_URL;
 
-export const threaded = crossOriginIsolated && typeof SharedArrayBuffer !== "undefined";
-export let usingThreads = false;
+const threaded = crossOriginIsolated && typeof SharedArrayBuffer !== "undefined";
+let usingThreads = false;
 
 type AIOneInstance = Awaited<ReturnType<typeof AIOne.create>>;
 
@@ -56,11 +56,9 @@ export class WasmBackend implements Backend {
 	}
 
 	async loadModel(src: ModelSource, onProgress?: (p: number) => void): Promise<boolean> {
-		let data: File;
-		if (src.kind === "file") data = src.file;
-		else throw new Error("WASM backend can't load from a disk path");
+		if (src.kind !== "file") throw new Error("WASM backend can't load from a disk path");
 
-		this.ai.loadModel(data, onProgress);
+		await this.ai.loadModel(src.file, onProgress);
 		return true;
 	}
 
@@ -82,16 +80,13 @@ export class WasmBackend implements Backend {
 		return addGenerationPrompt ? `${prompt}\nassistant:` : prompt;
 	}
 
-	async cancel(): Promise<void> {
-		// this.ai.cancel(); // ADAPT
-	}
+	async cancel(): Promise<void> {}
 
 	async unloadModel(): Promise<void> {
-		this.ai.unloadModel(); // ADAPT
+		await this.ai.unloadModel();
 	}
 
 	async isLoaded(): Promise<boolean> {
-		// return this.ai.isLoaded(); // ADAPT
 		return true;
 	}
 
@@ -100,8 +95,6 @@ export class WasmBackend implements Backend {
 		usingThreads = false;
 	}
 }
-
-// ---- backend selection ----
 
 const isTauri = () => typeof window !== "undefined" && "__TAURI_INTERNALS__" in window;
 

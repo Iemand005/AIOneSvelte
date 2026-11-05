@@ -1,12 +1,10 @@
 <script lang="ts">
 	import { MarkdownRenderer } from "svelte-md-parser";
 	import type { ChatMetadata } from "./aione-native";
-	import type { ChatNode } from "./chat";
 
 	type Props = {
 		chats: ChatMetadata[];
 		currentFolder: string | null;
-		messages: ChatNode[];
 		onselect: (folder: string) => void;
 		onnew: () => void;
 		ondelete: (folder: string) => void;
@@ -129,7 +127,7 @@
 
 	.preview {
 		min-width: 0;
-		max-width: 100%;;
+		max-width: 100%;
 		overflow: hidden;
 		white-space: nowrap;
 		text-overflow: ellipsis;

@@ -27,9 +27,9 @@ function createId(): string {
 }
 
 export async function listChats(): Promise<ChatMetadata[]> {
-	return readChats()
-		.map(({ messages: _messages, activePath: _activePath, ...metadata }) => metadata)
-		.sort((left, right) => right.updated - left.updated);
+	return readChats().map(
+		({ messages: _messages, activePath: _activePath, ...metadata }) => metadata
+	);
 }
 
 export async function createChat(

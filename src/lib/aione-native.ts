@@ -1,29 +1,6 @@
 import { invoke } from "@tauri-apps/api/core";
 import { listen, type UnlistenFn } from "@tauri-apps/api/event";
-import type { ChatPromptMessage } from "./backend";
-
-export interface GenerateStats {
-	promptTokens: number;
-	evaluatedTokens: number;
-	cachedTokens: number;
-	generatedTokens: number;
-	promptEvalMs: number;
-	generationMs: number;
-	promptTokensPerSecond: number;
-	tokensPerSecond: number;
-}
-
-export interface GenerateResult {
-	content: string;
-	stats: GenerateStats;
-}
-
-export interface GenerateCallbacks {
-	onToken?: (token: string, thinking: boolean) => void;
-	onThinkingChange?: (thinking: boolean) => void;
-	onPromptProgress?: (progress: number) => void;
-	onGenerationStart?: () => void;
-}
+import type { ChatPromptMessage, GenerateCallbacks, GenerateResult } from "./backend";
 
 interface TokenEvent {
 	token: string;

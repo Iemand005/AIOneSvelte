@@ -1,12 +1,7 @@
 <script lang="ts">
 	import { initializeAIOne, type Backend } from "./lib/aione";
 	import type { ChatMetadata } from "./lib/aione-native";
-	import {
-		buildActivePath,
-		nodesFromPersisted,
-		type ChatNode,
-		type VersionSelections
-	} from "./lib/chat";
+	import { nodesFromPersisted, type ChatNode, type VersionSelections } from "./lib/chat";
 	import ModelLoader from "./lib/ModelLoader.svelte";
 	import ChatBox from "./lib/ChatBox.svelte";
 	import ChatHistory from "./lib/ChatHistory.svelte";
@@ -32,8 +27,6 @@
 	let historyWidth = $state(220);
 	let promptWidth = $state(300);
 	let view = $state<"chat" | "settings">("chat");
-
-	let activeMessages = $derived(buildActivePath(messages, versionSelections));
 
 	initializeAIOne().then(async one => {
 		ai = one;
@@ -145,7 +138,6 @@
 		<ChatHistory
 			{chats}
 			{currentFolder}
-			messages={activeMessages}
 			onselect={openChat}
 			onnew={newChat}
 			ondelete={deleteChat}

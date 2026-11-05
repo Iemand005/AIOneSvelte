@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { untrack } from "svelte";
 	import ChatBubble from "./ChatBubble.svelte";
 	import MessageInput from "./MessageInput.svelte";
 	import type { ChatMetadata } from "./aione-native";
@@ -61,8 +62,7 @@
 	}
 
 	function scrollToBottom() {
-		followBottom = true;
-		messagesElement.scrollTo({ top: messagesElement.scrollHeight, behavior: "smooth" });
+		messagesElement?.scrollTo({ top: messagesElement.scrollHeight, behavior: "smooth" });
 	}
 
 	$effect(() => {
@@ -72,7 +72,7 @@
 		loading;
 		promptProgress;
 
-		if (followBottom && messagesElement) {
+		if (messagesElement && untrack(() => followBottom)) {
 			messagesElement.scrollTop = messagesElement.scrollHeight;
 		}
 	});
