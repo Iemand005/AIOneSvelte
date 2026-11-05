@@ -5,14 +5,20 @@
 		title: string;
 		side: "left" | "right";
 		width?: number;
+		minWidth?: number;
+		maxWidth?: number;
 		collapsed?: boolean;
 		children: Snippet;
 	};
+
+	const COLLAPSED_WIDTH = 48;
 
 	let {
 		title,
 		side,
 		width = $bindable(side === "left" ? 220 : 300),
+		minWidth = 180,
+		maxWidth = 440,
 		collapsed = $bindable(false),
 		children
 	}: Props = $props();
@@ -24,7 +30,7 @@
 	function startResize(event: PointerEvent) {
 		resizing = true;
 		startX = event.clientX;
-		startWidth = collapsed ? 48 : width;
+		startWidth = collapsed ? COLLAPSED_WIDTH : width;
 		event.preventDefault();
 	}
 
@@ -33,19 +39,20 @@
 		const delta = (event.clientX - startX) * (side === "left" ? 1 : -1);
 		const nextWidth = startWidth + delta;
 
-		if (nextWidth <= 48) {
+		if (nextWidth <= COLLAPSED_WIDTH) {
 			collapsed = true;
-		} else if (nextWidth >= 180) {
-			collapsed = false;
-			width = Math.min(440, nextWidth);
+			return;
 		}
+
+		collapsed = false;
+		width = Math.min(maxWidth, Math.max(minWidth, nextWidth));
 	}
 
 	function resizeWithKeyboard(event: KeyboardEvent) {
 		if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") return;
 		event.preventDefault();
 		const delta = (event.key === "ArrowRight" ? 1 : -1) * (side === "left" ? 1 : -1) * 16;
-		width = Math.max(180, Math.min(440, width + delta));
+		width = Math.min(maxWidth, Math.max(minWidth, width + delta));
 	}
 </script>
 
@@ -56,7 +63,7 @@
 	class:collapsed
 	class:resizing
 	class:left={side === "left"}
-	style:--sidebar-width={`${collapsed ? 48 : width}px`}
+	style:--sidebar-width={`${collapsed ? COLLAPSED_WIDTH : width}px`}
 	aria-label={title}
 >
 	<header>

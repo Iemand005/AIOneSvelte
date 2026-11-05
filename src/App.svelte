@@ -134,7 +134,7 @@
 </svelte:head>
 
 <main class="layout">
-	<Sidebar title="History" side="left" bind:width={historyWidth} bind:collapsed={historyOpen}>
+	<Sidebar title="History" side="left" minWidth={140} bind:width={historyWidth} bind:collapsed={historyOpen}>
 		<ChatHistory
 			{chats}
 			{currentFolder}
