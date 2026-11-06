@@ -12,6 +12,14 @@ interface TokenEvent {
 	thinking: boolean;
 }
 
+export interface NativeGenerateOptions {
+	maxTokens: number;
+	minP: number;
+	topK: number;
+	temperature: number;
+	seed: number;
+}
+
 export interface HardwareDevice {
 	index: number;
 	name: string;
@@ -60,8 +68,7 @@ export async function loadModel(
 
 export async function generate(
 	prompt: string,
-	maxTokens = 512,
-	temperature = 0.8,
+	options: NativeGenerateOptions,
 	callbacks: GenerateCallbacks = {}
 ): Promise<GenerateResult> {
 	const unlisteners: UnlistenFn[] = [];
@@ -101,8 +108,7 @@ export async function generate(
 	try {
 		return await invoke<GenerateResult>("aione_generate", {
 			prompt,
-			maxTokens,
-			temperature
+			options
 		});
 	} finally {
 		for (const unlisten of unlisteners) unlisten();

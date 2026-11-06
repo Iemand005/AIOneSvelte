@@ -22,8 +22,19 @@ export class NativeBackend implements Backend {
     return native.loadModel(src.path, onProgress, options);
   }
   generate(prompt: string, options: GenerateOptions = {}) {
-    const { maxTokens = 512, temperature = 0.8, callbacks = {} } = options;
-    return native.generate(prompt, maxTokens, temperature, callbacks);
+    const {
+      maxTokens = 512,
+      minP = 0.05,
+      topK = 40,
+      temperature = 0.8,
+      seed = 0xffffffff,
+      callbacks = {}
+    } = options;
+    return native.generate(
+      prompt,
+      { maxTokens, minP, topK, temperature, seed },
+      callbacks
+    );
   }
   formatChatPrompt(messages: ChatPromptMessage[], addGenerationPrompt = true) {
     return native.formatChatPrompt(messages, addGenerationPrompt);

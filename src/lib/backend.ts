@@ -27,7 +27,10 @@ export interface LoadOptions {
 
 export interface GenerateOptions {
   maxTokens?: number;
+  minP?: number;
+  topK?: number;
   temperature?: number;
+  seed?: number;
   callbacks?: GenerateCallbacks;
 }
 

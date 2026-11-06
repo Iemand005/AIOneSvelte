@@ -5,7 +5,8 @@ use serde::Serialize;
 use tauri::{AppHandle, Emitter, State};
 
 use aione_rs::{
-    ChatData, ChatMessage, ChatMetadata, GenerateCallbacks, GenerateResult, Session,
+    ChatData, ChatMessage, ChatMetadata, GenerateCallbacks, GenerateOptions, GenerateResult,
+    Session,
 };
 
 #[derive(Default, Clone)]
@@ -90,8 +91,7 @@ pub async fn aione_generate(
     app: AppHandle,
     state: State<'_, AioneState>,
     prompt: String,
-    max_tokens: u32,
-    temperature: f32,
+    options: GenerateOptions,
 ) -> Result<GenerateResult, String> {
     let session_slot = state.session.clone();
     let cancel_generation = state.cancel_generation.clone();
@@ -135,7 +135,7 @@ pub async fn aione_generate(
         callbacks.should_stop = Some(Box::new(move || cancel_flag.load(Ordering::Relaxed)));
 
         session
-            .generate(&prompt, max_tokens, temperature, &mut callbacks)
+            .generate(&prompt, options, &mut callbacks)
             .map_err(|error| error.to_string())
     })
     .await
