@@ -17,6 +17,7 @@
 		ai: Backend | null;
 		modelLoading?: boolean;
 		outputTokens?: number;
+		temperature?: number;
 		systemPrompt?: string;
 		messages?: ChatNode[];
 		versionSelections?: VersionSelections;
@@ -35,6 +36,7 @@
 		ai = $bindable(null),
 		modelLoading = false,
 		outputTokens = 512,
+		temperature = 0.8,
 		systemPrompt = $bindable(""),
 		messages = $bindable<ChatNode[]>([]),
 		versionSelections = $bindable<VersionSelections>({}),
@@ -120,21 +122,25 @@
 
 		try {
 			const promptText = await backend.formatChatPrompt(promptMessages, true);
-			const result = await backend.generate(promptText, outputTokens, {
-				onPromptProgress: value => {
-					canStopGeneration = backend.canCancel;
-					onPromptProgress?.(value);
-				},
-				onGenerationStart: () => {
-					canStopGeneration = backend.canCancel;
-					onPromptProgress?.(1);
-				},
-				onThinkingChange: value => {
-					thinking = value;
-				},
-				onToken: (token, isThinking) => {
-					streaming = true;
-					appendAssistantToken(assistant, token, isThinking);
+			const result = await backend.generate(promptText, {
+				maxTokens: outputTokens,
+				temperature,
+				callbacks: {
+					onPromptProgress: value => {
+						canStopGeneration = backend.canCancel;
+						onPromptProgress?.(value);
+					},
+					onGenerationStart: () => {
+						canStopGeneration = backend.canCancel;
+						onPromptProgress?.(1);
+					},
+					onThinkingChange: value => {
+						thinking = value;
+					},
+					onToken: (token, isThinking) => {
+						streaming = true;
+						appendAssistantToken(assistant, token, isThinking);
+					}
 				}
 			});
 
@@ -393,17 +399,21 @@
 		generating = singleToken ? "token" : "full";
 
 		try {
-			const result = await ai.generate(generationPrompt, maxTokens, {
-				onPromptProgress: () => {
-					canStopGeneration = ai.canCancel;
-				},
-				onGenerationStart: () => {
-					canStopGeneration = ai.canCancel;
-				},
-				onToken: (token, isThinking) => {
-					if (isThinking) return;
-					streamed += token;
-					prompt = hasDraft ? `${draft}${streamed}` : streamed;
+			const result = await ai.generate(generationPrompt, {
+				maxTokens,
+				temperature,
+				callbacks: {
+					onPromptProgress: () => {
+						canStopGeneration = ai.canCancel;
+					},
+					onGenerationStart: () => {
+						canStopGeneration = ai.canCancel;
+					},
+					onToken: (token, isThinking) => {
+						if (isThinking) return;
+						streamed += token;
+						prompt = hasDraft ? `${draft}${streamed}` : streamed;
+					}
 				}
 			});
 

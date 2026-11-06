@@ -64,6 +64,7 @@ pub async fn aione_load_model(
     app: AppHandle,
     state: State<'_, AioneState>,
     path: String,
+    no_host: bool,
 ) -> Result<bool, String> {
     let session_slot = state.session.clone();
     drop(state);
@@ -74,7 +75,7 @@ pub async fn aione_load_model(
 
         let progress_app = app.clone();
         session
-            .load_model(&path, move |progress| {
+            .load_model(&path, no_host, move |progress| {
                 let _ = progress_app.emit("aione-model-progress", progress);
             })
             .map_err(|error| error.to_string())?;
@@ -90,6 +91,7 @@ pub async fn aione_generate(
     state: State<'_, AioneState>,
     prompt: String,
     max_tokens: u32,
+    temperature: f32,
 ) -> Result<GenerateResult, String> {
     let session_slot = state.session.clone();
     let cancel_generation = state.cancel_generation.clone();
@@ -133,7 +135,7 @@ pub async fn aione_generate(
         callbacks.should_stop = Some(Box::new(move || cancel_flag.load(Ordering::Relaxed)));
 
         session
-            .generate(&prompt, max_tokens, &mut callbacks)
+            .generate(&prompt, max_tokens, temperature, &mut callbacks)
             .map_err(|error| error.to_string())
     })
     .await

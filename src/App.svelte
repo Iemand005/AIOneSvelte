@@ -24,6 +24,7 @@
 	let promptOpen = $state(true);
 	let historyOpen = $state(true);
 	let outputTokens = $state(512);
+	let temperature = $state(0.8);
 	let historyWidth = $state(220);
 	let promptWidth = $state(300);
 	let view = $state<"chat" | "settings">("chat");
@@ -164,6 +165,7 @@
 					{ai}
 					modelLoading={modelLoading}
 					{outputTokens}
+					{temperature}
 					bind:systemPrompt
 					bind:messages
 					bind:versionSelections
@@ -185,6 +187,8 @@
 			<h2>Generation</h2>
 			<label for="output-tokens">Maximum output tokens: {outputTokens}</label>
 			<input id="output-tokens" type="range" min="64" max="2048" step="64" bind:value={outputTokens} />
+			<label for="temperature">Temperature: {temperature.toFixed(2)}</label>
+			<input id="temperature" type="range" min="0" max="2" step="0.05" bind:value={temperature} />
 		</section>
 	</Sidebar>
 </main>

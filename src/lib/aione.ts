@@ -3,11 +3,19 @@ import type {
 	Backend,
 	ChatPromptMessage,
 	GenerateCallbacks,
+	GenerateOptions,
 	GenerateResult,
 	ModelSource,
 } from "./backend";
 
-export type { GenerateStats, Backend, ModelSource, GenerateCallbacks, GenerateResult };
+export type {
+	GenerateStats,
+	Backend,
+	ModelSource,
+	GenerateCallbacks,
+	GenerateOptions,
+	GenerateResult,
+};
 
 const BASE_URL = import.meta.env.BASE_URL;
 
@@ -64,10 +72,9 @@ export class WasmBackend implements Backend {
 
 	generate(
 		prompt: string,
-		maxTokens = 512,
-		cb: GenerateCallbacks = {}
+		{ maxTokens = 512, callbacks = {} }: GenerateOptions = {}
 	): Promise<GenerateResult> {
-		return this.ai.generate(prompt, maxTokens, cb);
+		return this.ai.generate(prompt, maxTokens, callbacks);
 	}
 
 	async formatChatPrompt(

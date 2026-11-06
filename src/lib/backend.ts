@@ -21,11 +21,21 @@ export type ModelSource =
   | { kind: "file"; file: File }
   | { kind: "url"; url: string };
 
+export interface LoadOptions {
+  noHost?: boolean;
+}
+
+export interface GenerateOptions {
+  maxTokens?: number;
+  temperature?: number;
+  callbacks?: GenerateCallbacks;
+}
+
 export interface Backend {
   readonly kind: "native" | "wasm";
   readonly canCancel: boolean;
-  loadModel(src: ModelSource, onProgress?: (p: number) => void): Promise<boolean>;
-  generate(prompt: string, maxTokens?: number, cb?: GenerateCallbacks): Promise<GenerateResult>;
+  loadModel(src: ModelSource, onProgress?: (p: number) => void, options?: LoadOptions): Promise<boolean>;
+  generate(prompt: string, options?: GenerateOptions): Promise<GenerateResult>;
   formatChatPrompt(messages: ChatPromptMessage[], addGenerationPrompt?: boolean): Promise<string>;
   cancel(): Promise<void>;
   unloadModel(): Promise<void>;

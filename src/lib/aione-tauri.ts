@@ -1,6 +1,12 @@
 import { invoke } from "@tauri-apps/api/core";
 import * as native from "./aione-native"; // your existing functions
-import type { Backend, ChatPromptMessage, ModelSource, GenerateCallbacks } from "./backend";
+import type {
+  Backend,
+  ChatPromptMessage,
+  GenerateOptions,
+  LoadOptions,
+  ModelSource
+} from "./backend";
 
 export class NativeBackend implements Backend {
   readonly kind = "native" as const;
@@ -11,12 +17,13 @@ export class NativeBackend implements Backend {
     return new NativeBackend();
   }
 
-  loadModel(src: ModelSource, onProgress?: (p: number) => void) {
+  loadModel(src: ModelSource, onProgress?: (p: number) => void, options: LoadOptions = {}) {
     if (src.kind !== "path") throw new Error("Native backend needs a file path");
-    return native.loadModel(src.path, onProgress);
+    return native.loadModel(src.path, onProgress, options);
   }
-  generate(prompt: string, maxTokens = 512, cb: GenerateCallbacks = {}) {
-    return native.generate(prompt, maxTokens, cb);
+  generate(prompt: string, options: GenerateOptions = {}) {
+    const { maxTokens = 512, temperature = 0.8, callbacks = {} } = options;
+    return native.generate(prompt, maxTokens, temperature, callbacks);
   }
   formatChatPrompt(messages: ChatPromptMessage[], addGenerationPrompt = true) {
     return native.formatChatPrompt(messages, addGenerationPrompt);

@@ -1,6 +1,11 @@
 import { invoke } from "@tauri-apps/api/core";
 import { listen, type UnlistenFn } from "@tauri-apps/api/event";
-import type { ChatPromptMessage, GenerateCallbacks, GenerateResult } from "./backend";
+import type {
+	ChatPromptMessage,
+	GenerateCallbacks,
+	GenerateResult,
+	LoadOptions
+} from "./backend";
 
 interface TokenEvent {
 	token: string;
@@ -32,7 +37,8 @@ export async function createSession(): Promise<void> {
 
 export async function loadModel(
 	path: string,
-	onProgress?: (progress: number) => void
+	onProgress?: (progress: number) => void,
+	options: LoadOptions = {}
 ): Promise<boolean> {
 	let unlisten: UnlistenFn | undefined;
 
@@ -43,7 +49,10 @@ export async function loadModel(
 	}
 
 	try {
-		return await invoke<boolean>("aione_load_model", { path });
+		return await invoke<boolean>("aione_load_model", {
+			path,
+			noHost: options.noHost ?? false
+		});
 	} finally {
 		unlisten?.();
 	}
@@ -52,6 +61,7 @@ export async function loadModel(
 export async function generate(
 	prompt: string,
 	maxTokens = 512,
+	temperature = 0.8,
 	callbacks: GenerateCallbacks = {}
 ): Promise<GenerateResult> {
 	const unlisteners: UnlistenFn[] = [];
@@ -91,7 +101,8 @@ export async function generate(
 	try {
 		return await invoke<GenerateResult>("aione_generate", {
 			prompt,
-			maxTokens
+			maxTokens,
+			temperature
 		});
 	} finally {
 		for (const unlisten of unlisteners) unlisten();

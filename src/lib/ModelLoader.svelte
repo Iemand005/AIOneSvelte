@@ -17,6 +17,7 @@
 	let progress = $state(0);
 	let dragActive = $state(false);
 	let modelName = $state<string | null>(null);
+	let noHost = $state(false);
 
 	function sourceName(src: ModelSource) {
 		if (src.kind === "file") return src.file.name;
@@ -32,7 +33,7 @@
 		progress = 0;
 
 		try {
-			await ai.loadModel(src, value => (progress = value));
+			await ai.loadModel(src, value => (progress = value), { noHost });
 			loaded = true;
 		} catch (error) {
 			onerror?.(error);
@@ -147,6 +148,16 @@
 		/>
 	{/if}
 
+	{#if ai?.kind === "native"}
+		<label
+			class="memory-option"
+			title="Load model weights directly into VRAM without a host-memory copy. Applies to the next model load."
+		>
+			<input type="checkbox" bind:checked={noHost} disabled={loading} />
+			<span>VRAM only</span>
+		</label>
+	{/if}
+
 	<button type="button" class="unload" onclick={unloadModel} disabled={!loaded}>Eject</button>
 
 	{#if loading}
@@ -190,6 +201,26 @@
 	button:disabled {
 		opacity: 0.5;
 		cursor: default;
+	}
+
+	.memory-option {
+		display: flex;
+		align-items: center;
+		gap: 6px;
+		padding: 0 10px;
+		color: var(--muted);
+		font-size: 0.8rem;
+		white-space: nowrap;
+		cursor: pointer;
+	}
+
+	.memory-option:hover {
+		color: var(--text-h);
+	}
+
+	.memory-option input {
+		accent-color: var(--focus);
+		cursor: pointer;
 	}
 
 	.drop-overlay {
