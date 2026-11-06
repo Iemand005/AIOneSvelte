@@ -23,6 +23,7 @@ export type ModelSource =
 
 export interface LoadOptions {
   noHost?: boolean;
+  contextLength?: number;
 }
 
 export interface GenerateOptions {

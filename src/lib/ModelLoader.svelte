@@ -18,6 +18,16 @@
 	let dragActive = $state(false);
 	let modelName = $state<string | null>(null);
 	let noHost = $state(false);
+	let contextLength = $state(4096);
+	let settingsOpen = $state(false);
+	let settingsRoot = $state<HTMLElement | null>(null);
+
+	function closeSettings(event: PointerEvent) {
+		if (!settingsOpen) return;
+		const target = event.target;
+		if (target instanceof Node && settingsRoot?.contains(target)) return;
+		settingsOpen = false;
+	}
 
 	function sourceName(src: ModelSource) {
 		if (src.kind === "file") return src.file.name;
@@ -33,7 +43,10 @@
 		progress = 0;
 
 		try {
-			await ai.loadModel(src, value => (progress = value), { noHost });
+			await ai.loadModel(src, value => (progress = value), {
+				noHost,
+				contextLength: Number(contextLength) || 4096
+			});
 			loaded = true;
 		} catch (error) {
 			onerror?.(error);
@@ -118,7 +131,12 @@
 	});
 </script>
 
-<svelte:window ondragover={handleDragOver} ondrop={handleDrop} ondragleave={handleDragLeave} />
+<svelte:window
+	ondragover={handleDragOver}
+	ondrop={handleDrop}
+	ondragleave={handleDragLeave}
+	onpointerdown={closeSettings}
+/>
 
 {#if dragActive}
 	<div class="drop-overlay" aria-live="polite">
@@ -129,45 +147,101 @@
 	</div>
 {/if}
 
-<form>
-	{#if ai?.kind === "native"}
-		<button type="button" onclick={pickNative}>{modelName ?? "Choose model…"}</button>
-	{:else}
-		<label for="model-file" class="button model-button" class:active={loaded}>
-			{modelName ?? "Choose model file!"}
-		</label>
-		<input
-			id="model-file"
-			type="file"
-			accept=".gguf"
-			hidden
-			onchange={event => {
-				const file = event.currentTarget.files?.[0];
-				if (file) pickFile(file);
-			}}
-		/>
-	{/if}
+<div class="loader" bind:this={settingsRoot}>
+	<form>
+		{#if ai?.kind === "native"}
+			<button type="button" onclick={pickNative}>{modelName ?? "Choose model."}</button>
+		{:else}
+			<label for="model-file" class="button model-button" class:active={loaded}>
+				{modelName ?? "Choose model file!"}
+			</label>
+			<input
+				id="model-file"
+				type="file"
+				accept=".gguf"
+				hidden
+				onchange={event => {
+					const file = event.currentTarget.files?.[0];
+					if (file) pickFile(file);
+				}}
+			/>
+		{/if}
 
-	{#if ai?.kind === "native"}
-		<label
-			class="memory-option"
-			title="Load model weights directly into VRAM without a host-memory copy. Applies to the next model load."
-		>
-			<input type="checkbox" bind:checked={noHost} disabled={loading} />
-			<span>VRAM only</span>
-		</label>
-	{/if}
+		{#if ai?.kind === "native"}
+			<button
+				type="button"
+				class="settings-toggle"
+				class:active={settingsOpen}
+				aria-label="Model loading settings"
+				aria-expanded={settingsOpen}
+				title="Model loading settings"
+				onclick={() => (settingsOpen = !settingsOpen)}
+			>
+				<svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true">
+					<path
+						d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.38a2 2 0 0 0-.73-2.73l-.15-.09a2 2 0 0 1-1-1.74v-.51a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="1.8"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+					/>
+					<circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.8" />
+				</svg>
+			</button>
+		{/if}
 
-	<button type="button" class="unload" onclick={unloadModel} disabled={!loaded}>Eject</button>
+		<button type="button" class="unload" onclick={unloadModel} disabled={!loaded}>Eject</button>
 
-	{#if loading}
-		<progress class="progress" value={Math.round(progress * 100)} max="100"></progress>
+		{#if loading}
+			<progress class="progress" value={Math.round(progress * 100)} max="100"></progress>
+		{/if}
+	</form>
+
+	{#if ai?.kind === "native" && settingsOpen}
+		<div class="settings-menu" role="dialog" aria-label="Model loading settings">
+			<div class="settings-heading">
+				<strong>Model loading</strong>
+				<span>Applied on next load</span>
+			</div>
+
+			<label class="setting-row">
+				<span>
+					<strong>VRAM only</strong>
+					<small>Don't keep a copy of the model in RAM</small>
+				</span>
+				<input type="checkbox" bind:checked={noHost} disabled={loading} />
+			</label>
+
+			<label class="setting-row">
+				<span>
+					<strong>Context length</strong>
+					<small>Tokens the model can see at once</small>
+				</span>
+				<input
+					class="number"
+					type="number"
+					min="512"
+					max="131072"
+					step="512"
+					bind:value={contextLength}
+					disabled={loading}
+				/>
+			</label>
+		</div>
 	{/if}
-</form>
+</div>
 
 <style>
 	label.active {
 		background-color: green;
+	}
+
+	.loader {
+		position: relative;
+		display: flex;
+		flex: 1;
+		min-width: 0;
 	}
 
 	form {
@@ -203,24 +277,103 @@
 		cursor: default;
 	}
 
-	.memory-option {
+	.settings-toggle {
+		display: grid;
+		place-items: center;
+		flex: none;
+		width: 44px;
+		padding: 0;
+		color: var(--muted);
+	}
+
+	.settings-toggle:hover,
+	.settings-toggle.active {
+		color: var(--text-h);
+		background: var(--surface-hover);
+	}
+
+	.settings-menu {
+		position: absolute;
+		z-index: 30;
+		top: calc(100% + 8px);
+		right: 0;
+		display: flex;
+		flex-direction: column;
+		gap: 12px;
+		width: min(310px, calc(100vw - 32px));
+		padding: 14px;
+		border: 1px solid var(--border);
+		border-radius: 12px;
+		background: var(--code-bg);
+		box-shadow: 0 18px 50px rgb(0 0 0 / 28%);
+		box-sizing: border-box;
+	}
+
+	.settings-heading {
+		display: flex;
+		flex-direction: column;
+		gap: 2px;
+	}
+
+	.settings-heading strong {
+		color: var(--text-h);
+		font-size: 0.9rem;
+	}
+
+	.settings-heading span,
+	.setting-row small {
+		color: var(--muted);
+		font-size: 0.75rem;
+	}
+
+	.setting-row {
 		display: flex;
 		align-items: center;
-		gap: 6px;
-		padding: 0 10px;
-		color: var(--muted);
-		font-size: 0.8rem;
-		white-space: nowrap;
+		justify-content: space-between;
+		gap: 14px;
 		cursor: pointer;
 	}
 
-	.memory-option:hover {
-		color: var(--text-h);
+	.setting-row > span {
+		display: flex;
+		flex-direction: column;
+		gap: 2px;
 	}
 
-	.memory-option input {
+	.setting-row strong {
+		color: var(--text-h);
+		font-size: 0.82rem;
+		font-weight: 500;
+	}
+
+	.setting-row input[type="checkbox"] {
+		flex: none;
+		width: 17px;
+		height: 17px;
 		accent-color: var(--focus);
 		cursor: pointer;
+	}
+
+	.setting-row .number {
+		width: 96px;
+		padding: 7px 8px;
+		border: 1px solid var(--border);
+		border-radius: 7px;
+		background: var(--surface);
+		color: var(--text-h);
+		font: inherit;
+		font-size: 0.82rem;
+		box-sizing: border-box;
+	}
+
+	.setting-row .number:focus {
+		outline: none;
+		border-color: var(--focus);
+	}
+
+	.setting-row input:disabled {
+		opacity: 0.5;
+		cursor: default;
 	}
 
 	.drop-overlay {

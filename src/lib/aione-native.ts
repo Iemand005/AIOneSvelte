@@ -59,7 +59,10 @@ export async function loadModel(
 	try {
 		return await invoke<boolean>("aione_load_model", {
 			path,
-			noHost: options.noHost ?? false
+			options: {
+				noHost: options.noHost ?? false,
+				contextLength: options.contextLength ?? 4096
+			}
 		});
 	} finally {
 		unlisten?.();

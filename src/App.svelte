@@ -183,10 +183,12 @@
 
 	<Sidebar title="Prompt & generation" side="right" bind:width={promptWidth} bind:collapsed={promptOpen}>
 		<SystemPrompt bind:systemPrompt />
-		<section class="generation-options">
-			<h2>Generation</h2>
+		<section class="output-tokens">
 			<label for="output-tokens">Maximum output tokens: {outputTokens}</label>
 			<input id="output-tokens" type="range" min="64" max="2048" step="64" bind:value={outputTokens} />
+		</section>
+		<section class="generation-options">
+			<h2>Generation</h2>
 			<label for="temperature">Temperature: {temperature.toFixed(2)}</label>
 			<input id="temperature" type="range" min="0" max="2" step="0.05" bind:value={temperature} />
 		</section>
@@ -226,10 +228,14 @@
 		color: var(--text-h);
 	}
 
+	.output-tokens,
 	.generation-options {
 		display: flex;
 		flex-direction: column;
 		gap: 8px;
+	}
+
+	.generation-options {
 		padding-top: 12px;
 		border-top: 1px solid var(--border);
 	}

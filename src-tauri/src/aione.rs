@@ -6,7 +6,7 @@ use tauri::{AppHandle, Emitter, State};
 
 use aione_rs::{
     ChatData, ChatMessage, ChatMetadata, GenerateCallbacks, GenerateOptions, GenerateResult,
-    Session,
+    LoadOptions, Session,
 };
 
 #[derive(Default, Clone)]
@@ -65,7 +65,7 @@ pub async fn aione_load_model(
     app: AppHandle,
     state: State<'_, AioneState>,
     path: String,
-    no_host: bool,
+    options: LoadOptions,
 ) -> Result<bool, String> {
     let session_slot = state.session.clone();
     drop(state);
@@ -76,7 +76,7 @@ pub async fn aione_load_model(
 
         let progress_app = app.clone();
         session
-            .load_model(&path, no_host, move |progress| {
+            .load_model(&path, options, move |progress| {
                 let _ = progress_app.emit("aione-model-progress", progress);
             })
             .map_err(|error| error.to_string())?;
