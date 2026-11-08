@@ -1,5 +1,10 @@
 <script lang="ts">
-	import type { Backend, TtsModelSource, TtsSynthesisResult } from "./backend";
+	import type {
+		Backend,
+		TtsModelSource,
+		TtsProgressUpdate,
+		TtsSynthesisResult
+	} from "./backend";
 
 	type Props = {
 		ai: Backend | null;
@@ -20,6 +25,9 @@
 	let error = $state<string | null>(null);
 	let audioUrl = $state<string | null>(null);
 	let result = $state<TtsSynthesisResult | null>(null);
+	let progressMessage = $state("");
+	let progressValue = $state<number | null>(null);
+	let elapsedSeconds = $state(0);
 
 	const canLoad = $derived(
 		ai?.kind === "native"
@@ -61,6 +69,47 @@
 		result = null;
 	}
 
+	function handleProgress(update: TtsProgressUpdate) {
+		const percent = update.progress;
+		progressValue = percent;
+		elapsedSeconds = Number(update.elapsedSeconds ?? elapsedSeconds);
+
+		switch (update.stage) {
+			case "initializing-runtime":
+				progressMessage = `Preparing runtime; model ${(update.modelBytes! / 1e9).toFixed(2)} GB, mmproj ${(update.mmprojBytes! / 1e9).toFixed(2)} GB`;
+				break;
+			case "loading-model":
+				progressMessage = "Starting model load";
+				break;
+			case "loading-backbone":
+				progressMessage = `Loading TTS backbone: ${percent}%`;
+				break;
+			case "loading-mmproj":
+				progressMessage = `Loading mmproj: ${percent}%`;
+				break;
+			case "loaded":
+				progressMessage = "Model files loaded; checking voices";
+				break;
+			case "processing-prompt":
+				progressMessage = "Processing prompt";
+				break;
+			case "synthesis":
+				progressMessage = `Generating audio: ${percent} frames`;
+				break;
+			default:
+				progressMessage = update.stage;
+		}
+
+		const isModelFileProgress =
+			update.stage === "loading-backbone" || update.stage === "loading-mmproj";
+		const shouldLog = isModelFileProgress
+			? percent === null || percent === 0 || percent === 100 || percent! % 5 === 0
+			: update.stage !== "synthesis" || Number(percent) % 10 === 0;
+		if (shouldLog) {
+			console.info("[AIOne TTS UI]", progressMessage, update);
+		}
+	}
+
 	async function loadTts() {
 		if (!ai || !canLoad) return;
 
@@ -78,17 +127,46 @@
 
 		loading = true;
 		error = null;
+		progressValue = null;
+		elapsedSeconds = 0;
+		progressMessage = "Starting TTS load";
 		releaseAudio();
+		const startedAt = performance.now();
+		let lastHeartbeat = 0;
+		const heartbeat = window.setInterval(() => {
+			elapsedSeconds = Math.floor((performance.now() - startedAt) / 1000);
+			if (elapsedSeconds > 0 && elapsedSeconds % 15 === 0 && elapsedSeconds !== lastHeartbeat) {
+				lastHeartbeat = elapsedSeconds;
+				console.warn("[AIOne TTS UI] Still waiting for model load", {
+					elapsedSeconds,
+					lastProgress: progressMessage
+				});
+			}
+		}, 1000);
+		console.info("[AIOne TTS UI] Starting model load", {
+			backend: ai.kind,
+			model: src.kind === "file" ? { name: src.modelFile.name, bytes: src.modelFile.size } : src.modelPath,
+			mmproj: src.kind === "file" ? { name: src.mmprojFile.name, bytes: src.mmprojFile.size } : src.mmprojPath
+		});
 
 		try {
-			await ai.ttsLoadModel(src);
+			await ai.ttsLoadModel(src, {}, handleProgress);
 			loaded = await ai.ttsIsLoaded();
 			voices = loaded ? await ai.ttsVoices() : [];
 			voice = voices[0] ?? "";
+			progressMessage = loaded ? "TTS model ready" : "Load finished, but model is not ready";
+			console.info("[AIOne TTS UI] Model load finished", {
+				loaded,
+				voices: voices.length,
+				elapsedSeconds: ((performance.now() - startedAt) / 1000).toFixed(1)
+			});
 		} catch (cause) {
 			error = String(cause);
 			loaded = false;
+			progressMessage = "Model load failed";
+			console.error("[AIOne TTS UI] Model load failed", cause);
 		} finally {
+			window.clearInterval(heartbeat);
 			loading = false;
 		}
 	}
@@ -98,12 +176,15 @@
 
 		loading = true;
 		error = null;
+		progressMessage = "Unloading TTS model";
 		releaseAudio();
 
 		try {
 			await ai.ttsUnloadModel();
+			progressMessage = "TTS model unloaded";
 		} catch (cause) {
 			error = String(cause);
+			console.error("[AIOne TTS UI] Model unload failed", cause);
 		} finally {
 			loaded = false;
 			voices = [];
@@ -117,13 +198,31 @@
 
 		synthesizing = true;
 		error = null;
+		progressMessage = "Starting audio generation";
+		progressValue = null;
 		releaseAudio();
+		const startedAt = performance.now();
+		let lastHeartbeat = 0;
+		const heartbeat = window.setInterval(() => {
+			elapsedSeconds = Math.floor((performance.now() - startedAt) / 1000);
+			if (elapsedSeconds > 0 && elapsedSeconds % 15 === 0 && elapsedSeconds !== lastHeartbeat) {
+				lastHeartbeat = elapsedSeconds;
+				console.warn("[AIOne TTS UI] Synthesis still running", {
+					elapsedSeconds,
+					lastProgress: progressMessage
+				});
+			}
+		}, 1000);
+		console.info("[AIOne TTS UI] Starting synthesis", {
+			promptLength: prompt.length,
+			voice: voice || "(default)"
+		});
 
 		try {
 			const generated = await ai.ttsSynthesize(prompt, {
 				outputType: "wav",
 				voice: voice ? { builtInName: voice } : undefined
-			});
+			}, handleProgress);
 
 			result = generated;
 			audioUrl = URL.createObjectURL(
@@ -131,9 +230,19 @@
 					type: generated.audioType === "wav" ? "audio/wav" : "audio/L16"
 				})
 			);
+			progressMessage = "Audio generated";
+			console.info("[AIOne TTS UI] Synthesis finished", {
+				samples: generated.samples,
+				sampleRate: generated.sampleRate,
+				stats: generated.stats,
+				elapsedSeconds: ((performance.now() - startedAt) / 1000).toFixed(1)
+			});
 		} catch (cause) {
 			error = String(cause);
+			progressMessage = "Audio generation failed";
+			console.error("[AIOne TTS UI] Synthesis failed", cause);
 		} finally {
+			window.clearInterval(heartbeat);
 			synthesizing = false;
 		}
 	}
@@ -181,6 +290,18 @@
 			Unload
 		</button>
 	</p>
+
+	{#if progressMessage}
+		<p role="status" aria-live="polite">
+			{progressMessage}
+			{#if loading || synthesizing}
+				({elapsedSeconds}s elapsed)
+			{/if}
+		</p>
+	{/if}
+	{#if loading && progressValue !== null}
+		<progress value={progressValue} max="100" aria-label={progressMessage}></progress>
+	{/if}
 
 	<p>Loaded: {loaded ? "yes" : "no"}</p>
 

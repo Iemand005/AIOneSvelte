@@ -8,6 +8,7 @@ import type {
 	ModelSource,
 	TtsLoadOptions,
 	TtsModelSource,
+	TtsProgressUpdate,
 	TtsSynthesisOptions,
 	TtsSynthesisResult,
 } from "./backend";
@@ -32,11 +33,13 @@ type TtsCapableAIOne = AIOneInstance & {
 	ttsLoadModel(
 		modelFile: File,
 		mmprojFile: File,
-		options?: TtsLoadOptions
+		options?: TtsLoadOptions,
+		onProgress?: (update: TtsProgressUpdate) => void
 	): Promise<void>;
 	ttsSynthesize(
 		prompt: string,
-		options?: TtsSynthesisOptions
+		options?: TtsSynthesisOptions,
+		onProgress?: (update: TtsProgressUpdate) => void
 	): Promise<TtsSynthesisResult>;
 	ttsUnloadModel(): Promise<void>;
 	ttsVoices(): Promise<string[]>;
@@ -116,11 +119,15 @@ export class WasmBackend implements Backend {
 		return true;
 	}
 
-	async ttsLoadModel(src: TtsModelSource, options: TtsLoadOptions = {}): Promise<boolean> {
+	async ttsLoadModel(
+		src: TtsModelSource,
+		options: TtsLoadOptions = {},
+		onProgress?: (update: TtsProgressUpdate) => void
+	): Promise<boolean> {
 		if (src.kind !== "file") throw new Error("WASM backend can't load from a disk path");
 
 		const api = this.ai as unknown as TtsCapableAIOne;
-		await api.ttsLoadModel(src.modelFile, src.mmprojFile, options);
+		await api.ttsLoadModel(src.modelFile, src.mmprojFile, options, onProgress);
 		return api.ttsIsLoaded();
 	}
 
@@ -138,9 +145,10 @@ export class WasmBackend implements Backend {
 
 	ttsSynthesize(
 		prompt: string,
-		options: TtsSynthesisOptions = {}
+		options: TtsSynthesisOptions = {},
+		onProgress?: (update: TtsProgressUpdate) => void
 	): Promise<TtsSynthesisResult> {
-		return (this.ai as unknown as TtsCapableAIOne).ttsSynthesize(prompt, options);
+		return (this.ai as unknown as TtsCapableAIOne).ttsSynthesize(prompt, options, onProgress);
 	}
 
 	async close(): Promise<void> {

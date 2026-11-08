@@ -13,6 +13,17 @@ export interface TtsLoadOptions {
   device?: TtsDevice;
 }
 
+export interface TtsProgressUpdate {
+  stage: string;
+  progress: number | null;
+  elapsedSeconds?: string;
+  frame?: number;
+  model?: string;
+  modelBytes?: number;
+  mmproj?: string;
+  mmprojBytes?: number;
+}
+
 export interface TtsVoice {
   referenceFile?: string;
   builtInName?: string;
@@ -90,9 +101,17 @@ export interface Backend {
   isLoaded(): Promise<boolean>;
   close(): Promise<void>;
 
-  ttsLoadModel(src: TtsModelSource, options?: TtsLoadOptions): Promise<boolean>;
+  ttsLoadModel(
+    src: TtsModelSource,
+    options?: TtsLoadOptions,
+    onProgress?: (update: TtsProgressUpdate) => void
+  ): Promise<boolean>;
   ttsUnloadModel(): Promise<void>;
   ttsIsLoaded(): Promise<boolean>;
   ttsVoices(): Promise<string[]>;
-  ttsSynthesize(prompt: string, options?: TtsSynthesisOptions): Promise<TtsSynthesisResult>;
+  ttsSynthesize(
+    prompt: string,
+    options?: TtsSynthesisOptions,
+    onProgress?: (update: TtsProgressUpdate) => void
+  ): Promise<TtsSynthesisResult>;
 }
