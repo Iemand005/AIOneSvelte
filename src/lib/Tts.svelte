@@ -84,8 +84,14 @@
 			case "loading-backbone":
 				progressMessage = `Loading TTS backbone: ${percent}%`;
 				break;
+			case "backbone-ready":
+				progressMessage = "Backbone loaded; starting mmproj";
+				break;
 			case "loading-mmproj":
 				progressMessage = `Loading mmproj: ${percent}%`;
+				break;
+			case "mmproj-ready":
+				progressMessage = "mmproj loaded; finalizing model setup";
 				break;
 			case "loaded":
 				progressMessage = "Model files loaded; checking voices";
@@ -101,7 +107,10 @@
 		}
 
 		const isModelFileProgress =
-			update.stage === "loading-backbone" || update.stage === "loading-mmproj";
+			update.stage === "loading-backbone" ||
+			update.stage === "backbone-ready" ||
+			update.stage === "loading-mmproj" ||
+			update.stage === "mmproj-ready";
 		const shouldLog = isModelFileProgress
 			? percent === null || percent === 0 || percent === 100 || percent! % 5 === 0
 			: update.stage !== "synthesis" || Number(percent) % 10 === 0;
