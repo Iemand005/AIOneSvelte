@@ -5,7 +5,11 @@ import type {
   ChatPromptMessage,
   GenerateOptions,
   LoadOptions,
-  ModelSource
+  ModelSource,
+  TtsLoadOptions,
+  TtsModelSource,
+  TtsSynthesisOptions,
+  TtsSynthesisResult
 } from "./backend";
 
 export class NativeBackend implements Backend {
@@ -43,4 +47,15 @@ export class NativeBackend implements Backend {
   unloadModel() { return native.unloadModel(); }
   isLoaded() { return native.isLoaded(); }
   close() { return native.destroySession(); }
+
+  ttsLoadModel(src: TtsModelSource, options: TtsLoadOptions = {}) {
+    if (src.kind !== "path") throw new Error("Native backend needs a file path");
+    return native.ttsLoadModel(src.modelPath, src.mmprojPath, options);
+  }
+  ttsUnloadModel() { return native.ttsUnloadModel(); }
+  ttsIsLoaded() { return native.ttsIsLoaded(); }
+  ttsVoices() { return native.ttsVoices(); }
+  ttsSynthesize(prompt: string, options: TtsSynthesisOptions = {}): Promise<TtsSynthesisResult> {
+    return native.ttsSynthesize(prompt, options);
+  }
 }

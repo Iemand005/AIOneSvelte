@@ -4,7 +4,12 @@ import type {
 	ChatPromptMessage,
 	GenerateCallbacks,
 	GenerateResult,
-	LoadOptions
+	LoadOptions,
+	TtsAudioType,
+	TtsLoadOptions,
+	TtsSynthesisOptions,
+	TtsSynthesisResult,
+	TtsSynthesisStats
 } from "./backend";
 
 interface TokenEvent {
@@ -208,4 +213,50 @@ export async function updateChatMetadata(
 
 export async function deleteChat(folder: string): Promise<void> {
 	await invoke("aione_chat_delete", { folder });
+}
+
+interface NativeTtsSynthesisResult {
+	sampleRate: number;
+	samples: number;
+	audioType: TtsAudioType;
+	audio: string;
+	stats: TtsSynthesisStats;
+}
+
+export async function ttsLoadModel(
+	modelPath: string,
+	mmprojPath: string,
+	options: TtsLoadOptions = {}
+): Promise<boolean> {
+	return invoke<boolean>("aione_tts_load_model", { modelPath, mmprojPath, options });
+}
+
+export async function ttsUnloadModel(): Promise<void> {
+	await invoke("aione_tts_unload_model");
+}
+
+export async function ttsIsLoaded(): Promise<boolean> {
+	return invoke<boolean>("aione_tts_is_loaded");
+}
+
+export async function ttsVoices(): Promise<string[]> {
+	return invoke<string[]>("aione_tts_voices");
+}
+
+export async function ttsSynthesize(
+	prompt: string,
+	options: TtsSynthesisOptions = {}
+): Promise<TtsSynthesisResult> {
+	const result = await invoke<NativeTtsSynthesisResult>("aione_tts_synthesize", {
+		prompt,
+		options
+	});
+
+	const binary = atob(result.audio);
+	const audio = new Uint8Array(binary.length);
+	for (let index = 0; index < binary.length; index += 1) {
+		audio[index] = binary.charCodeAt(index);
+	}
+
+	return { ...result, audio };
 }

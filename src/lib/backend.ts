@@ -4,6 +4,50 @@ export type { GenerateStats };
 
 export interface GenerateResult { content: string; stats: GenerateStats }
 
+export type TtsDevice = "any" | "cpu" | "igpu" | "dgpu" | "accelerator";
+export type TtsAudioType = "pcm" | "wav";
+
+export interface TtsLoadOptions {
+  threadCount?: number;
+  flashAttention?: boolean;
+  device?: TtsDevice;
+}
+
+export interface TtsVoice {
+  referenceFile?: string;
+  builtInName?: string;
+  builtInIndex?: number;
+}
+
+export interface TtsSynthesisOptions {
+  outputType?: TtsAudioType;
+  voice?: TtsVoice;
+  lang?: string;
+  topK?: number;
+  topP?: number;
+  seed?: number;
+  batchSize?: number;
+  maxTokens?: number;
+}
+
+export interface TtsSynthesisStats {
+  promptEvalMs: number;
+  generationMs: number;
+  conversionMs: number;
+}
+
+export interface TtsSynthesisResult {
+  sampleRate: number;
+  samples: number;
+  audioType: TtsAudioType;
+  audio: Uint8Array;
+  stats: TtsSynthesisStats;
+}
+
+export type TtsModelSource =
+  | { kind: "path"; modelPath: string; mmprojPath: string }
+  | { kind: "file"; modelFile: File; mmprojFile: File };
+
 export interface GenerateCallbacks {
   onToken?: (token: string, thinking: boolean) => void;
   onThinkingChange?: (thinking: boolean) => void;
@@ -45,4 +89,10 @@ export interface Backend {
   unloadModel(): Promise<void>;
   isLoaded(): Promise<boolean>;
   close(): Promise<void>;
+
+  ttsLoadModel(src: TtsModelSource, options?: TtsLoadOptions): Promise<boolean>;
+  ttsUnloadModel(): Promise<void>;
+  ttsIsLoaded(): Promise<boolean>;
+  ttsVoices(): Promise<string[]>;
+  ttsSynthesize(prompt: string, options?: TtsSynthesisOptions): Promise<TtsSynthesisResult>;
 }

@@ -6,6 +6,10 @@ import type {
 	GenerateOptions,
 	GenerateResult,
 	ModelSource,
+	TtsLoadOptions,
+	TtsModelSource,
+	TtsSynthesisOptions,
+	TtsSynthesisResult,
 } from "./backend";
 
 export type {
@@ -23,6 +27,21 @@ const threaded = crossOriginIsolated && typeof SharedArrayBuffer !== "undefined"
 let usingThreads = false;
 
 type AIOneInstance = Awaited<ReturnType<typeof AIOne.create>>;
+
+type TtsCapableAIOne = AIOneInstance & {
+	ttsLoadModel(
+		modelFile: File,
+		mmprojFile: File,
+		options?: TtsLoadOptions
+	): Promise<void>;
+	ttsSynthesize(
+		prompt: string,
+		options?: TtsSynthesisOptions
+	): Promise<TtsSynthesisResult>;
+	ttsUnloadModel(): Promise<void>;
+	ttsVoices(): Promise<string[]>;
+	ttsIsLoaded(): Promise<boolean>;
+};
 
 async function threadedRuntimeAvailable() {
 	if (!threaded) return false;
@@ -95,6 +114,33 @@ export class WasmBackend implements Backend {
 
 	async isLoaded(): Promise<boolean> {
 		return true;
+	}
+
+	async ttsLoadModel(src: TtsModelSource, options: TtsLoadOptions = {}): Promise<boolean> {
+		if (src.kind !== "file") throw new Error("WASM backend can't load from a disk path");
+
+		const api = this.ai as unknown as TtsCapableAIOne;
+		await api.ttsLoadModel(src.modelFile, src.mmprojFile, options);
+		return api.ttsIsLoaded();
+	}
+
+	async ttsUnloadModel(): Promise<void> {
+		await (this.ai as unknown as TtsCapableAIOne).ttsUnloadModel();
+	}
+
+	ttsIsLoaded(): Promise<boolean> {
+		return (this.ai as unknown as TtsCapableAIOne).ttsIsLoaded();
+	}
+
+	ttsVoices(): Promise<string[]> {
+		return (this.ai as unknown as TtsCapableAIOne).ttsVoices();
+	}
+
+	ttsSynthesize(
+		prompt: string,
+		options: TtsSynthesisOptions = {}
+	): Promise<TtsSynthesisResult> {
+		return (this.ai as unknown as TtsCapableAIOne).ttsSynthesize(prompt, options);
 	}
 
 	async close(): Promise<void> {

@@ -1,17 +1,20 @@
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::{Arc, Mutex, MutexGuard};
 
+use base64::Engine;
 use serde::Serialize;
 use tauri::{AppHandle, Emitter, State};
 
 use aione_rs::{
     ChatData, ChatMessage, ChatMetadata, GenerateCallbacks, GenerateOptions, GenerateResult,
-    LoadOptions, Session,
+    LoadOptions, Session, Tts, TtsAudioType, TtsLoadOptions, TtsSynthesisCallbacks,
+    TtsSynthesisOptions, TtsSynthesisStats,
 };
 
 #[derive(Default, Clone)]
 pub struct AioneState {
     session: Arc<Mutex<Option<Session>>>,
+    tts: Arc<Mutex<Option<Tts>>>,
     cancel_generation: Arc<AtomicBool>,
 }
 
@@ -19,6 +22,16 @@ pub struct AioneState {
 struct TokenEvent {
     token: String,
     thinking: bool,
+}
+
+#[derive(Clone, Serialize)]
+#[serde(rename_all = "camelCase")]
+struct TtsSynthesisResponse {
+    sample_rate: i32,
+    samples: i64,
+    audio_type: &'static str,
+    audio: String,
+    stats: TtsSynthesisStats,
 }
 
 fn ensure_session(session: &mut Option<Session>) -> Result<&mut Session, String> {
@@ -35,6 +48,11 @@ fn lock_session(
     session
         .lock()
         .map_err(|_| String::from("AIOne session lock poisoned"))
+}
+
+fn lock_tts(tts: &Mutex<Option<Tts>>) -> Result<MutexGuard<'_, Option<Tts>>, String> {
+    tts.lock()
+        .map_err(|_| String::from("AIOne TTS lock poisoned"))
 }
 
 async fn run_blocking<T, F>(task: F) -> Result<T, String>
@@ -204,6 +222,103 @@ pub async fn aione_destroy_session(state: State<'_, AioneState>) -> Result<(), S
         let mut session = lock_session(&session_slot)?;
         *session = None;
         Ok(())
+    })
+    .await
+}
+
+#[tauri::command]
+pub async fn aione_tts_load_model(
+    state: State<'_, AioneState>,
+    model_path: String,
+    mmproj_path: String,
+    options: TtsLoadOptions,
+) -> Result<bool, String> {
+    let tts_slot = state.tts.clone();
+    drop(state);
+
+    run_blocking(move || {
+        let mut tts = lock_tts(&tts_slot)?;
+        let model = Tts::new().map_err(|error| error.to_string())?;
+        model
+            .load_model(&model_path, &mmproj_path, options)
+            .map_err(|error| error.to_string())?;
+        *tts = Some(model);
+        Ok(true)
+    })
+    .await
+}
+
+#[tauri::command]
+pub async fn aione_tts_unload_model(state: State<'_, AioneState>) -> Result<(), String> {
+    let tts_slot = state.tts.clone();
+    drop(state);
+
+    run_blocking(move || {
+        let mut tts = lock_tts(&tts_slot)?;
+        *tts = None;
+        Ok(())
+    })
+    .await
+}
+
+#[tauri::command]
+pub async fn aione_tts_is_loaded(state: State<'_, AioneState>) -> Result<bool, String> {
+    let tts_slot = state.tts.clone();
+    drop(state);
+
+    run_blocking(move || {
+        let tts = lock_tts(&tts_slot)?;
+        Ok(tts.as_ref().map(Tts::is_loaded).unwrap_or(false))
+    })
+    .await
+}
+
+#[tauri::command]
+pub async fn aione_tts_voices(state: State<'_, AioneState>) -> Result<Vec<String>, String> {
+    let tts_slot = state.tts.clone();
+    drop(state);
+
+    run_blocking(move || {
+        let tts = lock_tts(&tts_slot)?;
+        let model = tts
+            .as_ref()
+            .ok_or_else(|| String::from("No TTS model loaded"))?;
+        model.voices().map_err(|error| error.to_string())
+    })
+    .await
+}
+
+#[tauri::command]
+pub async fn aione_tts_synthesize(
+    state: State<'_, AioneState>,
+    prompt: String,
+    options: TtsSynthesisOptions,
+) -> Result<TtsSynthesisResponse, String> {
+    let tts_slot = state.tts.clone();
+    drop(state);
+
+    run_blocking(move || {
+        let tts = lock_tts(&tts_slot)?;
+        let model = tts
+            .as_ref()
+            .ok_or_else(|| String::from("No TTS model loaded"))?;
+        let mut callbacks = TtsSynthesisCallbacks::default();
+        let result = model
+            .synthesize(&prompt, options, &mut callbacks)
+            .map_err(|error| error.to_string())?;
+
+        let audio_type = match result.audio_type {
+            TtsAudioType::Wav => "wav",
+            TtsAudioType::Pcm => "pcm",
+        };
+
+        Ok(TtsSynthesisResponse {
+            sample_rate: result.sample_rate,
+            samples: result.samples,
+            audio_type,
+            audio: base64::engine::general_purpose::STANDARD.encode(result.audio),
+            stats: result.stats,
+        })
     })
     .await
 }

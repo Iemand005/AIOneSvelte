@@ -8,6 +8,7 @@
 	import Settings from "./lib/Settings.svelte";
 	import SystemPrompt from "./lib/SystemPrompt.svelte";
 	import Sidebar from "./lib/Sidebar.svelte";
+	import Tts from "./lib/Tts.svelte";
 
 	if (window.__TAURI_INTERNALS__) {
 		document.documentElement.dataset.tauri = "";
@@ -27,7 +28,7 @@
 	let temperature = $state(0.8);
 	let historyWidth = $state(220);
 	let promptWidth = $state(300);
-	let view = $state<"chat" | "settings">("chat");
+	let view = $state<"chat" | "settings" | "tts">("chat");
 
 	initializeAIOne().then(async one => {
 		ai = one;
@@ -146,6 +147,15 @@
 		<button
 			type="button"
 			class="settings-button"
+			class:active={view === "tts"}
+			aria-pressed={view === "tts"}
+			onclick={() => (view = view === "tts" ? "chat" : "tts")}
+		>
+			TTS
+		</button>
+		<button
+			type="button"
+			class="settings-button"
 			class:active={view === "settings"}
 			aria-pressed={view === "settings"}
 			onclick={() => (view = view === "settings" ? "chat" : "settings")}
@@ -177,6 +187,10 @@
 
 			{#if view === "settings"}
 				<Settings onback={() => (view = "chat")} />
+			{/if}
+
+			{#if view === "tts"}
+				<Tts {ai} />
 			{/if}
 		</div>
 	</section>
