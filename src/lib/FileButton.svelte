@@ -24,7 +24,7 @@
 		class: className = "",
 		active = false,
 		disabled = false,
-		multiple = false
+		multiple = false,
 		onfile,
 		onpath
 	}: Props = $props();
@@ -44,8 +44,15 @@
 
 	function pickFile(event: Event) {
 		const input = event.currentTarget as HTMLInputElement;
-		const file = input.files?.[0];
-		if (file) onfile(file);
+		if (! input.files) return;
+		if (multiple) {
+			for (const file of input.files) {
+
+			}
+		} else {
+			const file = input.files?.[0];
+			if (file) onfile(file);
+		}
 		input.value = "";
 	}
 </script>
