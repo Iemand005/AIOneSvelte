@@ -54,8 +54,6 @@
 		const delta = (event.key === "ArrowRight" ? 1 : -1) * (side === "left" ? 1 : -1) * 16;
 		width = Math.min(maxWidth, Math.max(minWidth, width + delta));
 	}
-
-	function onclick() { collapsed = !collapsed; }
 </script>
 
 <svelte:window onpointermove={resize} onpointerup={() => (resizing = false)} />
@@ -73,7 +71,7 @@
 			class="toggle"
 			aria-expanded={!collapsed}
 			aria-label={`${collapsed ? "Expand" : "Collapse"} ${title}`}
-			{onclick}
+			onclick={() => collapsed = !collapsed}
 		>
 			<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
 				<path d="M9 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
