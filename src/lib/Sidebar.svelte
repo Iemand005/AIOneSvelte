@@ -117,6 +117,10 @@
 		padding-inline: 6px;
 	}
 
+	aside.collapsed:hover() {
+		background: gray;
+	}
+
 	header {
 		display: flex;
 		flex: none;
