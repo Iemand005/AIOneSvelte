@@ -66,8 +66,9 @@
 	class:left={side === "left"}
 	style:--sidebar-width={`${collapsed ? COLLAPSED_WIDTH : width}px`}
 	aria-label={title}
+	{onclick}
 >
-	<header {onclick}>
+	<header>
 		<button
 			type="button"
 			class="toggle"
