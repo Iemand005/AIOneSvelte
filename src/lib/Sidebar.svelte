@@ -152,7 +152,7 @@
 		height: 32px;
 		padding: 0;
 		border-radius: 8px;
-		/* background: var(--surface-subtle); */
+		background: transparent;
 	}
 
 	.toggle svg {
