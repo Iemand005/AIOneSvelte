@@ -73,8 +73,12 @@ header {
   padding: 10px;
 }
 
-section {
+.workspace {
   padding: 10px;
+}
+
+.unpadded {
+  padding: 0;
 }
 
 .button,
