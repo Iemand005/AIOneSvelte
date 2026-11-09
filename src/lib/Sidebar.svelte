@@ -143,7 +143,7 @@
 	h2 {
 		flex: 1;
 		margin: 0;
-		font-size: 0.78rem;
+		font-size: 0.78rem;48px
 		font-weight: 600;
 		letter-spacing: 0.08em;
 		text-transform: uppercase;
