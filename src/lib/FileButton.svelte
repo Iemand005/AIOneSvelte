@@ -47,11 +47,10 @@
 		if (! input.files) return;
 		if (multiple) {
 			for (const file of input.files) {
-
+				onfile(file);
 			}
 		} else {
-			const file = input.files?.[0];
-			if (file) onfile(file);
+			onfile(input.files[0]);
 		}
 		input.value = "";
 	}
