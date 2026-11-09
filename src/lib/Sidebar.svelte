@@ -114,11 +114,15 @@
 	}
 
 	aside.collapsed {
-		padding-inline: 6px;
+		padding: 0;
 	}
 
 	aside.collapsed header {
 		height: 100%;
+	}
+
+	aside.collapsed .toggle {
+		width: 100%;
 	}
 
 	header {
@@ -151,7 +155,8 @@
 		display: flex;
 		/* place-items: center;
 		 */
-		 align-items: flex-start;
+		align-items: flex-start;
+		justify-content: center;
 		flex: none;
 		width: 32px;
 		height: 100%;
