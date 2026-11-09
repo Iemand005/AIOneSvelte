@@ -562,13 +562,13 @@
 		bottom: calc(var(--message-box-size) + var(--chatbox-pad) * 2 + 0.75rem);
 		display: grid;
 		place-items: center;
-		width: 2.5rem;
-		height: 2.5rem;
+		width: 35px;
+		height: 35px;
 		padding: 0;
 		transform: translateX(-50%);
 		border: 1px solid #ffffff26;
 		border-radius: 50%;
-		background: var(--chat-bubble-bg);
+		background: transparent;
 		color: inherit;
 		box-shadow: 0 2px 10px #00000030;
 		cursor: pointer;
