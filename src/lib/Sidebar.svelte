@@ -151,7 +151,7 @@
 		display: flex;
 		/* place-items: center;
 		 */
-		 align-items: flex-starta;
+		 align-items: flex-start;
 		flex: none;
 		width: 32px;
 		height: 100%;
