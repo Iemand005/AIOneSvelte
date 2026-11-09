@@ -26,7 +26,7 @@ struct TokenEvent {
 
 #[derive(Clone, Serialize)]
 #[serde(rename_all = "camelCase")]
-struct TtsSynthesisResponse {
+pub struct TtsSynthesisResponse {
     sample_rate: i32,
     samples: i64,
     audio_type: &'static str,
