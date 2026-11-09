@@ -152,10 +152,14 @@
 		place-items: center;
 		flex: none;
 		width: 32px;
-		height: 32px;
+		height: 100%;
 		padding: 0;
 		border-radius: 8px;
 		background: transparent;
+	}
+
+	.toggle:hover {
+		background-color: gray;
 	}
 
 	.toggle svg {
