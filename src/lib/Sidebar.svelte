@@ -59,7 +59,6 @@
 <svelte:window onpointermove={resize} onpointerup={() => (resizing = false)} />
 
 <aside
-	class="sidebar"
 	class:collapsed
 	class:resizing
 	class:left={side === "left"}
@@ -91,7 +90,7 @@
 </aside>
 
 <style>
-	.sidebar {
+	aside {
 		position: relative;
 		display: flex;
 		flex: 0 0 var(--sidebar-width);
@@ -109,12 +108,12 @@
 		transition: flex-basis 180ms ease, padding 180ms ease;
 	}
 
-	.sidebar.left {
+	aside.left {
 		border-inline-start: 0;
 		border-inline-end: 1px solid var(--border);
 	}
 
-	.sidebar.collapsed {
+	aside.collapsed {
 		padding-inline: 6px;
 	}
 
@@ -127,7 +126,7 @@
 		padding: 0;
 	}
 
-	.sidebar:not(.left) header {
+	aside:not(.left) header {
 		flex-direction: row-reverse;
 	}
 
@@ -202,7 +201,7 @@
 		right: 0;
 	}
 
-	.sidebar:not(.left) .resize-handle {
+	aside:not(.left) .resize-handle {
 		left: 0;
 	}
 
