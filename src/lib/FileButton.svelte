@@ -44,11 +44,11 @@
 
 	function pickFile(event: Event) {
 		const input = event.currentTarget as HTMLInputElement;
-		if (!input.files) return;
+		if (!input.files || !input.files.length) return;
 		if (multiple)
 			for (const file of input.files)
 				onfile(file);
-		else if (input.files.length) onfile(input.files[0]);
+		else onfile(input.files[0]);
 		input.value = "";
 	}
 </script>
