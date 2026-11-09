@@ -246,15 +246,6 @@
 		align-self: stretch;
 	}
 
-	:global(.model-button) {
-		flex: 1;
-		min-width: 0;
-		border-radius: 0;
-		overflow: hidden;
-		text-overflow: ellipsis;
-		white-space: nowrap;
-	}
-
 	button {
 		margin-left: 1px;
 		border-radius: 0;
