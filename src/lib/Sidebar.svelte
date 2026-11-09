@@ -119,6 +119,8 @@
 
 	aside.collapsed:hover {
 		background: gray;
+		cursor: pointer
+		;
 	}
 
 	header {
