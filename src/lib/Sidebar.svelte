@@ -163,6 +163,7 @@
 		padding: 0;
 		border-radius: 8px;
 		background: transparent;
+		transition: all 1s linear;
 	}
 
 	.toggle > * {
