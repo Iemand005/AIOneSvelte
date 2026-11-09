@@ -39,6 +39,7 @@
 				extensions: accept.split(",").map(extension => extension.trim().replace(/^\./, ""))
 			}]
 		});
+		// TODO: handle mulitple files how are they passed in the string then
 		if (typeof path === "string") onpath(path);
 	}
 
