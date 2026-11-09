@@ -75,6 +75,7 @@ header {
 
 .workspace > section {
   padding: 0 var(--chatbox-pad);
+  overflow-y: auto;
 }
 
 .button,
