@@ -48,7 +48,7 @@
 		if (multiple)
 			for (const file of input.files)
 				onfile(file);
-		else onfile(input.files[0]);
+		else if (input.files.length) onfile(input.files[0]);
 		input.value = "";
 	}
 </script>
