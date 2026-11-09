@@ -117,10 +117,8 @@
 		padding-inline: 6px;
 	}
 
-	aside.collapsed:hover {
-		background: gray;
-		cursor: pointer
-		;
+	aside.collapsed header {
+		height: 100%;
 	}
 
 	header {
