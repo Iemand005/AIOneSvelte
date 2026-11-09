@@ -184,15 +184,16 @@
 					onpersisted={refreshChats}
 				/>
 			</div>
-
+			
+			{#if view === "settings"}
+				<Settings onback={() => (view = "chat")} />
+			{/if}
+	
+			{#if view === "tts"}
+				<Tts {ai} />
+			{/if}
 		</div>
-		{#if view === "settings"}
-			<Settings onback={() => (view = "chat")} />
-		{/if}
-
-		{#if view === "tts"}
-			<Tts {ai} />
-		{/if}
+		
 	</section>
 
 	<Sidebar title="Prompt & generation" side="right" bind:width={promptWidth} bind:collapsed={promptOpen}>
