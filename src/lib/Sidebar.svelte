@@ -143,7 +143,7 @@
 	h2 {
 		flex: 1;
 		margin: 0;
-		font-size: 0.78rem;48px
+		font-size: 0.78rem;
 		font-weight: 600;
 		letter-spacing: 0.08em;
 		text-transform: uppercase;
@@ -166,6 +166,7 @@
 		border-radius: 8px;
 		background: transparent;
 		transition: all 100ms linear;
+		max-width: var(--sidebar-width);
 	}
 
 	.toggle > * {
