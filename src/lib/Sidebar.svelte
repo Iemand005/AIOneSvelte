@@ -55,7 +55,7 @@
 		width = Math.min(maxWidth, Math.max(minWidth, width + delta));
 	}
 
-	function toggle() { collapsed = !collapsed; }
+	function onclick() { collapsed = !collapsed; }
 </script>
 
 <svelte:window onpointermove={resize} onpointerup={() => (resizing = false)} />
@@ -67,13 +67,13 @@
 	style:--sidebar-width={`${collapsed ? COLLAPSED_WIDTH : width}px`}
 	aria-label={title}
 >
-	<header onclick={toggle}>
+	<header {obclick}>
 		<button
 			type="button"
 			class="toggle"
 			aria-expanded={!collapsed}
 			aria-label={`${collapsed ? "Expand" : "Collapse"} ${title}`}
-			onclick={() => (collapsed = !collapsed)}
+		{	onclick}
 		>
 			<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
 				<path d="M9 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
