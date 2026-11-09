@@ -73,6 +73,10 @@ header {
   padding: 10px;
 }
 
+section {
+  padding: 10px;
+}
+
 .button,
 button {
   display: inline-block;
