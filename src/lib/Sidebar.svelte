@@ -54,6 +54,8 @@
 		const delta = (event.key === "ArrowRight" ? 1 : -1) * (side === "left" ? 1 : -1) * 16;
 		width = Math.min(maxWidth, Math.max(minWidth, width + delta));
 	}
+
+	function toggle() { collapsed = !collapsed; }
 </script>
 
 <svelte:window onpointermove={resize} onpointerup={() => (resizing = false)} />
@@ -65,7 +67,7 @@
 	style:--sidebar-width={`${collapsed ? COLLAPSED_WIDTH : width}px`}
 	aria-label={title}
 >
-	<header>
+	<header onclick={toggle}>
 		<button
 			type="button"
 			class="toggle"
