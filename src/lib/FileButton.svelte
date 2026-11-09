@@ -10,6 +10,7 @@
 		class?: string;
 		active?: boolean;
 		disabled?: boolean;
+		multiple?: boolean;
 		onfile: (file: File) => void;
 		onpath: (path: string) => void;
 	};
@@ -23,6 +24,7 @@
 		class: className = "",
 		active = false,
 		disabled = false,
+		multiple = false
 		onfile,
 		onpath
 	}: Props = $props();
@@ -30,7 +32,7 @@
 	async function pickNative() {
 		const { open } = await import("@tauri-apps/plugin-dialog");
 		const path = await open({
-			multiple: false,
+			multiple,
 			directory: false,
 			filters: [{
 				name: filterName,
