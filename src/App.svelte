@@ -166,7 +166,7 @@
 
 	<section class="workspace">
 		
-		<header>
+		<header hidden={view !== "chat"}>
 			<ModelLoader {ai} bind:loading={modelLoading} />
 		</header>
 		<div class="chat-area">
@@ -185,14 +185,14 @@
 				/>
 			</div>
 			
-			{#if view === "settings"}
-				<Settings onback={() => (view = "chat")} />
-			{/if}
-	
-			{#if view === "tts"}
-				<Tts {ai} />
-			{/if}
 		</div>
+		{#if view === "settings"}
+			<Settings onback={() => (view = "chat")} />
+		{/if}
+
+		{#if view === "tts"}
+			<Tts {ai} />
+		{/if}
 		
 	</section>
 
