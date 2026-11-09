@@ -1,9 +1,9 @@
 [package]
 name = "aione-tauri"
 version = "0.1.0"
-description = "A Tauri App"
+description = "AIOne Tauri App"
 authors = ["you"]
-edition = "2024"
+edition = "2026"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
