@@ -148,14 +148,20 @@
 	}
 
 	.toggle {
-		display: grid;
-		place-items: center;
+		display: flex;
+		/* place-items: center;
+		 */
+		 align-items: flex-starta;
 		flex: none;
 		width: 32px;
 		height: 100%;
 		padding: 0;
 		border-radius: 8px;
 		background: transparent;
+	}
+
+	.toggle > * {
+		height: 32px;
 	}
 
 	.toggle:hover {
