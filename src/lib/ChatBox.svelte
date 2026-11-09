@@ -572,6 +572,7 @@
 		color: inherit;
 		box-shadow: 0 2px 10px #00000030;
 		cursor: pointer;
+		backdrop-filter: blur(5px);
 	}
 
 	.scroll-bottom:hover {
