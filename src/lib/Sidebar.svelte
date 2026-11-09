@@ -124,6 +124,7 @@
 	aside.collapsed .toggle {
 		width: 100%;
 		border-radius: 0;
+		padding: 6px;
 	}
 
 	header {
