@@ -5,6 +5,7 @@
 		TtsProgressUpdate,
 		TtsSynthesisResult
 	} from "./backend";
+	import FileButton from "./FileButton.svelte";
 
 	type Props = {
 		ai: Backend | null;
@@ -35,32 +36,24 @@
 			: Boolean(modelFile && mmprojFile)
 	);
 
-	function pickModelFile(event: Event) {
-		modelFile = (event.currentTarget as HTMLInputElement).files?.[0] ?? null;
+	function pickModelFile(file: File) {
+		modelFile = file;
+		nativeModelPath = null;
 	}
 
-	function pickMmprojFile(event: Event) {
-		mmprojFile = (event.currentTarget as HTMLInputElement).files?.[0] ?? null;
+	function pickMmprojFile(file: File) {
+		mmprojFile = file;
+		nativeMmprojPath = null;
 	}
 
-	async function pickNativeModel() {
-		const { open } = await import("@tauri-apps/plugin-dialog");
-		const path = await open({
-			multiple: false,
-			directory: false,
-			filters: [{ name: "GGUF model", extensions: ["gguf"] }]
-		});
-		if (typeof path === "string") nativeModelPath = path;
+	function pickNativeModel(path: string) {
+		nativeModelPath = path;
+		modelFile = null;
 	}
 
-	async function pickNativeMmproj() {
-		const { open } = await import("@tauri-apps/plugin-dialog");
-		const path = await open({
-			multiple: false,
-			directory: false,
-			filters: [{ name: "GGUF mmproj", extensions: ["gguf"] }]
-		});
-		if (typeof path === "string") nativeMmprojPath = path;
+	function pickNativeMmproj(path: string) {
+		nativeMmprojPath = path;
+		mmprojFile = null;
 	}
 
 	function releaseAudio() {
@@ -267,29 +260,24 @@
 <section>
 	<h2>TTS</h2>
 
-	{#if ai?.kind === "native"}
-		<p>
-			<button type="button" onclick={pickNativeModel}>
-				{nativeModelPath ?? "Choose TTS model"}
-			</button>
-			<button type="button" onclick={pickNativeMmproj}>
-				{nativeMmprojPath ?? "Choose mmproj"}
-			</button>
-		</p>
-	{:else}
-		<p>
-			<label>
-				TTS model
-				<input type="file" accept=".gguf" onchange={pickModelFile} />
-			</label>
-		</p>
-		<p>
-			<label>
-				mmproj
-				<input type="file" accept=".gguf" onchange={pickMmprojFile} />
-			</label>
-		</p>
-	{/if}
+	<p>
+		<FileButton
+			{ai}
+			label="Choose TTS model"
+			value={nativeModelPath ?? modelFile?.name}
+			filterName="GGUF model"
+			onfile={pickModelFile}
+			onpath={pickNativeModel}
+		/>
+		<FileButton
+			{ai}
+			label="Choose mmproj"
+			value={nativeMmprojPath ?? mmprojFile?.name}
+			filterName="GGUF mmproj"
+			onfile={pickMmprojFile}
+			onpath={pickNativeMmproj}
+		/>
+	</p>
 
 	<p>
 		<button type="button" onclick={loadTts} disabled={!ai || !canLoad || loading}>

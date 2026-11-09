@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { Backend, ModelSource } from "./backend";
+	import FileButton from "./FileButton.svelte";
 
 	type Props = {
 		ai: Backend | null;
@@ -67,14 +68,8 @@
 		}
 	}
 
-	async function pickNative() {
-		const { open } = await import("@tauri-apps/plugin-dialog");
-		const path = await open({
-			multiple: false,
-			directory: false,
-			filters: [{ name: "Model", extensions: ["gguf"] }]
-		});
-		if (typeof path === "string") void loadModel({ kind: "path", path });
+	function pickPath(path: string) {
+		void loadModel({ kind: "path", path });
 	}
 
 	function pickFile(file: File) {
@@ -149,23 +144,16 @@
 
 <div class="loader" bind:this={settingsRoot}>
 	<form>
-		{#if ai?.kind === "native"}
-			<button type="button" onclick={pickNative}>{modelName ?? "Choose model."}</button>
-		{:else}
-			<label for="model-file" class="button model-button" class:active={loaded}>
-				{modelName ?? "Choose model file!"}
-			</label>
-			<input
-				id="model-file"
-				type="file"
-				accept=".gguf"
-				hidden
-				onchange={event => {
-					const file = event.currentTarget.files?.[0];
-					if (file) pickFile(file);
-				}}
-			/>
-		{/if}
+		<FileButton
+			{ai}
+			label={ai?.kind === "native" ? "Choose model." : "Choose model file!"}
+			value={modelName}
+			class="model-button"
+			active={ai?.kind !== "native" && loaded}
+			filterName="Model"
+			onfile={pickFile}
+			onpath={pickPath}
+		/>
 
 		{#if ai?.kind === "native"}
 			<button
@@ -233,7 +221,7 @@
 </div>
 
 <style>
-	label.active {
+	:global(.model-button.active) {
 		background-color: green;
 	}
 
@@ -258,7 +246,7 @@
 		align-self: stretch;
 	}
 
-	.model-button {
+	:global(.model-button) {
 		flex: 1;
 		min-width: 0;
 		border-radius: 0;
