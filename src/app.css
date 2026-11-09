@@ -73,7 +73,7 @@ header {
   padding: 10px;
 }
 
-.workspace > section {
+.workspace > div >  section {
   padding: 0 var(--chatbox-pad);
 }
 
