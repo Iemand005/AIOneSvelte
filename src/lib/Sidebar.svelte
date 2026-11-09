@@ -174,7 +174,7 @@
 	}
 
 	.toggle:hover {
-		background-color: gray;
+		background-color: VAR(--surface-hover)	;
 	}
 
 	.toggle svg {
