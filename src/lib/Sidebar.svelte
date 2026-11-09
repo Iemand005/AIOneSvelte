@@ -162,6 +162,7 @@
 
 	.toggle > * {
 		height: 32px;
+		/* width: 32px; */
 	}
 
 	.toggle:hover {
