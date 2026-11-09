@@ -46,7 +46,7 @@
 	function pickFile(event: Event) {
 		const input = event.currentTarget as HTMLInputElement;
 		if (!input.files || !input.files.length) return;
-		if (multiple)
+	 	if (multiple)
 			for (const file of input.files)
 				onfile(file);
 		else onfile(input.files[0]);
