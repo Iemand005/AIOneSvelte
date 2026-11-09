@@ -117,7 +117,7 @@
 		padding-inline: 6px;
 	}
 
-	aside.collapsed:hover() {
+	aside.collapsed:hover {
 		background: gray;
 	}
 
