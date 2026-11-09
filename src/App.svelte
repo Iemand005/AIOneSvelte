@@ -164,7 +164,7 @@
 		</button>
 	</Sidebar>
 
-	<section class={`workspace ${view !== "chat" ? "unpadded" : ""}`}>
+	<section class="workspace">
 		<header>
 			<ModelLoader {ai} bind:loading={modelLoading} />
 		</header>
