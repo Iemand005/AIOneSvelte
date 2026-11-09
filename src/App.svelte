@@ -165,12 +165,12 @@
 	</Sidebar>
 
 	<section class="workspace">
-		<header>
-			<ModelLoader {ai} bind:loading={modelLoading} />
-		</header>
-
+		
 		<div class="chat-area">
 			<div class="view" hidden={view !== "chat"}>
+				<header>
+					<ModelLoader {ai} bind:loading={modelLoading} />
+				</header>
 				<ChatBox
 					{ai}
 					modelLoading={modelLoading}
