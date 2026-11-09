@@ -164,32 +164,35 @@
 		</button>
 	</Sidebar>
 
-	<section class="workspace chat-area">
-		<div class="view" hidden={view !== "chat"}>
-			<header>
-				<ModelLoader {ai} bind:loading={modelLoading} />
-			</header>
-			<ChatBox
-				{ai}
-				modelLoading={modelLoading}
-				{outputTokens}
-				{temperature}
-				bind:systemPrompt
-				bind:messages
-				bind:versionSelections
-				bind:chatFolder={currentFolder}
-				onchatcreated={onChatCreated}
-				onpersisted={refreshChats}
-			/>
-		</div>
+	<section class="workspace">
 		
-		{#if view === "settings"}
-			<Settings onback={() => (view = "chat")} />
-		{/if}
-
-		{#if view === "tts"}
-			<Tts {ai} />
-		{/if}
+		<header>
+			<ModelLoader {ai} bind:loading={modelLoading} />
+		</header>
+		<div class="chat-area">
+			<div class="view" hidden={view !== "chat"}>
+				<ChatBox
+					{ai}
+					modelLoading={modelLoading}
+					{outputTokens}
+					{temperature}
+					bind:systemPrompt
+					bind:messages
+					bind:versionSelections
+					bind:chatFolder={currentFolder}
+					onchatcreated={onChatCreated}
+					onpersisted={refreshChats}
+				/>
+			</div>
+			
+			{#if view === "settings"}
+				<Settings onback={() => (view = "chat")} />
+			{/if}
+	
+			{#if view === "tts"}
+				<Tts {ai} />
+			{/if}
+		</div>
 		
 	</section>
 
