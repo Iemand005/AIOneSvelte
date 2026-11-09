@@ -123,6 +123,7 @@
 
 	aside.collapsed .toggle {
 		width: 100%;
+		border-radius: 0;
 	}
 
 	header {
@@ -163,7 +164,7 @@
 		padding: 0;
 		border-radius: 8px;
 		background: transparent;
-		transition: all 1s linear;
+		transition: all 100ms linear;
 	}
 
 	.toggle > * {
