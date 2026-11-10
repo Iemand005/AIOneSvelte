@@ -106,6 +106,6 @@ textarea {
 }
 
 .active {
-  background: var(--surface-active);
+  background: var(--surface-active) !important;
   color: var(--text-h);
 }
