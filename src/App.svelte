@@ -149,24 +149,6 @@
 			ondelete={deleteChat}
 			
 		/>
-		<button
-			type="button"
-			class="settings-button"
-			class:active={view === "tts"}
-			aria-pressed={view === "tts"}
-			onclick={() => (view = view === "tts" ? "chat" : "tts")}
-		>
-			TTS
-		</button>
-		<button
-			type="button"
-			class="settings-button"
-			class:active={view === "settings"}
-			aria-pressed={view === "settings"}
-			onclick={() => (view = view === "settings" ? "chat" : "settings")}
-		>
-			Settings
-		</button>
 	</Sidebar>
 
 	<section class="workspace">
