@@ -151,7 +151,7 @@
 	}
 
 	aside.collapsed button {
-		width: 48px;
+		min-width: 48px;
 		height: 48px;
 		border-radius: 0;
 		padding: 6px;
@@ -242,6 +242,7 @@
 		inset-block: 0;
 		right: 0;
 		width: 8px !important;
+		min-width: 0 !important;
 		padding: 0;
 		border: 0;
 		border-radius: 0;
