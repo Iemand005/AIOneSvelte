@@ -139,7 +139,7 @@
 
 	aside > * {
 		margin-bottom: 12px;
-		transition: margin 180ms ease;
+		/* transition: margin 180ms ease; */
 	}
 
 	aside > button {
@@ -224,6 +224,7 @@
 		border-radius: 8px;
 		max-width: var(--sidebar-width);
 		background: transparent;
+		transition: all 180ms ease;
 	}
 
 	:global(.toggle > *) {
