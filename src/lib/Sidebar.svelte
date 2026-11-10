@@ -119,6 +119,7 @@
 		min-height: 0;
 		overflow: hidden;
 		padding: 16px 12px;
+		padding-bottom: 0;
 		box-sizing: border-box;
 		background: var(--sidebar);
 		border-block-start: 1px solid var(--border);
