@@ -136,6 +136,10 @@
 		margin-bottom: 12px
 	}
 
+	aside.collapsed > * {
+		margin-bottom: 0
+	}
+
 	aside.collapsed {
 		padding: 0;
 	}
