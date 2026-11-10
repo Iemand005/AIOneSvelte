@@ -216,7 +216,7 @@
 		max-width: var(--sidebar-width);
 	}
 
-	.toggle > * {
+	:global(.toggle > *) {
 		height: 32px;
 		/* width: 32px; */
 	}
@@ -237,7 +237,7 @@
 		transform: rotate(180deg);
 	}
 
-	.left.collapsed .toggle svg {
+	:global(.left.collapsed .toggle svg) {
 		transform: none;
 	}
 
