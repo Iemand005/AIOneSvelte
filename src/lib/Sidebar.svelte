@@ -124,7 +124,7 @@
 		background: var(--sidebar);
 		border-block-start: 1px solid var(--border);
 		border-inline-start: 1px solid var(--border);
-		transition: flex-basis 1080ms ease, padding 180ms ease;
+		transition: flex-basis 180ms ease, padding 180ms ease;
 	}
 
 	aside.left {
@@ -134,6 +134,7 @@
 
 	aside.collapsed {
 		padding: 0;
+		gap: 0;
 	}
 
 	aside.collapsed header {
