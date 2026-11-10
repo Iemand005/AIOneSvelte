@@ -35,14 +35,10 @@
 	}
 
 	svg {
-		transform: rotate(180deg);
-	}
-
-	svg {
-		transform: rotate(180deg);
-	}
-
-	svg {
 		transform: none;
+	}
+
+	svg.flipped {
+		transform: rotate(180deg);
 	}
 </style>
