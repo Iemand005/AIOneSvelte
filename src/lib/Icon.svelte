@@ -1,8 +1,8 @@
 <script lang="ts">
-	import type { Snippet } from "svelte";
+	type IconName = "settings";
 
 	type Props = {
-		children?: Snippet;
+		name: string;
 		class?: string;
 		as?: keyof HTMLElementTagNameMap;
 	};
