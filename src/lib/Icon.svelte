@@ -2,17 +2,13 @@
 	import type { Snippet } from "svelte";
 
 	type Props = {
-		children: Snippet;
+		children?: Snippet;
 		class?: string;
 		as?: keyof HTMLElementTagNameMap;
 	};
 
-	let { children, class: className = "", as: tag = "div" }: Props = $props();
+	let { class: className = "", as: tag = "div" }: Props = $props();
 </script>
-
-<svelte:element this={tag} class={`card${className ? ` ${className}` : ""}`}>
-	{@render children()}
-</svelte:element>
 
 <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true">
 	<path
