@@ -115,7 +115,6 @@
 		display: flex;
 		flex: 0 0 var(--sidebar-width);
 		flex-direction: column;
-		gap: 12px;
 		min-width: 0;
 		min-height: 0;
 		overflow: hidden;
@@ -135,7 +134,6 @@
 
 	aside.collapsed {
 		padding: 0;
-		gap: 0;
 	}
 
 	aside.collapsed header {
