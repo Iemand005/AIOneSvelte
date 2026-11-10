@@ -229,11 +229,7 @@
 		transition: transform 160ms ease;
 	}
 
-	:global(.left .toggle svg) {
-		transform: rotate(180deg);
-	}
-
-	:global(.collapsed .toggle svg) {
+	:global(.left .toggle svg, .collapsed .toggle svg) {
 		transform: rotate(180deg);
 	}
 
