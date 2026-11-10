@@ -86,7 +86,7 @@
 		</button>
 		{#if !collapsed}<h2>{title}</h2>{/if}
 	</header>
-	{#if !false}<div class="content">
+	{#if !collapsed}<div class="content">
 		{@render children()}
 	</div>{/if}
 	{#each views as newView}
