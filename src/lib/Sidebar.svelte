@@ -157,8 +157,14 @@
 		padding: 6px;
 	}
 
+	.toggle {
+		height: 48px;
+		transition: height 1s linear;
+	}
+
 	aside.collapsed .toggle {
 		width: 48px;
+		height: 48px;
 	}
 
 	aside.collapsed .toggle,  .resize-handle {
