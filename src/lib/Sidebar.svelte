@@ -134,7 +134,7 @@
 
 	aside > * {
 		margin-bottom: 12px;
-		transition: margin 180ms linear;
+		transition: margin 180ms ease;
 	}
 
 	aside.collapsed > * {
@@ -154,6 +154,10 @@
 		width: 48px;
 		border-radius: 0;
 		padding: 6px;
+	}
+
+	aside.collapsed > button {
+		height: 48px;
 	}
 
 	header {
