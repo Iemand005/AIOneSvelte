@@ -171,7 +171,7 @@
 
 		transition: border-color 100ms ease-out;
 
-		overflow: auto;
+		overflow: hidden;
 	}
 
 	form:has(input:focus) {
