@@ -83,7 +83,7 @@
 			aria-label={`${collapsed ? "Expand" : "Collapse"} ${title}`}
 			onclick={() => collapsed = !collapsed}
 		>
-			<Icon name="arrow"/>
+			<Icon name="arrow" flipped={side === "left" ? collapsed : !collapsed}/>
 		</button>
 		{#if !collapsed}<h2>{title}</h2>{/if}
 	</header>
@@ -225,7 +225,7 @@
 		background-color: var(--surface-hover)	;
 	}
 
-	:global(.toggle svg) {
+	/* :global(.toggle svg) {
 		transition: transform 160ms ease;
 	}
 
@@ -235,7 +235,7 @@
 
 	:global(.left.collapsed .toggle svg) {
 		transform: none;
-	}
+	} */
 
 	.content {
 		display: flex;
