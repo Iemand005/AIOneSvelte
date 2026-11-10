@@ -289,6 +289,8 @@
 	}
 
 	@media(width: 500px) {
-
+		section {
+			display: none;
+		}
 	}
 </style>
