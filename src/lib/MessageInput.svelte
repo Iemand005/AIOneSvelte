@@ -288,9 +288,9 @@
 		}
 	}
 
-	@media(width: 500px) {
-		section {
-			display: none;
+	@media (width: 500px) {
+		:global(section) {
+			display: none !important;
 		}
 	}
 </style>
