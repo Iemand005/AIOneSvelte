@@ -133,7 +133,8 @@
 	}
 
 	aside > * {
-		margin-bottom: 12px
+		margin-bottom: 12px;
+		transition: margin 180ms linear;
 	}
 
 	aside.collapsed > * {
