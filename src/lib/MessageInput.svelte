@@ -170,6 +170,8 @@
 		backdrop-filter: blur(10px);
 
 		transition: border-color 100ms ease-out;
+
+		overflow: auto;
 	}
 
 	form:has(input:focus) {
