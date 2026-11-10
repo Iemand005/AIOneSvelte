@@ -147,7 +147,7 @@
 		pointer-events: auto;
 	}
 
-	section {
+	section, form {
 		display: flex;
 		flex-direction: row;
 		gap: 5px;
@@ -168,8 +168,6 @@
 		z-index: 1;
 		box-sizing: border-box;
 
-		display: flex;
-		gap: 5px;
 		padding: 5px;
 
 		border-radius: 1000px;
