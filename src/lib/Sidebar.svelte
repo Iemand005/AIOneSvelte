@@ -101,7 +101,9 @@
 			{#if newView.icon}
 			<Icon name={newView.icon}/>
 			{/if}
+			{#if !collapsed || !newView.icon}
 			{newView.title}
+			{/if}
 		</button>
 	{/each}
 	<button
@@ -224,18 +226,6 @@
 	.toggle:hover {
 		background-color: var(--surface-hover)	;
 	}
-
-	/* :global(.toggle svg) {
-		transition: transform 160ms ease;
-	}
-
-	:global(.left .toggle svg, .collapsed .toggle svg) {
-		transform: rotate(180deg);
-	}
-
-	:global(.left.collapsed .toggle svg) {
-		transform: none;
-	} */
 
 	.content {
 		display: flex;
