@@ -166,7 +166,7 @@
 				title="Model loading settings"
 				onclick={() => (settingsOpen = !settingsOpen)}
 			>
-				<Icon/>
+				<Icon name="settings"/>
 			</button>
 		{/if}
 
