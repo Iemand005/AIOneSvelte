@@ -212,7 +212,6 @@
 		height: 100%;
 		padding: 0;
 		border-radius: 8px;
-		background: transparent;
 		transition: all 100ms linear;
 		max-width: var(--sidebar-width);
 	}
@@ -271,5 +270,6 @@
 		font-size: 0.85rem;
 		text-align: left;
 		height: 48px;
+		background: transparent;
 	}
 </style>
