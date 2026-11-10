@@ -131,7 +131,7 @@
 		border-inline-end: 1px solid var(--border);
 	}
 
-	aside > *:not(:last-child) {
+	aside > *:not(:last-of-type) {
 		margin-bottom: 12px
 	}
 
