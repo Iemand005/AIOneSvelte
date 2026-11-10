@@ -42,7 +42,7 @@
     --border: #2e303a;
     --code-bg: #1f2028;
     --sidebar: rgba(18, 16, 15, 0.6);
-    --message-input-gradient: linear-gradient(0deg, #46454587, #36363666);
+    --message-input-gradient: linear-gradient(0deg, #36363640, #66666659);
     --chat-bubble-bg: #292929;
   }
 }
