@@ -29,3 +29,21 @@
 	<path d="M9 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
 </svg>
 {/if}
+
+<style>
+	svg {
+		transition: transform 160ms ease;
+	}
+
+	svg {
+		transform: rotate(180deg);
+	}
+
+	svg {
+		transform: rotate(180deg);
+	}
+
+	svg {
+		transform: none;
+	}
+</style>

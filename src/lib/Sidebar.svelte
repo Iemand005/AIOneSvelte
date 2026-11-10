@@ -225,15 +225,15 @@
 		background-color: var(--surface-hover)	;
 	}
 
-	.toggle svg {
+	:global(.toggle svg) {
 		transition: transform 160ms ease;
 	}
 
-	.left .toggle svg {
+	:global(.left .toggle svg) {
 		transform: rotate(180deg);
 	}
 
-	.collapsed .toggle svg {
+	:global(.collapsed .toggle svg) {
 		transform: rotate(180deg);
 	}
 
