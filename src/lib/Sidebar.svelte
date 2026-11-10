@@ -142,6 +142,10 @@
 		transition: margin 180ms ease;
 	}
 
+	aside > button {
+		border-top: 1px solid gray;
+	}
+
 	aside.collapsed > * {
 		margin-bottom: 0
 	}
