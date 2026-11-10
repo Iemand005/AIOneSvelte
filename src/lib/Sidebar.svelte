@@ -255,13 +255,7 @@
 	}
 
 	button {
-		display: flex;
-		flex: none;
-		align-items: center;
-		gap: 8px;
 		padding: 8px 10px;
-		border-radius: 8px;
-		font: inherit;
 		font-size: 0.85rem;
 		text-align: left;
 	}
