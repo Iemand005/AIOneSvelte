@@ -140,7 +140,7 @@
 		{id: "tts", title: "TTS"},
 		{id: "settings", title: "Settings"}
 		]}
-		bind:biview side="left" minWidth={140} bind:width={historyWidth} bind:collapsed={historyOpen}>
+		bind:view side="left" minWidth={140} bind:width={historyWidth} bind:collapsed={historyOpen}>
 		<ChatHistory
 			{chats}
 			{currentFolder}
@@ -241,11 +241,6 @@
 		font: inherit;
 		font-size: 0.85rem;
 		text-align: left;
-	}
-
-	.settings-button.active {
-		background: var(--surface-active);
-		color: var(--text-h);
 	}
 
 	.output-tokens,
