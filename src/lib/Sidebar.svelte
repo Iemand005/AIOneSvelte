@@ -9,7 +9,10 @@
 		maxWidth?: number;
 		collapsed?: boolean;
 		children: Snippet;
-		views?: string[];
+		views?: {
+			id: string;
+			title: string;
+		}[];
 	};
 
 	const COLLAPSED_WIDTH = 48;
@@ -81,7 +84,14 @@
 		</button>
 		{#if !collapsed}<h2>{title}</h2>{/if}
 	</header>
-	{#if !collapsed}<div class="content">{@render children()}</div>{/if}
+	{#if !collapsed}<div class="content">
+		{@render children()}
+		{
+			views?.map(view => {
+				
+			})
+		}
+	</div>{/if}
 	<button
 		type="button"
 		class="resize-handle"
