@@ -5,7 +5,7 @@
 		name: IconName;
 		class?: string;
 		as?: keyof HTMLElementTagNameMap;
-		flipped: boolean;
+		flipped?: boolean;
 	};
 
 	let { name, flipped }: Props = $props();
