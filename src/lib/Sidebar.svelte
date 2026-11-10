@@ -122,7 +122,7 @@
 	}
 
 	aside.collapsed .toggle {
-		width: 100%;
+		width: 48px;
 		border-radius: 0;
 		padding: 6px;
 	}
@@ -175,7 +175,7 @@
 	}
 
 	.toggle:hover {
-		background-color: VAR(--surface-hover)	;
+		background-color: var(--surface-hover)	;
 	}
 
 	.toggle svg {
