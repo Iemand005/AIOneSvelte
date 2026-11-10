@@ -7,7 +7,7 @@
 		as?: keyof HTMLElementTagNameMap;
 	};
 
-	let { class: className = "", as: tag = "div" }: Props = $props();
+	let { name }: Props = $props();
 </script>
 
 {#if name === "settings"}
