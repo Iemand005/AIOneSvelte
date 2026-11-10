@@ -288,7 +288,7 @@
 		}
 	}
 
-	@media (width: 500px) {
+	@media (max-width: 500px) {
 		:global(section) {
 			display: none !important;
 		}
