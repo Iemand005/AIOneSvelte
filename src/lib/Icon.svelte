@@ -1,5 +1,5 @@
 <script lang="ts">
-	type IconName = "settings";
+	export type IconName = "settings";
 
 	type Props = {
 		name: IconName;

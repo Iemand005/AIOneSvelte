@@ -138,7 +138,7 @@
 <main class="layout">
 	<Sidebar title="History" views={[
 		{id: "tts", title: "TTS"},
-		{id: "settings", title: "Settings"}
+		{id: "settings", title: "Settings", icon: "settings"}
 		]}
 		bind:view side="left" minWidth={140} bind:width={historyWidth} bind:collapsed={historyOpen}>
 		<ChatHistory

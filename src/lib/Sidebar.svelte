@@ -1,5 +1,7 @@
 <script lang="ts">
 	import type { Snippet } from "svelte";
+    import type { IconName } from "./Icon.svelte";
+    import Icon from "./Icon.svelte";
 
 	type Props = {
 		title: string;
@@ -12,6 +14,7 @@
 		views?: {
 			id: string;
 			title: string;
+			icon?: IconName;
 		}[];
 		view?: string;
 	};
@@ -97,6 +100,9 @@
 			aria-pressed={view === newView.id}
 			onclick={() => (view = view === newView.id ? "chat" : newView.id)}
 		>
+			{#if newView.icon}
+			<Icon name={newView.icon}/>
+			{/if}
 			{newView.title}
 		</button>
 	{/each}
