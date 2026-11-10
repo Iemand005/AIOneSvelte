@@ -221,7 +221,7 @@
 		/* width: 32px; */
 	}
 
-	.toggle:hover {
+	button:hover {
 		background-color: var(--surface-hover)	;
 	}
 
