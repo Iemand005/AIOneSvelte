@@ -136,13 +136,14 @@
 </svelte:head>
 
 <main class="layout">
-	<Sidebar title="History" side="left" minWidth={140} bind:width={historyWidth} bind:collapsed={historyOpen}>
+	<Sidebar title="History" views={["tts", "settings"]} side="left" minWidth={140} bind:width={historyWidth} bind:collapsed={historyOpen}>
 		<ChatHistory
 			{chats}
 			{currentFolder}
 			onselect={openChat}
 			onnew={newChat}
 			ondelete={deleteChat}
+			
 		/>
 		<button
 			type="button"
