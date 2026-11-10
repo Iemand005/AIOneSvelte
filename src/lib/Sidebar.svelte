@@ -229,7 +229,7 @@
 		z-index: 1;
 		inset-block: 0;
 		right: 0;
-		width: 8px;
+		width: 8px !important;
 		padding: 0;
 		border: 0;
 		border-radius: 0;
