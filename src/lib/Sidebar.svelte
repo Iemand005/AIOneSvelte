@@ -83,9 +83,7 @@
 			aria-label={`${collapsed ? "Expand" : "Collapse"} ${title}`}
 			onclick={() => collapsed = !collapsed}
 		>
-			<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
-				<path d="M9 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-			</svg>
+			<Icon name="arrow"/>
 		</button>
 		{#if !collapsed}<h2>{title}</h2>{/if}
 	</header>
