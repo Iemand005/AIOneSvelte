@@ -152,12 +152,13 @@
 
 	aside.collapsed button {
 		width: 48px;
+		height: 48px;
 		border-radius: 0;
 		padding: 6px;
 	}
 
-	aside.collapsed > button {
-		height: 48px;
+	aside.collapsed .toggle,  .resize-handle {
+		height: 100% !important;
 	}
 
 	header {
@@ -270,5 +271,6 @@
 		padding: 8px 10px;
 		font-size: 0.85rem;
 		text-align: left;
+		height: 48px;
 	}
 </style>
