@@ -96,7 +96,7 @@
 				aria-pressed={view === newView.id}
 				onclick={() => (view = view === newView.id ? "chat" : newView.id)}
 			>
-				Settings
+				{newView.title}
 			</button>
 		{/each}
 	</div>{/if}
