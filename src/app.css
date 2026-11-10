@@ -96,7 +96,7 @@ button {
 
 .button:hover,
 button:hover {
-  background-color: var(--surface-hover);
+  background-color: var(--surface-hover) !important;
 }
 
 textarea {
