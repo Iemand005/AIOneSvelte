@@ -139,7 +139,8 @@
 	<Sidebar title="History" views={[
 		{id: "tts", title: "TTS"},
 		{id: "settings", title: "Settings"}
-		]} side="left" minWidth={140} bind:width={historyWidth} bind:collapsed={historyOpen}>
+		]}
+		bind:biview side="left" minWidth={140} bind:width={historyWidth} bind:collapsed={historyOpen}>
 		<ChatHistory
 			{chats}
 			{currentFolder}
