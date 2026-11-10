@@ -157,7 +157,7 @@
 		padding: 6px;
 	}
 
-	.aside.collapsed .toggle {
+	aside.collapsed .toggle {
 		width: 48px;
 	}
 
