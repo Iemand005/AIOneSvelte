@@ -164,7 +164,7 @@
 
 	aside.collapsed .toggle {
 		width: 48px;
-		height: 48px;
+		height: 100%;
 	}
 
 	aside.collapsed .toggle,  .resize-handle {
