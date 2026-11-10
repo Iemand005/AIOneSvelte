@@ -174,7 +174,7 @@
 			
 		</div>
 		{#if view === "settings"}
-			<Settings onback={() => (view = "chat")} />
+			<Settings/>
 		{/if}
 
 		{#if view === "tts"}

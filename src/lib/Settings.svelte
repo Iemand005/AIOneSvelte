@@ -2,12 +2,6 @@
 	import Card from "./Card.svelte";
 	import { getHardwareInfo, type HardwareInfo } from "./system-info";
 
-	type Props = {
-		onback: () => void;
-	};
-
-	let { onback }: Props = $props();
-
 	let info = $state<HardwareInfo | null>(null);
 	let loading = $state(true);
 	let error = $state<string | null>(null);
@@ -53,7 +47,6 @@
 			<button type="button" onclick={refresh} disabled={loading}>
 				{loading ? "Detecting…" : "Refresh"}
 			</button>
-			<button type="button" class="primary" onclick={onback}>Back</button>
 		</div>
 	</header>
 
