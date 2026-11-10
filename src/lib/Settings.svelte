@@ -4,6 +4,9 @@
 
 	type Props = {
 		onback: () => void;
+		buttons: {
+			onclick: () => void;
+		}
 	};
 
 	let { onback }: Props = $props();
