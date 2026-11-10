@@ -139,7 +139,6 @@
 
 	aside > * {
 		margin-bottom: 12px;
-		/* transition: margin 180ms ease; */
 	}
 
 	aside > button {
@@ -147,7 +146,6 @@
 	}
 
 	aside.collapsed > button {
-		/* border-top: 1px solid var(--border); */
 		border-color: var(--border);
 		background: transparent;
 	}
@@ -213,8 +211,6 @@
 
 	.toggle {
 		display: flex;
-		/* place-items: center;
-		 */
 		align-items: flex-start;
 		justify-content: center;
 		flex: none;
