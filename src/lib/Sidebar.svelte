@@ -135,6 +135,7 @@
 
 	aside.collapsed {
 		padding: 0;
+		gap: 0;
 	}
 
 	aside.collapsed header {
