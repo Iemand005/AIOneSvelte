@@ -222,7 +222,6 @@
 		height: 100%;
 		padding: 0;
 		border-radius: 8px;
-		transition: all 100ms linear;
 		max-width: var(--sidebar-width);
 	}
 
