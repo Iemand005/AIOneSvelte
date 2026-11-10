@@ -153,9 +153,11 @@
 
 	<section class="workspace">
 		
+		{#if view === "chat"}
 		<header hidden={view !== "chat"}>
 			<ModelLoader {ai} bind:loading={modelLoading} />
 		</header>
+		{/if}
 		<div class="chat-area">
 			<div class="view" hidden={view !== "chat"}>
 				<ChatBox
