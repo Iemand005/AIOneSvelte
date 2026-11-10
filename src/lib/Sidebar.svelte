@@ -13,6 +13,7 @@
 			id: string;
 			title: string;
 		}[];
+		view?: string;
 	};
 
 	const COLLAPSED_WIDTH = 48;
@@ -25,7 +26,8 @@
 		maxWidth = 440,
 		collapsed = $bindable(false),
 		children,
-		views
+		views,
+		view = $bindable("chat")
 	}: Props = $props();
 
 	let resizing = $state(false);
@@ -86,11 +88,17 @@
 	</header>
 	{#if !collapsed}<div class="content">
 		{@render children()}
-		{
-			views?.map(view => {
-				
-			})
-		}
+		{#each views as newView}
+			<button
+				type="button"
+				class="settings-button"
+				class:active={view === "settings"}
+				aria-pressed={view === "settings"}
+				onclick={() => (view = view === "settings" ? "chat" : "settings")}
+			>
+				Settings
+			</button>
+		{/each}
 	</div>{/if}
 	<button
 		type="button"
