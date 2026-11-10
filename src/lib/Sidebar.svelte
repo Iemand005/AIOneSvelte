@@ -92,9 +92,9 @@
 			<button
 				type="button"
 				class="settings-button"
-				class:active={view === "settings"}
-				aria-pressed={view === "settings"}
-				onclick={() => (view = view === "settings" ? "chat" : "settings")}
+				class:active={view === newView.id}
+				aria-pressed={view === newView.id}
+				onclick={() => (view = view === newView.id ? "chat" : newView.id)}
 			>
 				Settings
 			</button>
