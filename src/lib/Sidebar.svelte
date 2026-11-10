@@ -142,7 +142,7 @@
 		flex: 1;
 	}
 
-	aside.collapsed .toggle {
+	aside.collapsed button {
 		width: 48px;
 		border-radius: 0;
 		padding: 6px;
