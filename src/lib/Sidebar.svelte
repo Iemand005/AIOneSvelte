@@ -9,6 +9,7 @@
 		maxWidth?: number;
 		collapsed?: boolean;
 		children: Snippet;
+		views?: string[];
 	};
 
 	const COLLAPSED_WIDTH = 48;
@@ -20,7 +21,8 @@
 		minWidth = 180,
 		maxWidth = 440,
 		collapsed = $bindable(false),
-		children
+		children,
+		views
 	}: Props = $props();
 
 	let resizing = $state(false);

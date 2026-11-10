@@ -4,10 +4,9 @@
 
 	type Props = {
 		onback: () => void;
-		views: string[];
 	};
 
-	let { onback, views }: Props = $props();
+	let { onback }: Props = $props();
 
 	let info = $state<HardwareInfo | null>(null);
 	let loading = $state(true);
