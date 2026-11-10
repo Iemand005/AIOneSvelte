@@ -88,18 +88,18 @@
 	</header>
 	{#if !collapsed}<div class="content">
 		{@render children()}
-		{#each views as newView}
-			<button
-				type="button"
-				class="settings-button"
-				class:active={view === newView.id}
-				aria-pressed={view === newView.id}
-				onclick={() => (view = view === newView.id ? "chat" : newView.id)}
-			>
-				{newView.title}
-			</button>
-		{/each}
 	</div>{/if}
+	{#each views as newView}
+		<button
+			type="button"
+			class="settings-button"
+			class:active={view === newView.id}
+			aria-pressed={view === newView.id}
+			onclick={() => (view = view === newView.id ? "chat" : newView.id)}
+		>
+			{newView.title}
+		</button>
+	{/each}
 	<button
 		type="button"
 		class="resize-handle"
