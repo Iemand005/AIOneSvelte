@@ -143,7 +143,7 @@
 	}
 
 	aside > button {
-		border-top: 1px solid gray;
+		border-top: 1px solid var(--border);
 	}
 
 	aside.collapsed > * {
