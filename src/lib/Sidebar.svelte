@@ -131,7 +131,7 @@
 		border-inline-end: 1px solid var(--border);
 	}
 
-	aside > *:not(:last-of-type) {
+	aside > * {
 		margin-bottom: 12px
 	}
 
