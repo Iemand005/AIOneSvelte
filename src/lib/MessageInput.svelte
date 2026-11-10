@@ -47,6 +47,7 @@
 				}
 			}}
 		/>
+		<section>
 		<button
 			type="button"
 			class="generate"
@@ -100,6 +101,7 @@
 				</svg>
 			{/if}
 		</button>
+		</section>
 		<button
 			type="submit"
 			class="send"
@@ -143,6 +145,12 @@
 		position: absolute;
 		inset: var(--chatbox-pad);
 		pointer-events: auto;
+	}
+
+	section {
+		display: flex;
+		flex-direction: row;
+		gap: 5px;
 	}
 
 	/* Fills everything outside the bottom half of the pill.
@@ -280,5 +288,9 @@
 		to {
 			transform: rotate(360deg);
 		}
+	}
+
+	@media(width: 500px) {
+
 	}
 </style>
