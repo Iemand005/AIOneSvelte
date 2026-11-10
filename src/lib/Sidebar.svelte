@@ -143,7 +143,13 @@
 	}
 
 	aside > button {
-		border-top: 1px solid var(--border);
+		transition: border 1s linear;
+		border-top: 1px solid transparent;
+	}
+
+	aside.collapsed > button {
+		/* border-top: 1px solid var(--border); */
+		border-color: var(--border);
 	}
 
 	aside.collapsed > * {
