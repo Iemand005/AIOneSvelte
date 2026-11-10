@@ -136,7 +136,7 @@
 </svelte:head>
 
 <main class="layout">
-	<Sidebar title="History" views={["tts", "settings"]} side="left" minWidth={140} bind:width={historyWidth} bind:collapsed={historyOpen}>
+	<Sidebar title="History" views={[{"tts": "TTS"}, {"settings": "Settings"}]} side="left" minWidth={140} bind:width={historyWidth} bind:collapsed={historyOpen}>
 		<ChatHistory
 			{chats}
 			{currentFolder}
