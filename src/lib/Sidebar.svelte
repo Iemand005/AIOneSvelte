@@ -83,7 +83,7 @@
 			aria-label={`${collapsed ? "Expand" : "Collapse"} ${title}`}
 			onclick={() => collapsed = !collapsed}
 		>
-			<Icon name="arrow" flipped={side === "left" ? collapsed : !collapsed}/>
+			<Icon name="arrow" flipped={side === "left" ? !collapsed : collapsed}/>
 		</button>
 		{#if !collapsed}<h2>{title}</h2>{/if}
 	</header>
