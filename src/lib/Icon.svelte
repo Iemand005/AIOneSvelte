@@ -1,5 +1,5 @@
 <script lang="ts">
-	export type IconName = "settings";
+	export type IconName = "settings" | "arrow";
 
 	type Props = {
 		name: IconName;
@@ -22,4 +22,10 @@
 	/>
 	<circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.8" />
 </svg>
+{/if}
+
+{#if name === "arrow"}
+	<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+		<path d="M9 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+	</svg>
 {/if}
