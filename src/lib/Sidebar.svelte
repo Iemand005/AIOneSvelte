@@ -138,7 +138,8 @@
 	}
 
 	aside.collapsed header {
-		height: 100%;
+		/* height: 100%; */
+		flex: 1;
 	}
 
 	aside.collapsed .toggle {
