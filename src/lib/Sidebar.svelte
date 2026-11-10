@@ -121,10 +121,9 @@
 		padding: 16px 12px;
 		box-sizing: border-box;
 		background: var(--sidebar);
-		backdrop-filter: blur(20px);
 		border-block-start: 1px solid var(--border);
 		border-inline-start: 1px solid var(--border);
-		transition: flex-basis 180ms ease, padding 180ms ease;
+		transition: flex-basis 1080ms ease, padding 180ms ease;
 	}
 
 	aside.left {
@@ -149,7 +148,6 @@
 
 	header {
 		display: flex;
-		flex: none;
 		align-items: center;
 		gap: 8px;
 		min-height: 32px;
