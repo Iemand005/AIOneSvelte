@@ -89,6 +89,9 @@ button {
   font: inherit;
   cursor: pointer;
   transition: all 120ms ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .button:hover,
